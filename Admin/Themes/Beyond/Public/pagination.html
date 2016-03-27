@@ -1,0 +1,52 @@
+<!-- <div class="paginationbox row DTTTFooter">
+    <div class="dataTables_paginate paging_bootstrap" id="simpledatatable_paginate">
+        <ul class="pagination">
+            <li class="prev disabled"><a href="#">上一页</a></li>
+            <li class="active"><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">4</a></li>
+            <li><a href="#">5</a></li>
+            <li class="next"><a href="#">下一页</a></li>
+        </ul>
+    </div>
+</div> -->
+{if is_array($pagination)&&!empty($pagination)}
+<div class="paginationbox row DTTTFooter">
+    <div class="dataTables_paginate paging_bootstrap" id="simpledatatable_paginate">
+        <ul id="datalist_table_toolbar_pagination" class="pagination datalist_table_toolbar_pagination">
+            <li class="first">
+                <a href="{$pagination.url}{$pagination.firstpage}">首页</a>
+            </li>
+            {if $pagination.prevpage}
+            <li class="previous">
+                <a href="{$pagination.url}{$pagination.prevpage}"><i class="fa fa-arrow-left"></i></a>
+            </li>
+            {else}
+            <li class="previous disabled">
+                <a href="javascript:void(0);"><i class="fa fa-arrow-left"></i></a>
+            </li>
+            {/if}
+            {if is_array($pagination.listpage)&&!empty($pagination.listpage)}
+            {foreach $pagination.listpage as $item}
+            <li class="{if $item==$pagination.curtpage}active{/if}">
+                <a href="{$pagination.url}{$item}">{$item}</a>
+            </li>
+            {/foreach}
+            {/if}
+            {if $pagination.nextpage}
+            <li class="next">
+                <a href="{$pagination.url}{$pagination.nextpage}"><i class="fa fa-arrow-right"></i></a>
+            </li>
+            {else}
+            <li class="next disabled">
+                <a href="javascript:void(0);"><i class="fa fa-arrow-right"></i></a>
+            </li>
+            {/if}
+            <li class="last">
+                <a href="{$pagination.url}{$pagination.lastpage}">末页</a>
+            </li>
+        </ul>
+    </div>
+</div>
+{/if}

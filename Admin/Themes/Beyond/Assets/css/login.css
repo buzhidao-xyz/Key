@@ -1,0 +1,38 @@
+.login .login-header .brand {
+    padding: 0;
+    font-size: 28px;
+    padding-top: 13px;
+}
+.login .login-header .brand .logo {
+    border: 0;
+    border-color: none;
+    background: url("../img/logo.png");
+}
+.login .login-header .brand .logoimg {
+    float: left;
+    width: 48px;
+    padding-top: 3px;
+}
+.login .login-header .brand p.title {
+    float: left;
+    padding-left: 10px;
+}
+.login-v2 {
+    border-radius: 0;
+    background: rgba(0,0,0, .5);
+}
+.login-v2 .form-control {
+    border-radius: 0;
+}
+.copyright {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 7px;
+    font-size: 13px;
+    background: rgba(0,0,0, .5);
+}
+.btn {
+    border-radius: 0;
+}

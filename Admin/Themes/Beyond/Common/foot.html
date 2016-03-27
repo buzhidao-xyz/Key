@@ -1,0 +1,37 @@
+
+    <!--Basic Scripts-->
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/jquery/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/jquery/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!--Beyond Scripts-->
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/js/beyond.js"></script>
+
+    <!--Page Related Scripts-->
+    <!--Sparkline Charts Needed Scripts-->
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/charts/sparkline/jquery.sparkline.js"></script>
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/charts/sparkline/sparkline-init.js"></script>
+
+    <!-- bzd js -->
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/js/bzd.js"></script>
+    
+    <script>
+        $(window).bind("load", function () {
+            themeprimary = getThemeColorFromCss('themeprimary');
+            themesecondary = getThemeColorFromCss('themesecondary');
+            themethirdcolor = getThemeColorFromCss('themethirdcolor');
+            themefourthcolor = getThemeColorFromCss('themefourthcolor');
+            themefifthcolor = getThemeColorFromCss('themefifthcolor');
+        });
+    </script>
+
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/select2/select2.js"></script>
+    <script>
+        $(function (){
+            $(".select2el").select2();
+        });
+    </script>
+</body>
+<!-- /Body -->
+
+</html>

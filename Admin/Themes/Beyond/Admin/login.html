@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>系统登录 - 钥匙柜管理系统 - 昆山信德佳电气科技有限公司</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="author" content="sindgood" />
+    <meta name="description" content="login page" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- bootstrap css -->
+    <link href="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/bootstrap-3.3.4/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/animate.min.css" rel="stylesheet" />
+    <link href="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/style.min.css" rel="stylesheet" />
+    <link href="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/style-responsive.min.css" rel="stylesheet" />
+
+    <link href="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/login.css" rel="stylesheet" />
+
+    <!-- ================== PACE JS ================== -->
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/pace/pace.min.js"></script>
+
+    <script type="text/javascript">
+    var JS_APP = '{$ANY.__APP__}';
+    
+    var JS_SERVER    = '{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/js/';
+    var CSS_SERVER   = '{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/';
+    var IMAGE_SERVER = '{$SERVER.HOST.IMAGE_SERVER}Themes/Beyond/Assets/img/';
+    </script>
+</head>
+
+<body class="pace-top">
+    <!-- begin #page-loader -->
+    <!-- <div id="page-loader" class="fade in"><span class="spinner"></span></div> -->
+    <!-- end #page-loader -->
+
+    <!-- alertpanel -->
+    {include file="Public/alertpanel.html"}
+
+    <div class="login-cover">
+        <div class="login-cover-image"><img src="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/img/login/login_bg_1.jpg" data-id="login-cover-image" alt="" /></div>
+        <div class="login-cover-bg"></div>
+    </div>
+    <!-- begin #page-container -->
+    <div id="page-container" class="fade">
+        <!-- begin login -->
+        <div class="login login-v2" data-pageload-addclass="animated fadeIn">
+            <!-- begin brand -->
+            <div class="login-header">
+                <div class="brand">
+                    <!-- <span class="logo"></span> -->
+                    <img src="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/img/logo.png" class="logoimg img-responsive">
+                    <p class="title">钥匙柜管理系统</p>
+                    <!-- <small>常州市公安局</small> -->
+                </div>
+                <div class="icon">
+                    <i class="fa fa-sign-in"></i>
+                </div>
+            </div>
+            <!-- end brand -->
+            <div class="login-content">
+                <form name="loginform" method="post" action="{$ANY.__APP__}?s=Admin/loginck" class="margin-bottom-0">
+                    <div class="form-group m-b-20">
+                        <input type="text" name="account" class="form-control input-lg" placeholder="管理员账号" />
+                    </div>
+                    <div class="form-group m-b-20">
+                        <input type="password" name="password" class="form-control input-lg" placeholder="管理员密码" />
+                    </div>
+                    <div class="login-buttons">
+                        <button type="submit" class="btn btn-success btn-block btn-lg">登 录</button>
+                    </div>
+                    <div class="m-t-20 text-center">
+                        常州市公安局
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- end login -->
+    </div>
+
+    <!-- copyright -->
+    <div id="copyright" class="copyright text-center">
+        &copy;昆山信德佳电气科技有限公司
+    </div>
+
+    <!-- ================== jquery ================== -->
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/jquery/jquery-2.1.4.min.js"></script>
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/jquery/jquery-migrate-1.3.0.min.js"></script>
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/jquery/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/jquery/slimscroll/jquery.slimscroll.min.js"></script>
+    <!--[if lt IE 9]>
+        <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/crossbrowserjs/html5shiv.js"></script>
+        <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/crossbrowserjs/respond.min.js"></script>
+        <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/crossbrowserjs/excanvas.min.js"></script>
+    <![endif]-->
+
+    <!-- ================== BEGIN BASE JS ================== -->
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <!-- bzd js -->
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/js/bzd.js"></script>
+    <script type="text/javascript">
+    //页面初始化加载
+    var handlePageContentView = function() {
+        "use strict";
+        $.when($('#page-loader').addClass('hide')).done(function() {
+            $('#page-container').addClass('in');
+        });
+    }();
+
+    //登录
+    $("form[name=loginform]").submit(function (){
+        var url = $(this).attr('action');
+        var postdata = $(this).serialize();
+        $.post(url, postdata, function (data){
+            var status = data.error ? 'error' : 'success';
+            alertPanelShow(status, data.msg);
+            if (!data.error) {
+                var location_href = "";
+                if ("location" in data.data) {
+                    location_href = data.data.location;
+                }
+                location.href = location_href ? location_href : location.href;
+            }
+        }, 'json');
+
+        return false;
+    });
+    </script>
+</body>
+
+</html>

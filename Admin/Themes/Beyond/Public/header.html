@@ -1,0 +1,189 @@
+<!-- Navbar -->
+<div id="NavBar" class="navbar">
+    <div class="navbar-inner">
+        <div class="navbar-container">
+            <!-- Navbar Barnd -->
+            <div class="navbar-header pull-left">
+                <a href="{$ANY.__APP__}?s=Index/index" class="navbar-brand">
+                    <small>
+                        <img src="{$SERVER.HOST.IMAGE_SERVER}Themes/Beyond/Assets/img/logo.png" alt="" class="img-responsive" style="width: 110px; height: auto; padding-top: 5px;" />
+                    </small>
+                </a>
+            </div>
+            <!-- /Navbar Barnd -->
+            <!-- Sidebar Collapse -->
+            <div class="sidebar-collapse active" id="sidebar-collapse">
+                <i class="collapse-icon fa fa-bars"></i>
+            </div>
+            <!-- /Sidebar Collapse -->
+            <!-- headernav -->
+            <div id="headernav" class="headernav">
+                <ul class="list-unstyled list-inline">
+                    {if is_array($managerinfo.access)&&!empty($managerinfo.access)}
+                    {foreach $managerinfo.access as $group}
+                    <li class="{$group.class}">
+                        <a href="{$ANY.__APP__}?s=Menu/ajaxNodeHtml&groupid={$group.groupid}" class="{if $group.groupid==$default_groupid}active{/if}">
+                            <i class="menu-icon fa {$group.icon}"></i>
+                            <span>{$group.groupname}</span>
+                        </a>
+                    </li>
+                    {/foreach}
+                    {/if}
+                </ul>
+            </div>
+            <!-- Account Area and Settings -->
+            <div class="navbar-header pull-right">
+                <div class="navbar-account">
+                    <ul class="account-area">
+                        <li>
+                            <a class="login-area dropdown-toggle" data-toggle="dropdown">
+                                <div class="avatar" title="View your public profile">
+                                    <img src="{$SERVER.HOST.IMAGE_SERVER}Themes/Beyond/Assets/img/user/user_avatar_default.jpg">
+                                </div>
+                                <section>
+                                    <h2 style="margin: 0;"><span class="profile"><span>{$managerinfo.account}</span></span></h2>
+                                </section>
+                            </a>
+                            <!--Login Area Dropdown-->
+                            <ul class="pull-right dropdown-menu dropdown-arrow dropdown-login-area" style="position: absolute;">
+                                <!--Avatar Area-->
+                                <li class="edit">
+                                    <a href="#" class="pull-left">账户设置</a>
+                                </li>
+                                <!--Theme Selector Area-->
+                                <li class="theme-area">
+                                    <ul class="colorpicker" id="skin-changer">
+                                        <li><a class="colorpick-btn" href="#" style="background-color:#5DB2FF;" rel="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/skins/blue.min.css"></a></li>
+                                        <li><a class="colorpick-btn" href="#" style="background-color:#2dc3e8;" rel="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/skins/azure.min.css"></a></li>
+                                        <li><a class="colorpick-btn" href="#" style="background-color:#03B3B2;" rel="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/skins/teal.min.css"></a></li>
+                                        <li><a class="colorpick-btn" href="#" style="background-color:#53a93f;" rel="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/skins/green.min.css"></a></li>
+                                        <li><a class="colorpick-btn" href="#" style="background-color:#FF8F32;" rel="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/skins/orange.min.css"></a></li>
+                                        <li><a class="colorpick-btn" href="#" style="background-color:#cc324b;" rel="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/skins/pink.min.css"></a></li>
+                                        <li><a class="colorpick-btn" href="#" style="background-color:#AC193D;" rel="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/skins/darkred.min.css"></a></li>
+                                        <li><a class="colorpick-btn" href="#" style="background-color:#8C0095;" rel="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/skins/purple.min.css"></a></li>
+                                        <li><a class="colorpick-btn" href="#" style="background-color:#0072C6;" rel="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/skins/darkblue.min.css"></a></li>
+                                        <li><a class="colorpick-btn" href="#" style="background-color:#585858;" rel="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/skins/gray.min.css"></a></li>
+                                        <li><a class="colorpick-btn" href="#" style="background-color:#474544;" rel="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/skins/black.min.css"></a></li>
+                                        <li><a class="colorpick-btn" href="#" style="background-color:#001940;" rel="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/skins/deepblue.min.css"></a></li>
+                                    </ul>
+                                </li>
+                                <!--/Theme Selector Area-->
+                                <li class="dropdown-footer">
+                                    <a href="{$ANY.__APP__}?s=Admin/logout">退出</a>
+                                </li>
+                            </ul>
+                            <!--/Login Area Dropdown-->
+                        </li>
+                        <!-- /Account Area -->
+                    </ul>
+                </div>
+            </div>
+            <!-- /Account Area and Settings -->
+        </div>
+    </div>
+</div>
+<!-- /Navbar -->
+<style type="text/css">
+/* header */
+#header {
+    width:100%;
+    height:90px;
+    clear: both;
+}
+.navbar {
+    height: 90px;
+    min-height: 90px;
+}
+.navbar .navbar-inner {
+    min-height: 90px;
+}
+.navbar .sidebar-collapse {
+    height: 90px;
+}
+.navbar .sidebar-collapse .collapse-icon {
+    line-height: 64px;
+}
+.navbar .sidebar-collapse.active .collapse-icon {
+    font-size: 18px;
+    padding: 11px 10px 15px 10px;
+}
+.navbar .navbar-inner .navbar-header .navbar-account .account-area {
+    top: 12px;
+}
+
+/*headernav*/
+.headernav {
+    float: left;
+    margin-left: 130px;
+    margin-top: 50px;
+}
+.headernav ul {
+    margin-bottom: 0;
+    margin-left: 0;
+    border: 0;
+    top: 2px;
+}
+.headernav ul li {
+    float: left;
+}
+.headernav ul li a {
+    display: block;
+    width: 120px;
+    height: 40px;
+    line-height: 40px;
+    margin: 0 3px;
+    color: #777;
+    z-index: 11;
+    text-align: center;
+    background-color: #eee;
+    -webkit-box-shadow: 0 0 4px rgba(0,0,0,.3);
+    -moz-box-shadow: 0 0 4px rgba(0,0,0,.3);
+    box-shadow: 0 0 4px rgba(0,0,0,.3);
+}
+.headernav ul li a:hover {
+    color: #262626;
+    text-decoration: none;
+}
+.headernav ul li a.active {
+    height: 42px;
+    color: #262626;
+    border: 0;
+    border-top: 2px solid #2dc3e8;
+    border-bottom-color: transparent;
+    background-color: #fbfbfb;
+    margin-top: -2px;
+    text-decoration: none;
+}
+.headernav ul li.a-blue a.active {
+    border-color: #11a9cc !important;
+}
+.headernav ul li.a-red a.active {
+    border-color: #d73d32 !important;
+}
+.headernav ul li.a-green a.active {
+    border-color: #53a93f !important;
+}
+.headernav ul li.a-yellow a.active {
+    border-color: #f6c12a !important;
+}
+.headernav ul li.a-purple a.active {
+    border-color: #bc5679 !important;
+}
+</style>
+<script type="text/javascript">
+$(function () {
+    //顶部导航菜单选择
+    $("#headernav ul li a").on('click', function (){
+        $(this).parents(".headernav").find("a").removeClass('active');
+        $(this).addClass('active');
+
+        //AJAX获取Node菜单
+        var url = $(this).attr('href');
+        $.get(url, {}, function (data){
+            $("#menuTree").html(data.data.html);
+        }, 'json');
+
+        return false;
+    });
+})
+</script>

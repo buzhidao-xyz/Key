@@ -1,0 +1,15 @@
+{include file="Common/head.html"}
+<link rel="stylesheet" type="text/css" href="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/frame.css" />
+<div id="header">
+    {include file="Public/header.html"}
+</div>
+<div id="menuTree">
+    {include file="Public/menu.html"}
+</div>
+<div id="main">
+    <iframe frameborder="0" name="main" src="{$ANY.__APP__}?s=Index/dashboard" scrolling="yes"></iframe>
+</div>
+<div id="bottom">
+    {include file="Public/bottom.html"}
+</div>
+{include file="Common/foot.html"}

@@ -1,0 +1,81 @@
+<!-- Main Container -->
+<div class="main-container container-fluid">
+    <!-- Page Container -->
+    <div class="page-container">
+        <!-- Page Sidebar -->
+        <div class="page-sidebar" id="sidebar">
+            <!-- Page Sidebar Header-->
+            <div class="sidebar-header-wrapper">
+                <!-- <input type="text" class="searchinput" />
+                <i class="searchicon fa fa-search"></i>
+                <div class="searchhelper"></div> -->
+            </div>
+            <!-- /Page Sidebar Header -->
+
+            {if isset($nodemenu)&&is_array($nodemenu)&&!empty($nodemenu)}
+            <!-- Sidebar Menu -->
+            <ul class="nav sidebar-menu">
+                <!-- <li class="active">
+                    <a href="{$ANY.__APP__}?s=Index/dashboard" target="main">
+                        <i class="menu-icon fa fa-home"></i>
+                        <span class="menu-text"> 控制面板 </span>
+                    </a>
+                </li> -->
+                {foreach $nodemenu as $node}
+                <li class="{if isset($node.nodelist)&&is_array($node.nodelist)&&!empty($node.nodelist)}open{/if} {if isset($default_nodeid)&&$node.nodeid==$default_nodeid}active{/if}">
+                    {if isset($node.nodelist)&&is_array($node.nodelist)&&!empty($node.nodelist)}
+                    <a href="javascript:;" class="menu-dropdown" target="main">
+                        <i class="menu-icon fa {$node.icon}"></i>
+                        <span class="menu-text"> {$node.nodename} </span>
+                        <i class="menu-expand"></i>
+                    </a>
+                    <ul class="submenu">
+                        {foreach $node.nodelist as $subnode}
+                        <li class="{if isset($subnode.nodelist)&&is_array($subnode.nodelist)&&!empty($subnode.nodelist)}open{/if}">
+                            {if isset($subnode.nodelist)&&is_array($subnode.nodelist)&&!empty($subnode.nodelist)}
+                            <a href="javascript:;" class="menu-dropdown" target="main">
+                                <span class="menu-text"> {$subnode.nodename} </span>
+                                <i class="menu-expand"></i>
+                            </a>
+                            <ul class="submenu">
+                                {foreach $subnode.nodelist as $subsubnode}
+                                <li>
+                                    <a href="{$ANY.__APP__}?s={$subsubnode.control}/{$subsubnode.action}" target="main">
+                                        <i class="menu-icon fa fa-bug"></i>
+                                        <span class="menu-text">{$subsubnode.nodename}</span>
+                                    </a>
+                                </li>
+                                {/foreach}
+                            </ul>
+                            {else}
+                            <a href="{$ANY.__APP__}?s={$subnode.control}/{$subnode.action}" target="main">
+                                <span class="menu-text"> {$subnode.nodename} </span>
+                            </a>
+                            {/if}
+                        </li>
+                        {/foreach}
+                    </ul>
+                    {else}
+                    <a href="{$ANY.__APP__}?s={$node.control}/{$node.action}" target="main">
+                        <i class="menu-icon fa {$node.icon}"></i>
+                        <span class="menu-text"> {$node.nodename} </span>
+                    </a>
+                    {/if}
+                </li>
+                {/foreach}
+            </ul>
+            <!-- /Sidebar Menu -->
+            {/if}
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(function (){
+    //菜单点击active
+    $("#sidebar ul.nav li a").on('click', function (){
+        $("#sidebar ul.nav li").removeClass("active");
+        $(this).parent("li").addClass("active");
+    });
+})
+</script>
