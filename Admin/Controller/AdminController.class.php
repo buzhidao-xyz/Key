@@ -175,10 +175,14 @@ class AdminController extends BaseController
         $access = array();
 
         //管理员角色-节点菜单
-        $groupids = array();
-        $nodeids = array();
+        $groupids = array(0);
+        $nodeids = array(0);
 
         //如果是超级管理员-不需要获取角色-直接获取全部菜单信息
+        if ($super == 1) {
+            $groupids = array();
+            $nodeids = array();
+        }
         //如果不是超级管理员-获取管理员角色-角色关联的菜单信息
         if ($super !== 1) {
             //根据管理员的角色id 获取角色-菜单信息
@@ -199,7 +203,7 @@ class AdminController extends BaseController
                 $access[$group['groupid']] = $group;
             }
         }
-        
+        // dump($grouplist);exit;
         //获取节点菜单
         $nodelist = D('Menu')->getNode($nodeids);
         //组合节点菜单 支持三级

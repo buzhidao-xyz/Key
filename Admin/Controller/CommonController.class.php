@@ -48,9 +48,8 @@ class CommonController extends BaseController
 
     /**
      * 存取登录信息 session
-     * @param int $isrefresh 是否刷新session 0:不刷新 1:刷新 默认1
      */
-    protected function GSManagerinfo($managerinfo=array(),$isrefresh=1)
+    protected function GSManagerinfo($managerinfo=array())
     {
         if (!is_array($managerinfo)) return false;
 
@@ -60,13 +59,6 @@ class CommonController extends BaseController
             $smanagerinfo = array_merge($smanagerinfo, $managerinfo);
 
             session('managerinfo',$smanagerinfo);
-            //如果60秒内连续请求 不刷新sessionid
-            $session_regenerate_expire_no = session('session_regenerate_expire_no');
-            if (!$session_regenerate_expire_no) {
-                //刷新sessionid
-                $isrefresh ? session('[regenerate]') : null;
-                session('session_regenerate_expire_no', 1, 60);
-            }
         }
 
         $this->managerinfo = $smanagerinfo;
@@ -186,6 +178,49 @@ class CommonController extends BaseController
     //获取组织结构信息 公司-子公司-部门
     private function _getCompany()
     {
-        
+        $companys = D('Company')->getCompany();
+
+        $subcompanys = D('Company')->getSubCompany();
+        $subcompanys = $subcompanys['data'];
+
+        $departments = D('Company')->getDepartment();
+        $departments = $departments['data'];
+
+        $company = $companys;
+        $subcompanycache = array();
+        foreach ($subcompanys as $scp) {
+            $subcompanyno = $scp['subcompanyno'];
+            $company['subcompany'][$subcompanyno] = $scp;
+            $subcompanycache[$scp['subcompanyid']] = $scp;
+        }
+        foreach ($departments as $dpm) {
+            $departmentno = $dpm['departmentno'];
+            $subcompanyno = $subcompanycache[$dpm['subcompanyid']]['subcompanyno'];
+            $company['subcompany'][$subcompanyno]['department'][$departmentno] = $dpm;
+        }
+
+        //管理员管理的部门
+        $departmentnos = array();
+        if ($this->managerinfo['super'] == 1) {
+            $departmentlist = D('Company')->getDepartment();
+            foreach ($departmentlist['data'] as $dpm) {
+                $departmentnos[] = $dpm['departmentno'];
+            }
+        } else {
+            $departmentnos = D('Manager')->getManagerDepartment($this->managerinfo['managerid']);
+        }
+        $this->GSManagerinfo(array('departmentnos'=>$departmentnos));
+
+        //过滤没有管理权限的departmentno
+        foreach ($company['subcompany'] as $subcompanyno=>$scp) {
+            foreach ($scp['department'] as $departmentno=>$dpm) {
+                if (!in_array($departmentno, $departmentnos)) unset($company['subcompany'][$subcompanyno]['department'][$departmentno]);
+            }
+
+            if (empty($company['subcompany'][$subcompanyno]['department'])) unset($company['subcompany'][$subcompanyno]);
+        }
+
+        $this->assign('company', $company);
+        $this->company = $company;
     }
 }

@@ -7,18 +7,21 @@
 .ng-cloak {
     display: none;
 }
-.glyphicon {
-    top: 0;
-}
 
 /*base基础样式*/
-.page-header .inops-buttons {
-	float: right;
-	margin-top: 5px;
-	margin-right: 150px;
+.page-breadcrumbs {
+    position: fixed; top: 0; right: 0; left: 0;
+    z-index: 999;
 }
-.page-sidebar .sidebar-menu .submenu li {
-    /*border-left: 3px solid #FFF;*/
+.page-header.page-header-fixed {
+    position: fixed;
+    top: 40px;
+    left: 0;
+    right: 0;
+    z-index: 998;
+}
+.page-content {
+    margin-left: 0px;
 }
 
 /**common通用样式**/
@@ -57,9 +60,4 @@
 }
 .m-r-10 {
     margin-right: 10px;
-}
-
-/*dashbaord样式表*/
-.dashboard {
-
 }

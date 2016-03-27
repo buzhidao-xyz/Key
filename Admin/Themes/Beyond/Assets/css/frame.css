@@ -33,11 +33,11 @@ html, body {
 #main {
 	position:absolute;
 	top:90px;
-	left:230px;
+	left:225px;
 	bottom:20px;
 	right:0;
 	overflow: hidden;
-	z-index: 10;
+	z-index: 0;
 }
 #main iframe {
 	width:100%;

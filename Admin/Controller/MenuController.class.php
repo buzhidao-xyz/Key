@@ -8,6 +8,9 @@ namespace Admin\Controller;
 
 class MenuController extends CommonController
 {
+    //默认选中组菜单id=1(实时监控)
+    private $_default_groupid = 1;
+
     public function __construct()
     {
         parent::__construct();
@@ -17,6 +20,7 @@ class MenuController extends CommonController
     private function _getGroupid()
     {
         $groupid = mRequest('groupid');
+        $this->assign('groupid', $groupid);
 
         return $groupid;
     }
@@ -31,6 +35,12 @@ class MenuController extends CommonController
     {
         $groupid = $this->_getGroupid();
         if (!$groupid) $this->ajaxReturn(1, '菜单组错误！');
+
+        //sidebar菜单class
+        $sidebarclass = mRequest('sidebarclass');
+        $this->assign('sidebarclass', $sidebarclass);
+        
+        $this->assign('default_groupid', $this->_default_groupid);
 
         $this->assign('nodemenu', isset($this->managerinfo['access'][$groupid]) ? $this->managerinfo['access'][$groupid]['nodelist'] : array());
 

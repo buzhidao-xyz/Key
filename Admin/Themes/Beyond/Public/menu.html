@@ -3,7 +3,7 @@
     <!-- Page Container -->
     <div class="page-container">
         <!-- Page Sidebar -->
-        <div class="page-sidebar" id="sidebar">
+        <div class="{if $sidebarclass}{$sidebarclass}{else}page-sidebar{/if}" id="sidebar">
             <!-- Page Sidebar Header-->
             <div class="sidebar-header-wrapper">
                 <!-- <input type="text" class="searchinput" />
@@ -15,12 +15,6 @@
             {if isset($nodemenu)&&is_array($nodemenu)&&!empty($nodemenu)}
             <!-- Sidebar Menu -->
             <ul class="nav sidebar-menu">
-                <!-- <li class="active">
-                    <a href="{$ANY.__APP__}?s=Index/dashboard" target="main">
-                        <i class="menu-icon fa fa-home"></i>
-                        <span class="menu-text"> 控制面板 </span>
-                    </a>
-                </li> -->
                 {foreach $nodemenu as $node}
                 <li class="{if isset($node.nodelist)&&is_array($node.nodelist)&&!empty($node.nodelist)}open{/if} {if isset($default_nodeid)&&$node.nodeid==$default_nodeid}active{/if}">
                     {if isset($node.nodelist)&&is_array($node.nodelist)&&!empty($node.nodelist)}
@@ -67,15 +61,93 @@
             <!-- /Sidebar Menu -->
             {/if}
 
+            {if isset($groupid)&&isset($default_groupid)&&$groupid==$default_groupid&&isset($company)&&is_array($company)&&!empty($company)}
+            <ul class="nav sidebar-menu">
+                <li class="open">
+                    <a href="javascript:;" class="menu-dropdown" target="main">
+                        <i class="menu-icon fa fa-desktop"></i>
+                        <span class="menu-text"> {$company.companyname} </span>
+                        <i class="menu-expand"></i>
+                    </a>
+                    <ul class="submenu">
+                        {foreach $company.subcompany as $subcompany}
+                        <li class="open">
+                            <a href="javascript:;" class="menu-dropdown" target="main">
+                                <span class="menu-text"> {$subcompany.subcompanyname} </span>
+                                <i class="menu-expand"></i>
+                            </a>
+                            <ul class="submenu">
+                                {foreach $subcompany.department as $department}
+                                <li>
+                                    <a href="{$ANY.__APP__}?s=Monitor/rtmonitor" target="main">
+                                        <i class="menu-icon fa fa-bar-chart-o"></i>
+                                        <span class="menu-text">{$department.departmentname}</span>
+                                    </a>
+                                </li>
+                                {/foreach}
+                            </ul>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </li>
+            </ul>
+            {/if}
         </div>
     </div>
 </div>
+<style type="text/css">
+.page-sidebar .sidebar-header-wrapper {
+    height: 15px;
+}
+.page-sidebar .sidebar-menu .submenu>li .submenu>li>a {
+    overflow: hidden;
+}
+</style>
 <script type="text/javascript">
 $(function (){
     //菜单点击active
     $("#sidebar ul.nav li a").on('click', function (){
-        $("#sidebar ul.nav li").removeClass("active");
-        $(this).parent("li").addClass("active");
+        if (!$(this).hasClass('menu-dropdown')) {
+            $("#sidebar ul.nav li").removeClass("active");
+            $(this).parent("li").addClass("active");
+        }
     });
+
+    function InitiateSideMenu() {
+        var b = $("#sidebar").hasClass("menu-compact");
+
+        //Sidebar Menu Handle
+        $(".sidebar-menu").on('click', function (e) {
+            var menuLink = $(e.target).closest("a");
+            if (!menuLink || menuLink.length == 0)
+                return;
+            if (!menuLink.hasClass("menu-dropdown")) {
+                if (b && menuLink.get(0).parentNode.parentNode == this) {
+                    var menuText = menuLink.find(".menu-text").get(0);
+                    if (e.target != menuText && !$.contains(menuText, e.target)) {
+                        return false;
+                    }
+                }
+                return;
+            }
+            var submenu = menuLink.next().get(0);
+            // if (!$(submenu).is(":visible")) {
+            //     var c = $(submenu.parentNode).closest("ul");
+            //     if (b && c.hasClass("sidebar-menu"))
+            //         return;
+            //     c.find("> .open > .submenu")
+            //         .each(function () {
+            //             if (this != submenu && !$(this.parentNode).hasClass("active"))
+            //                 $(this).slideUp(200).parent().removeClass("open");
+            //         });
+            // }
+            if (b && $(submenu.parentNode.parentNode).hasClass("sidebar-menu"))
+                return false;
+            $(submenu).slideToggle(200).parent().toggleClass("open");
+            return false;
+        });
+        //End Sidebar Menu Handle
+    }
+    InitiateSideMenu();
 })
 </script>

@@ -25,6 +25,7 @@ class IndexController extends CommonController
         $nodemenu = isset($this->managerinfo['access'][$this->_default_groupid]) ? $this->managerinfo['access'][$this->_default_groupid]['nodelist'] : array();
         $this->assign('nodemenu', $nodemenu);
 
+        $this->assign('groupid', $this->_default_groupid);
         //默认组菜单
         $this->assign('default_groupid', $this->_default_groupid);
         //默认节点菜单

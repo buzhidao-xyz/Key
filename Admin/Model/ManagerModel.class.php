@@ -125,4 +125,20 @@ class ManagerModel extends CommonModel
 
         return is_array($result) ? $result : array();
     }
+
+    //获取管理员管理的公司-子公司-部门
+    public function getManagerDepartment($managerid=null)
+    {
+        if (!$managerid) return false;
+
+        $result = M('manager_department')->where(array('managerid'=>$managerid))->select();
+        $data = array();
+        if (is_array($result)&&!empty($result)) {
+            foreach ($result as $d) {
+                $data[] = $d['departmentno'];
+            }
+        }
+
+        return $data;
+    }
 }

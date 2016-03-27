@@ -174,16 +174,61 @@
 $(function () {
     //顶部导航菜单选择
     $("#headernav ul li a").on('click', function (){
+        if ($(this).hasClass('active')) return false;
+
+        //选中点击
         $(this).parents(".headernav").find("a").removeClass('active');
         $(this).addClass('active');
 
         //AJAX获取Node菜单
         var url = $(this).attr('href');
-        $.get(url, {}, function (data){
+        var postdata = {
+            sidebarclass: $("#menuTree #sidebar").attr('class')
+        }
+        $.get(url, postdata, function (data){
             $("#menuTree").html(data.data.html);
         }, 'json');
 
         return false;
     });
+})
+</script>
+<script type="text/javascript">
+$(function (){
+    function InitiateSideCollapse() {
+        //Sidebar Collapse
+        var b = $("#sidebar").hasClass("menu-compact");
+        $("#sidebar-collapse").on('click', function () {
+            if (!$('#sidebar').is(':visible'))
+                $("#sidebar").toggleClass("hide");
+            $("#sidebar").toggleClass("menu-compact");
+            $(".sidebar-collapse").toggleClass("active");
+            b = $("#sidebar").hasClass("menu-compact");
+
+            if ($(".sidebar-menu").closest("div").hasClass("slimScrollDiv")) {
+                $(".sidebar-menu").slimScroll({ destroy: true });
+                $(".sidebar-menu").attr('style', '');
+            }
+            if (b) {
+                $("#main").css('left', '47px');
+                $(".open > .submenu")
+                    .removeClass("open");
+            } else {
+                $("#main").css('left', '225px');
+                if ($('.page-sidebar').hasClass('sidebar-fixed')) {
+                    var position = (readCookie("rtl-support") || location.pathname == "/index-rtl-fa.html" || location.pathname == "index-rtl-ar.html") ? 'right' : 'left';
+                    $('.sidebar-menu').slimscroll({
+                        height: 'auto',
+                        position: position,
+                        size: '3px',
+                        color: themeprimary
+                    });
+                }
+            }
+            //Slim Scroll Handle
+        });
+        //End Sidebar Collapse
+    };
+    InitiateSideCollapse();
 })
 </script>
