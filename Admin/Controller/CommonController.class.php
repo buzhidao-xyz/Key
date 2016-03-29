@@ -223,4 +223,22 @@ class CommonController extends BaseController
         $this->assign('company', $company);
         $this->company = $company;
     }
+
+    //获取subcompanyno
+    protected function _getSubcompanyno()
+    {
+        $subcompanyno = mRequest('subcompanyno');
+        $this->assign('subcompanyno', $subcompanyno);
+
+        return $subcompanyno;
+    }
+
+    //获取departmentno
+    protected function _getDepartmentno()
+    {
+        $departmentno = mRequest('departmentno');
+        $this->assign('departmentno', $departmentno);
+
+        return $departmentno;
+    }
 }

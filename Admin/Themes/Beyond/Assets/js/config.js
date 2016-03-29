@@ -1,23 +1,22 @@
 requirejs.config({
 	//lib基础路径
-	baseUrl: "js",
+	baseUrl: JS_SERVER,
 	//包名-路径
 	paths: {
 		"app": "app",
 		"boot": "boot",
 		"function": "function",
-		"jquery": "../../assets/jquery/jquery-2.1.4.min",
-		"jquery.purl": "../../assets/jquery/jquery.purl",
-		"bootstrap": "../../assets/bootstrap-3.3.4/js/bootstrap.min",
-		"angular": "../../assets/angular-1.4.2/angular.min",
-		"angular-route": "../../assets/angular-1.4.2/angular-route.min",
-		"angular-cookies": "../../assets/angular-1.4.2/angular-cookies.min",
+		"jquery": "../jquery/jquery-2.1.4.min",
+		"jquery.purl": "../jquery/jquery.purl",
+		"bootstrap": "../bootstrap-3.3.4/js/bootstrap.min",
+		"bootstrap-fileinput": "../plugins/bootstrap-fileinput/js/fileinput.min",
+		"angular": "../angular-1.4.2/angular.min",
+		"angular-route": "../angular-1.4.2/angular-route.min",
+		"angular-cookies": "../angular-1.4.2/angular-cookies.min",
 		"commoncontroller": "controller/common.controller",
 		"commonservice": "service/common.service",
-		"usercontroller": "controller/user.controller",
-		"userservice": "service/user.service",
-		"goodscontroller": "controller/goods.controller",
-		"goodsservice": "service/goods.service"
+		"keycontroller": "controller/key.controller",
+		"keyservice": "service/key.service"
 	},
 	//包依赖
 	shim: {
@@ -39,6 +38,10 @@ requirejs.config({
 		"bootstrap": {
 			deps: ["jquery"],
 			exports: "bootstrap"
+		},
+		"bootstrap-fileinput": {
+			deps: ["jquery"],
+			exports: "bootstrap-fileinput",
 		},
 		"jquery.purl": {
 			deps: ["jquery"],

@@ -24,6 +24,13 @@
     margin-left: 0px;
 }
 
+.form-horizontal .checkbox, .form-horizontal .radio {
+    min-height: 27px;
+    float: left;
+    margin-right: 20px;
+    width: 120px;
+}
+
 /**common通用样式**/
 .m-b-3 {
 	margin-bottom: 3px;

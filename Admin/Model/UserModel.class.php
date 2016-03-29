@@ -13,4 +13,6 @@ class UserModel extends CommonModel
     {
         parent::__construct();
     }
+
+    //
 }

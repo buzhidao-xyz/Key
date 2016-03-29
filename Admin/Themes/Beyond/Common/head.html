@@ -44,12 +44,15 @@
     var CSS_SERVER   = '{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/';
     var IMAGE_SERVER = '{$SERVER.HOST.IMAGE_SERVER}Themes/Beyond/Assets/img/';
     </script>
+
+    <!-- requirejs -->
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/js/require-2.1.11.min.js" data-main="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/js/main.js"></script>
 </head>
 
 <body>
     {include file="Public/alertpanel.html"}
     <!-- Main Container -->
-    <div class="main-container container-fluid">
+    <div class="main-container container-fluid" ng-controller="KeyController">
         <!-- Page Container -->
         <div class="page-container">
             <!-- Page Content -->

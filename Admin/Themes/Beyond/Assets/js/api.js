@@ -1,20 +1,10 @@
 define([], function (){
     return {
-        host: "/html5js/",
+        host: JS_APP + '?s=',
         user: {
             userlist: {
                 m: "get",
-                u: "api/userlist.json"
-            },
-            userprofile: {
-                m: "get",
-                u: "api/userprofile.json"
-            }
-        },
-        goods: {
-            goodslist: {
-                m: "get",
-                u: "api/goodslist.json"
+                u: "user/userlist"
             }
         }
     }
