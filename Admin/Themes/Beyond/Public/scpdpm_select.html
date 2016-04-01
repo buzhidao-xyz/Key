@@ -27,9 +27,9 @@ $(function (){
             subcompanyno: $(this).val()
         }
         $.get(url, params, function (data){
-            var status = data.error ? 'error' : 'success';
-            alertPanelShow(status, data.msg);
-            if (!data.error) {
+            if (data.error) {
+                alertPanelShow('error', data.msg);
+            } else {
                 for (index in data.data.department) {
                     $("select[name=departmentno]").append('<option value="'+data.data.department[index].departmentno+'">'+data.data.department[index].departmentname+'</option>');
                 }

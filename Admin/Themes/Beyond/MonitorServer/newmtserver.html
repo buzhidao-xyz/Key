@@ -1,0 +1,87 @@
+{include file="Common/head.html"}
+    <!-- Page Header -->
+    <div class="page-header position-relative page-header-fixed">
+        <div class="header-title">
+            <h1>
+                监控软件 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+            </h1>
+        </div>
+        <!--Header Buttons-->
+        <div class="header-buttons">
+            <a class="sidebar-toggler" href="#">
+                <i class="fa fa-arrows-h"></i>
+            </a>
+            <a class="refresh" id="refresh-toggler" href="#">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </a>
+            <a class="fullscreen" id="fullscreen-toggler" href="#">
+                <i class="glyphicon glyphicon-fullscreen"></i>
+            </a>
+        </div>
+        <!--Header Buttons End-->
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Page Body -->
+    <div class="page-body">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>添加监控软件</h5>
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-sky">
+                        <span class="widget-caption">监控软件信息表单</span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="horizontal-form">
+                            <form name="mtserverform" method="post" action="{$ANY.__APP__}?s=MonitorServer/newmtserversave" class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">服务器IP</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="mtserverip" placeholder="服务器IP 例：192.168.1.100">
+                                        <p class="help-block"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">服务器port</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="mtserverport" placeholder="服务器端口 例：8080">
+                                    </div>
+                                </div>
+                                {include file="Public/scpdpm_checkbox.html"}
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="online" value="1" class="colored-success" checked="checked">
+                                                <span class="text">在线</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-sky">保存</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+$(function (){
+    //用户Form提交
+    $("form[name=mtserverform]").submit(function (){
+        var url = $(this).attr('action');
+        var postdata = $(this).serialize();
+        $.post(url, postdata, function (data){
+            ajaxCallback(data);
+        }, 'json');
+        return false;
+    });
+})
+</script>
+{include file="Common/foot.html"}

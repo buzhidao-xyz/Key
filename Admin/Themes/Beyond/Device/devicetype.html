@@ -1,0 +1,88 @@
+{include file="Common/head.html"}
+    <link href="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/dataTables.bootstrap.css" rel="stylesheet">
+    <!-- Page Header -->
+    <div class="page-header position-relative page-header-fixed">
+        <div class="header-title">
+            <h1>
+                设备类型 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+            </h1>
+        </div>
+        <!--Header Buttons-->
+        <div class="header-buttons">
+            <a class="sidebar-toggler" href="#">
+                <i class="fa fa-arrows-h"></i>
+            </a>
+            <a class="refresh" id="refresh-toggler" href="#">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </a>
+            <a class="fullscreen" id="fullscreen-toggler" href="#">
+                <i class="glyphicon glyphicon-fullscreen"></i>
+            </a>
+        </div>
+        <!--Header Buttons End-->
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Page Body -->
+    <div class="page-body">
+        <h5 class="row-title before-darkorange"><i class="glyphicon glyphicon-plane darkorange"></i>管理设备类型</h5>
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="widget">
+                    <div class="widget-header bg-sky">
+                        <span class="widget-caption">设备类型信息列表</span>
+                        <div class="widget-buttons">
+                            <a href="#" data-toggle="collapse">
+                                <i class="fa fa-minus"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="widget-body no-padding">
+                        <div id="searchable_wrapper" class="dataTables_wrapper form-inline">
+                            <table class="table table-bordered table-hover table-striped dataTable" id="searchable" role="grid" aria-describedby="searchable_info">
+                                <thead class="bordered-darkorange">
+                                    <tr role="row">
+                                        <th></th>
+                                        <th>名称</th>
+                                        <th>图片</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {if isset($devicetypelist)&&is_array($devicetypelist)&&!empty($devicetypelist)}
+                                    {foreach $devicetypelist as $data}
+                                    <tr role="row" class="even">
+                                        <td>{$data.ROW_NUMBER}</td>
+                                        <td>{$data.devicetypename}</td>
+                                        <td><img src="{$SERVER.HOST.HTTP_HOST}{$data.devicetypeimage}" class="img-responsive"></td>
+                                        <td>
+                                            <a href="{$ANY.__APP__}?s=Device/ajaxGetDeviceTypeHtml&devicetypeid={$data.devicetypeid}" class="btn btn-sky btn-edit-modal">编辑</a>
+                                        </td>
+                                    </tr>
+                                    {/foreach}
+                                    {/if}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+$(function (){
+    $("a.btn-edit-modal").on('click', function (){
+        $.get($(this).attr("href"), {}, function (data){
+            if (!data.error) {
+                $(window.parent.document).find("#modalpanel").html(data.data.html).show();
+                window.parent.bootboxInit();
+            } else {
+                alertPanelShow('error', data.msg);
+            }
+        });
+        return false;
+    });
+})
+</script>
+{include file="Common/foot.html"}

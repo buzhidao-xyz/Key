@@ -28,15 +28,12 @@ var ajaxCallback = function(data) {
     var status = data.error ? 'error' : 'success';
     alertPanelShow(status, data.msg);
     if (!data.error) {
-        var location_href = location.href;
-        if ("location" in data.data) {
-            location_href = data.data.location;
-        }
-        if (location_href == location.href) {
+        setTimeout(function (){
+            if ("location" in data.data) {
+                location.href = data.data.location;
+            }
             location.reload();
-        } else {
-            location.href = location_href;
-        }
+        }, 3000);
     }
 };
 
@@ -73,3 +70,53 @@ $("a.btnenable, a.btndelete, a.btnajax").on('click', function (){
 
     return false;
 });
+
+//初始化bootbox
+function bootboxInit() {
+    var modalhtml = $("#modalhtml").html();
+    var title = $("#modalhtml").attr("title");
+    var className = $("#modalhtml").attr("class");
+
+    $("#modalhtml").html(null);
+    //初始化bootbox
+    bootbox.dialog({
+        title: title,
+        message: modalhtml,
+        className: className,
+        buttons: {
+            success: {
+                label: "确定",
+                className: "btn-sky",
+                callback: function (event){
+                    //绑定Form表单submit事件
+                    $("form[name=modalform]").submit(function (event){
+                        event.preventDefault();
+
+                        var url = $(this).attr('doaction');
+                        var postdata = $(this).serialize();
+                        $.post(url, postdata, function (data){
+                            var status = data.error ? 'error' : 'success';
+                            window.frames["main"].alertPanelShow(status, data.msg);
+                            if (!data.error) {
+                                setTimeout(function (){
+                                    if ("location" in data.data) {
+                                        window.frames["main"].location.href = data.data.location;
+                                    }
+                                    window.frames["main"].location.reload();
+                                }, 3000);
+                            }
+                        }, 'json');
+                        return false;
+                    });
+                    //提交FORM 保存试题信息
+                    $("form[name=modalform]").submit();
+                }
+            },
+            danger: {
+                label: "取消",
+                className: "btn-danger",
+                callback: function (){}
+            }
+        }
+    });
+}

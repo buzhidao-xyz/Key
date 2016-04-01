@@ -121,7 +121,7 @@ class CommonController extends BaseController
     //总页数
     protected function _mkPagination($total=0, $param=array())
     {
-        if (!$total) return false;
+        // if (!$total) return false;
 
         //page参数
         $page     = $this->_getPage();
@@ -143,7 +143,7 @@ class CommonController extends BaseController
         $url = $_SERVER['PHP_SELF'].'?'.implode('&', $query_string);
 
         //总页数
-        $totalpage = ceil($total/$pagesize);
+        $totalpage = $total>0 ? ceil($total/$pagesize) : 1;
         $start = 1;
         $end = $totalpage<11 ? $totalpage : 11;
         if ($totalpage > 11) {
@@ -240,5 +240,14 @@ class CommonController extends BaseController
         $this->assign('departmentno', $departmentno);
 
         return $departmentno;
+    }
+
+    //获取departmentnos
+    protected function _getDepartmentnos()
+    {
+        $departmentnos = mRequest('departmentnos', false);
+        $this->assign('departmentnos', $departmentnos);
+
+        return $departmentnos;
     }
 }

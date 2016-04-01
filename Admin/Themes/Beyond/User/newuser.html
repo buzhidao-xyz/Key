@@ -59,7 +59,7 @@
                                         <input type="text" class="form-control" name="phone" placeholder="手机号码 例：18012345678">
                                     </div>
                                 </div>
-                                {include file="Public/Subcompanydepartment.html"}
+                                {include file="Public/scpdpm_select.html"}
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">职务</label>
                                     <div class="col-sm-10">
@@ -117,30 +117,24 @@
     </div>
 
 <link href="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+<script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+<script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-fileinput/js/fileinput_locale_zh.js"></script>
+<script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/js/class/bootstrap-fileinput.class.js"></script>
 <script>
-requirejs([
-    'require'
-    ], function (){
-        requirejs([JS_SERVER+'../plugins/bootstrap-fileinput/js/fileinput.min.js'], function (){
-            requirejs([JS_SERVER+'../plugins/bootstrap-fileinput/js/fileinput_locale_zh.js'], function (){
-                requirejs(['function'], function ($function){
-                    var BootstrapFileInputClassObj = $function.BootstrapFileInputClass();
-                    //课程示例图
-                    BootstrapFileInputClassObj.Init("photo", JS_APP+"?s=User/photoupload");
+$(function (){
+    var BootstrapFileInputClassObj = new BootstrapFileInputClass();
+    //课程示例图
+    BootstrapFileInputClassObj.Init("photo", JS_APP+"?s=User/photoupload");
 
-                    //课程Form提交
-                    $("form[name=userform]").submit(function (){
-                        var url = $(this).attr('action');
-                        var postdata = $(this).serialize();
-                        $.post(url, postdata, function (data){
-                            $function.ajaxCallback(data);
-                        }, 'json');
-                        return false;
-                    });
-                });
-            });
-        });
-    }
-);
+    //用户Form提交
+    $("form[name=userform]").submit(function (){
+        var url = $(this).attr('action');
+        var postdata = $(this).serialize();
+        $.post(url, postdata, function (data){
+            ajaxCallback(data);
+        }, 'json');
+        return false;
+    });
+})
 </script>
 {include file="Common/foot.html"}

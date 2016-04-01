@@ -1,12 +1,12 @@
 requirejs.config({
 	//lib基础路径
-	baseUrl: JS_SERVER,
+	// baseUrl: JS_SERVER,
 	//包名-路径
 	paths: {
 		"app": "app",
 		"boot": "boot",
 		"function": "function",
-		"jquery": "../jquery/jquery-2.1.4.min",
+		"jquery": "../jquery/jquery-1.11.3.min",
 		"jquery.purl": "../jquery/jquery.purl",
 		"bootstrap": "../bootstrap-3.3.4/js/bootstrap.min",
 		"bootstrap-fileinput": "../plugins/bootstrap-fileinput/js/fileinput.min",

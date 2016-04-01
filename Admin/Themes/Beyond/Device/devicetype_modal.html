@@ -1,0 +1,20 @@
+<div id="modalhtml" title="设备类型-编辑" class="modal-darkorange" style="display: none;">
+    <form role="form" name="modalform" method="post" action="javascript:;" doaction="{$ANY.__APP__}?s=Device/devicetypesave">
+        <input type="hidden" name="devicetypeid" value="{$devicetypeinfo.devicetypeid}">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-title"><b>名称：</b></div>
+                <div class="form-group">
+                    <input type="text" name="devicetypename" value="{$devicetypeinfo.devicetypename}" class="form-control" placeholder="设备类型名称">
+                </div>
+                <div class="form-title"><b>图片：</b></div>
+                <div class="form-group">
+                    <img src="{$SERVER.HOST.HTTP_HOST}{$devicetypeinfo.devicetypeimage}" class="img-responsive center-block">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+$(function (){});
+</script>

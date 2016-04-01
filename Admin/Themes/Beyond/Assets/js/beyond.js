@@ -79,7 +79,9 @@ $(".sidebar-toggler").on('click', function () {
     if ($(window.parent.document).find("#sidebar").hasClass('hide')) {
         $(window.parent.document).find("#main").css("left", 0);
     } else {
-        $(window.parent.document).find("#main").css("left", '225px');
+        var width = $(window.parent.document).find("#sidebar").css("width");
+        var left = parseInt(width.replace('px', ''))+1;
+        $(window.parent.document).find("#main").css("left", left+'px');
     }
     return false;
 });

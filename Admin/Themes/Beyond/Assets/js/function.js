@@ -1,16 +1,33 @@
 define(["jquery"], function ($){
+    var alertPanelShow = function(status, html) {
+        var alertPanelObj = $("#alert-panel");
+        var alertElementObj = $("#alert-element");
+
+        var alerthtml = alertElementObj.find("div#alert-"+status).html();
+        alerthtml = alerthtml.replace('{html}', html);
+        alertPanelObj.html(alerthtml+alertPanelObj.html());
+
+        //5秒后淡出
+        setTimeout(function() {
+            alertPanelObj.find(".alert:last").remove();
+        }, 5000);
+    };
+
     return {
         helloworld: function (){
-            return 'helloworld';
+            console.log('helloworld');
         },
+        alertPanelShow: alertPanelShow,
         ajaxCallback: function (data){
             var status = data.error ? 'error' : 'success';
             alertPanelShow(status, data.msg);
             if (!data.error) {
-                if ("location" in data.data) {
-                    location.href = data.data.location;
-                }
-                location.reload();
+                setTimeout(function (){
+                    if ("location" in data.data) {
+                        location.href = data.data.location;
+                    }
+                    location.reload();
+                }, 3000);
             }
         },
         BootstrapFileInputClass: function () {

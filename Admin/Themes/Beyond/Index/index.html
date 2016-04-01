@@ -27,8 +27,8 @@
     <link href="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/frame.css" rel="stylesheet" />
 
     <!-- ================== jquery ================== -->
-    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/jquery/jquery-2.1.4.min.js"></script>
-    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/jquery/jquery-migrate-1.3.0.min.js"></script>
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/jquery/jquery-1.11.3.min.js"></script>
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/jquery/jquery-migrate-1.1.0.min.js"></script>
     <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
     <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/js/skins.min.js"></script>
 </head>
@@ -47,10 +47,14 @@
         {include file="Public/bottom.html"}
     </div>
 
+    <div id="modalpanel" style="display: none;"></div>
+    
     <!--Basic Scripts-->
     <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/bootstrap-3.3.4/js/bootstrap.min.js"></script>
     <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/jquery/jquery-ui/ui/minified/jquery-ui.min.js"></script>
     <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/jquery/slimscroll/jquery.slimscroll.min.js"></script>
+    
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/bootbox/bootbox.js"></script>
 
     <!--Beyond Scripts-->
     <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/js/beyond.js"></script>
@@ -72,6 +76,7 @@
             themefifthcolor = getThemeColorFromCss('themefifthcolor');
         });
     </script>
+
 </body>
 <!-- /Body -->
 

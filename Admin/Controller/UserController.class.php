@@ -84,7 +84,7 @@ class UserController extends CommonController
         $status = mRequest('status');
         $this->assign('status', $status);
 
-        return $status;
+        return (int)$status;
     }
 
     public function index(){}
@@ -131,6 +131,47 @@ class UserController extends CommonController
     public function newusersave()
     {
         $username = $this->_getUsername();
+        if (!$username) $this->ajaxReturn(1, '请填写警员名称！');
+
         $codeno = $this->_getCodeno();
+        if (!$codeno) $this->ajaxReturn(1, '请填写警员编号！');
+        //查询警员编号是否已存在
+        if (D("User")->ckUserCodenoExists(null, $codeno)) $this->ajaxReturn(1, '该警员编号已存在！');
+
+        $cardno = $this->_getCardno();
+        $phone = $this->_getPhone();
+        $position = $this->_getPosition();
+        $photo = $this->_getPhoto();
+        $access = $this->_getAccess();
+        $status = $this->_getStatus();
+
+        $subcompanyno = $this->_getSubcompanyno();
+        $departmentno = $this->_getDepartmentno();
+        if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
+
+        $createtime = mkDateTime();
+        $updatetime = mkDateTime();
+        //生成userid
+        $userid = guid();
+        $data = array(
+            'userid'   => $userid,
+            'username' => $username,
+            'codeno'   => $codeno,
+            'cardno'   => $cardno,
+            'phone'    => $phone,
+            'departmentno' => $departmentno,
+            'position' => $position,
+            'photo'    => $photo,
+            'access'   => $access,
+            'status'   => $status,
+            'createtime' => $createtime,
+            'updatetime' => $updatetime
+        );
+        $result = D('User')->saveuser(null, $data);
+        if ($result) {
+            $this->ajaxReturn(0, '保存成功！');
+        } else {
+            $this->ajaxReturn(1, '保存失败！');
+        }
     }
 }
