@@ -250,4 +250,22 @@ class CommonController extends BaseController
 
         return $departmentnos;
     }
+
+    //获取cabinetnos
+    protected function _getCabinetnos()
+    {
+        $cabinetnos = mRequest('cabinetnos', false);
+        $this->assign('cabinetnos', $cabinetnos);
+
+        return $cabinetnos;
+    }
+
+    //获取cabinetno
+    protected function _getCabinetno()
+    {
+        $cabinetno = mRequest('cabinetno', false);
+        $this->assign('cabinetno', $cabinetno);
+
+        return $cabinetno;
+    }
 }

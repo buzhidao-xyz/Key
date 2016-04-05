@@ -19,21 +19,13 @@ return array(
 	'DB_CONFIG'     => $database,
 	//mongodb配置信息
 	'MONGO'         => $mongo,
-
-	//系统初始化默认管理员(超级管理员super=1)
-	//区别仅在系统内不可编辑和删除
-	//manager表字段信息
-	'SYSTEM_MANAGER' => array(
-		'managerid' => 1,
-		'account'   => 'admin',
-	),
-
+	
 	//SESSION配置信息
 	'SESSION_TYPE'       => '',
-	'SESSION_PREFIX'     => 'AnyCMS',
+	'SESSION_PREFIX'     => 'KeyCabinet',
 	'VAR_SESSION_ID'     => 'sessionid',
 	'SESSION_OPTIONS'    => array(
-		'name'   => 'AnyCMS',
+		'name'   => 'KeyCabinet',
 		'expire' => 7200 //session默认过期时间 2小时=7200秒
 	),
 

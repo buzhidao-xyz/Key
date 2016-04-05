@@ -15,9 +15,17 @@ class CabinetModel extends CommonModel
     }
 
     //获取钥匙柜
-    public function getCabinet($cabinetid=null, $cabinetname=null, $departmentno=null, $start=0, $length=0)
+    public function getCabinet($cabinetid=null, $cabinetname=null, $departmentno=null, $start=0, $length=9999)
     {
+        $where = array();
+        if ($cabinetid) $where['cabinetid'] = $cabinetid;
+        if ($cabinetname) $where['cabinetname'] = $cabinetname;
+        if ($departmentno) $where['departmentno'] = $departmentno;
 
+        $total = M('cabinet')->where($where)->count();
+        $data = M('cabinet')->where($where)->order('createtime asc')->limit($start, $length)->select();
+
+        return array('total'=>$total, 'data'=>is_array($data)?$data:array());
     }
 
     //获取钥匙柜信息

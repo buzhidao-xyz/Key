@@ -1,0 +1,20 @@
+<div id="modalhtml" title="钥匙类型-编辑" class="modal-darkorange" style="display: none;">
+    <form role="form" name="modalform" method="post" action="javascript:;" doaction="{$ANY.__APP__}?s=Key/keytypesave">
+        <input type="hidden" name="keytypeid" value="{$keytypeinfo.keytypeid}">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-title"><b>名称：</b></div>
+                <div class="form-group">
+                    <input type="text" name="keytypename" value="{$keytypeinfo.keytypename}" class="form-control" placeholder="钥匙类型名称">
+                </div>
+                <div class="form-title"><b>图片：</b></div>
+                <div class="form-group">
+                    <img src="{$SERVER.HOST.HTTP_HOST}{$keytypeinfo.keytypeimage}" class="img-responsive center-block" style="width: 200px;">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+$(function (){});
+</script>

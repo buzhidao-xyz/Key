@@ -15,8 +15,26 @@ class CompanyController extends CommonController
 
     public function index(){}
 
+    //公司管理
+    public function companym()
+    {
+
+    }
+
+    //子公司管理
+    public function subcompany()
+    {
+        
+    }
+
+    //部门管理
+    public function department()
+    {
+        
+    }
+
     //AJAX获取部门列表 通过subcompanyno
-    public function ajaxDepartment()
+    public function ajaxGetDepartment()
     {
         $subcompanyno = $this->_getSubcompanyno();
         if (!$subcompanyno) $this->ajaxReturn(0, '', array('department'=>$department));

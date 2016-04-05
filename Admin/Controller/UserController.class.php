@@ -149,12 +149,14 @@ class UserController extends CommonController
         $departmentno = $this->_getDepartmentno();
         if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
 
-        $createtime = mkDateTime();
-        $updatetime = mkDateTime();
-        //生成userid
+        //获取部门信息
+        $departmentinfo = D('Company')->getDepartmentByNO($departmentno);
+        $userno = $departmentinfo['maxuserno']+1;
+
         $userid = guid();
         $data = array(
             'userid'   => $userid,
+            'userno'   => $userno,
             'username' => $username,
             'codeno'   => $codeno,
             'cardno'   => $cardno,
@@ -164,14 +166,31 @@ class UserController extends CommonController
             'photo'    => $photo,
             'access'   => $access,
             'status'   => $status,
-            'createtime' => $createtime,
-            'updatetime' => $updatetime
+            'createtime' => mkDateTime(),
+            'updatetime' => mkDateTime()
         );
         $result = D('User')->saveuser(null, $data);
         if ($result) {
+            //更新部门信息 - maxuserno
+            D('Company')->savedepartment($departmentinfo['departmentid'], array(
+                'maxuserno' => $userno
+            ));
+
             $this->ajaxReturn(0, '保存成功！');
         } else {
             $this->ajaxReturn(1, '保存失败！');
         }
+    }
+
+    //管理员工
+    public function userlist()
+    {
+        
+    }
+
+    //管理员工
+    public function importuser()
+    {
+        
     }
 }

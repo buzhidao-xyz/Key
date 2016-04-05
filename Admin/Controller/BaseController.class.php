@@ -11,6 +11,14 @@ use Org\Util\Log;
 
 class BaseController extends Controller
 {
+    //设备类型
+    //主控板
+    protected $_DEVICETYPE_ZKB = 1;
+    //门禁机
+    protected $_DEVICETYPE_MJJ = 2;
+    //摄像头
+    protected $_DEVICETYPE_SXT = 3;
+
     public function __construct()
     {
         parent::__construct();

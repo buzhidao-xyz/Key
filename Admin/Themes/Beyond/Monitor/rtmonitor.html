@@ -1,0 +1,220 @@
+{include file="Common/head.html"}
+    <script src="{$SERVER.HOST.PUBLIC_SERVER}plugin/echarts-2.2.7/echarts-all.js"></script>
+
+    <!-- Page Header -->
+    <div class="page-header position-relative page-header-fixed">
+        <div class="header-title">
+            <h1>
+                {$department.departmentname} <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+            </h1>
+        </div>
+        <!--Header Buttons-->
+        <div class="header-buttons">
+            <a class="sidebar-toggler" href="#">
+                <i class="fa fa-arrows-h"></i>
+            </a>
+            <a class="refresh" id="refresh-toggler" href="#">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </a>
+            <a class="fullscreen" id="fullscreen-toggler" href="#">
+                <i class="glyphicon glyphicon-fullscreen"></i>
+            </a>
+        </div>
+        <!--Header Buttons End-->
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Page Body -->
+    <div class="page-body">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <div class="navalinkbox">
+                    {foreach $cabinetList as $cbt}
+                    {if $cbt.cabinetno==$cabinetno}
+                    <a href="{$ANY.__APP__}?s=Monitor/rtmonitor&departmentno={$departmentno}&cabinetno={$cbt.cabinetno}" class="item active">
+                        <h5 class="row-title before-darkorange"><i class="glyphicon glyphicon-plane darkorange"></i>{$cbt.cabinetname}</h5>
+                    </a>
+                    {else}
+                    <a href="{$ANY.__APP__}?s=Monitor/rtmonitor&departmentno={$departmentno}&cabinetno={$cbt.cabinetno}" class="item">
+                        <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>{$cbt.cabinetname}</h5>
+                    </a>
+                    {/if}
+                    {/foreach}
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-8 keysbox">
+                        <div class="widget">
+                            <div class="widget-header bordered-bottom bordered-darkorange">
+                                <span class="widget-caption"><b>1号钥匙柜</b></span>
+                                <span class="widget-caption" style="color: #999; margin-left: 15px;">
+                                    &nbsp;【钥匙数量】: <font color="black">100</font>
+                                    &nbsp;【在位】: <font color="green">70</font>
+                                    &nbsp;【离位】: <font color="red">20</font>
+                                    &nbsp;【错位】: <font color="purple">10</font>
+                                </span>
+                                <div class="widget-buttons">
+                                    <a href="#" data-toggle="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="widget-body no-padding" style="height: 1000px; overflow-y: auto;">
+                                {foreach $keyList as $key}
+                                <div class="keyitem {if !$key.keystatus}keyout{/if}">
+                                    <div class="databox databox-sm radius-bordered databox-shadowed databox-vertical databox-white">
+                                        <div class="databox-top bordered-bottom-2 bordered-sky bg-blue sky">
+                                            <span><b>{$key.keyshowname}</b></span>
+                                        </div>
+                                        <div class="databox-bottom bg-white no-padding">
+                                            <img src="{$SERVER.HOST.HTTP_HOST}{$key.keytypeimage}" class="img-responsive center-block" style="width: 100px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                {/foreach}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 keyuselogbox">
+                        <div class="widget m-b-10">
+                            <div class="widget-header bg-sky">
+                                <span class="widget-caption">钥匙使用日志【今天】</span>
+                                <div class="widget-buttons">
+                                    <a href="#" data-toggle="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="widget-body no-padding" style="height: 580px; overflow-y: auto;">
+                                <div id="searchable_wrapper" class="dataTables_wrapper form-inline">
+                                    <table class="table table-bordered table-hover table-striped dataTable" id="searchable" role="grid" aria-describedby="searchable_info">
+                                        <thead class="bordered-darkorange">
+                                            <tr role="row">
+                                                <th></th>
+                                                <th>【名称】-位置</th>
+                                                <th>动作</th>
+                                                <th>警员</th>
+                                                <th>时间</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {foreach $keyuseLogList as $kuselog}
+                                            <tr role="row" class="even">
+                                                <td>{$kuselog.ROW_NUMBER}</td>
+                                                <td>【{$kuselog.keyshowname}】-1</td>
+                                                <td>
+                                                    {if $kuselog.action}
+                                                    <span class="sky">归还</span>
+                                                    {else}
+                                                    <span class="danger">领取</span>
+                                                    {/if}
+                                                </td>
+                                                <td>{$kuselog.username}</td>
+                                                <td>{$kuselog.logtime|substr:11:8}</td>
+                                            </tr>
+                                            {/foreach}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget">
+                            <div class="widget-header bg-warning">
+                                <span class="widget-caption">钥匙柜开关门日志【今天】</span>
+                                <div class="widget-buttons">
+                                    <a href="#" data-toggle="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="widget-body no-padding" style="height: 377px; overflow-y: auto;">
+                                <div id="searchable_wrapper" class="dataTables_wrapper form-inline">
+                                    <table class="table table-bordered table-hover table-striped dataTable" id="searchable" role="grid" aria-describedby="searchable_info">
+                                        <thead class="bordered-darkorange">
+                                            <tr role="row">
+                                                <th></th>
+                                                <th>动作</th>
+                                                <th>异常</th>
+                                                <th>警员</th>
+                                                <th>时间</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr role="row" class="even">
+                                                <td>1</td>
+                                                <td><span class="danger">开门</span></td>
+                                                <td><span class="danger">异常开门</span></td>
+                                                <td>测试员</td>
+                                                <td>2016-04-04 14:00:00</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style type="text/css">
+    .navalinkbox a.item {
+        margin-right: 7px;
+    }
+    .navalinkbox a.item:hover {
+        text-decoration: none;
+    }
+    .navalinkbox a.item h5 {
+        background: #F5F5F5;
+    }
+    .navalinkbox a.item:hover h5 {
+        font-weight: 700;
+        background: #FFFFFF;
+    }
+    .navalinkbox a.active h5 {
+        font-weight: 700;
+        background: #FFFFFF;
+    }
+
+    .keyitem {
+        float: left;
+        margin: 10px;
+    }
+    .keyitem .databox {
+        width: 120px;
+        height: 160px;
+    }
+    .keyitem .databox .sky {
+        color: #FFF !important;
+    }
+    .keyitem .databox .databox-top {
+        height: 40px;
+        line-height: 30px;
+        font-size: 14px;
+    }
+    .keyitem .databox .databox-bottom {
+        height: 120px;
+    }
+    .keyout .databox .bg-blue {
+        background: none !important;
+    }
+    .keyout .databox .bordered-sky {
+        border-color: #CCC !important;
+    }
+    .keyout .databox .sky {
+        color: #CCC !important;
+    }
+    .keyout .databox .databox-bottom img {
+        -webkit-filter: grayscale(100%);
+        -moz-filter: grayscale(100%);
+        -ms-filter: grayscale(100%);
+        -o-filter: grayscale(100%);
+        
+        filter: grayscale(100%);
+        
+        filter: gray;
+    }
+    </style>
+
+{include file="Common/foot.html"}

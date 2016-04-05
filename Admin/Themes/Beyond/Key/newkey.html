@@ -1,0 +1,256 @@
+{include file="Common/head.html"}
+    <!-- Page Header -->
+    <div class="page-header position-relative page-header-fixed">
+        <div class="header-title">
+            <h1>
+                钥匙管理 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+            </h1>
+        </div>
+        <!--Header Buttons-->
+        <div class="header-buttons">
+            <a class="sidebar-toggler" href="#">
+                <i class="fa fa-arrows-h"></i>
+            </a>
+            <a class="refresh" id="refresh-toggler" href="#">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </a>
+            <a class="fullscreen" id="fullscreen-toggler" href="#">
+                <i class="glyphicon glyphicon-fullscreen"></i>
+            </a>
+        </div>
+        <!--Header Buttons End-->
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Page Body -->
+    <div class="page-body">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>新增钥匙</h5>
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-sky">
+                        <span class="widget-caption">钥匙信息表单</span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="horizontal-form">
+                            <form name="keyform" method="post" action="{$ANY.__APP__}?s=Key/newkeysave" class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">钥匙名称</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="keyname" placeholder="钥匙名称">
+                                        <!-- <p class="help-block"></p> -->
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">钥匙类型</label>
+                                    <div class="col-sm-10">
+                                        <select name="keytypeid" class="select2el" style="width:100%;">
+                                            <option value="">--请选择钥匙类型--</option>
+                                            {foreach $keytypelist as $keytype}
+                                            <option value="{$keytype.keytypeid}">{$keytype.keytypename}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">车牌号码</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="keyshowname" placeholder="车牌号码 例：常A12Z57">
+                                    </div>
+                                </div>
+                                {include file="Public/scpdpm_cabinet.html"}
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">钥匙位置</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="keypos" placeholder="钥匙位置 例：1、2...">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">钥匙RFID</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="keyrfid" placeholder="钥匙RFID标签码">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">限时领取</label>
+                                    <div class="col-sm-10">
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="usetimeflag" value="1" class="colored-blue">
+                                                <span class="text">是</span>
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="usetimeflag" value="0" class="colored-blue" checked="checked">
+                                                <span class="text">否</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="usetimebox" style="display: none;">
+                                    <label class="col-sm-2 control-label no-padding-right"><b>领取时限</b></label>
+                                    <div class="col-sm-10">
+                                        <div class="row m-b-10">
+                                            <label class="control-label no-padding-right" style="float: left; padding-left: 15px;">
+                                                时间段一
+                                            </label>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control datetimepickerele" name="usetimebegin[1]" placeholder="开始时间 时:分 例：08:30">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-clock-o"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div style="float: left; line-height: 34px;">到</div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control datetimepickerele" name="usetimeend[1]" placeholder="结束时间 时:分 例：12:00">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-clock-o"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row m-b-10">
+                                            <label class="control-label no-padding-right" style="float: left; padding-left: 15px;">
+                                                时间段二
+                                            </label>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control datetimepickerele" name="usetimebegin[2]" placeholder="开始时间 时:分 例：13:30">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-clock-o"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div style="float: left; line-height: 34px;">到</div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control datetimepickerele" name="usetimeend[2]" placeholder="结束时间 时:分 例：17:00">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-clock-o"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row m-b-10">
+                                            <label class="control-label no-padding-right" style="float: left; padding-left: 15px;">
+                                                时间段三
+                                            </label>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control datetimepickerele" name="usetimebegin[3]" placeholder="开始时间 时:分 例：20:00">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-clock-o"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div style="float: left; line-height: 34px;">到</div>
+                                            <div class="col-xs-3">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control datetimepickerele" name="usetimeend[3]" placeholder="结束时间 时:分 例：23:00">
+                                                    <span class="input-group-addon">
+                                                        <i class="fa fa-clock-o"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="help-block"><font color="red">*每天，如果只有一个时间段 其他可以留空</font></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">限时归还</label>
+                                    <div class="col-sm-10">
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="returntimeflag" value="1" class="colored-blue">
+                                                <span class="text">是</span>
+                                            </label>
+                                        </div>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="returntimeflag" value="0" class="colored-blue" checked="checked">
+                                                <span class="text">否</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="returntimebox" style="display: none;">
+                                    <label class="col-sm-2 control-label no-padding-right"><b>归还时限</b></label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="returntime" value="" placeholder="归还时限（小时） 例：8">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="keystatus" value="1" class="colored-success" checked="checked">
+                                                <span class="text">在位</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-sky">保存</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<link href="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript">
+$(function (){
+    //领取时限初始化
+    var usetimeInit = function (){
+        $(".datetimepickerele").datetimepicker({
+            language: 'zh-CN',
+            startView: 'day',
+            minView: 'hour',
+            maxView: 'day',
+            format: 'hh:ii',
+            autoclose: true,
+        });
+    }();
+
+    //限时领取选择
+    $("input[name=usetimeflag]").click(function (){
+        if ($(this).val() == '1') {
+            $("#usetimebox").show();
+        } else {
+            $("#usetimebox").hide();
+        }
+    });
+
+    //限时归还选择
+    $("input[name=returntimeflag]").click(function (){
+        if ($(this).val() == '1') {
+            $("#returntimebox").show();
+        } else {
+            $("#returntimebox").hide();
+            $("input[name=returntime]").val('');
+        }
+    });
+
+    //form提交
+    $("form[name=keyform]").submit(function (){
+        var url = $(this).attr('action');
+        var postdata = $(this).serialize();
+        $.post(url, postdata, function (data){
+            ajaxCallback(data);
+        }, 'json');
+        return false;
+    });
+})
+</script>
+{include file="Common/foot.html"}

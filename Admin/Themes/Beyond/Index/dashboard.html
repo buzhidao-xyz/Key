@@ -1,9 +1,11 @@
 {include file="Common/head.html"}
+    <script src="{$SERVER.HOST.PUBLIC_SERVER}plugin/echarts-2.2.7/echarts-all.js"></script>
+
     <!-- Page Header -->
     <div class="page-header position-relative page-header-fixed">
         <div class="header-title">
             <h1>
-                控制面板 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+                系统信息概况 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
             </h1>
         </div>
         <!--Header Buttons-->
@@ -26,17 +28,207 @@
     <div class="page-body">
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
+                <div class="navalinkbox">
+                    {foreach $subcompanylist as $scp}
+                    {if $scp.subcompanyno==$subcompanyno}
+                    <a href="{$ANY.__APP__}?s=Index/dashboard&subcompanyno={$scp.subcompanyno}" class="item active">
+                        <h5 class="row-title before-darkorange"><i class="glyphicon glyphicon-plane darkorange"></i>{$scp.subcompanyname}</h5>
+                    </a>
+                    {else}
+                    <a href="{$ANY.__APP__}?s=Index/dashboard&subcompanyno={$scp.subcompanyno}" class="item">
+                        <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>{$scp.subcompanyname}</h5>
+                    </a>
+                    {/if}
+                    {/foreach}
+                </div>
+
+                {foreach $subcompany.department as $dpm}
                 <div class="widget">
-                    <!--Widget Header-->
                     <div class="widget-header bordered-bottom bordered-sky">
-                        <span class="widget-caption">标题</span>
+                        <span class="widget-caption"><b>{$dpm.departmentname}</b></span>
+                        <span class="widget-caption" style="color: #999; margin-left: 15px;">
+                            -监控服务：192.168.10.11:8090 <font color="green">[在线]</font>
+                        </span>
+                        <div class="widget-buttons">
+                            <a href="#" data-toggle="collapse">
+                                <i class="fa fa-minus"></i>
+                            </a>
+                        </div>
                     </div>
-                    <!--Widget Body-->
-                    <div class="widget-body" style="height: 1000px;">
-                        <p>控制面板</p>
+                    <div class="widget-body no-padding">
+                        <div class="dataTables_wrapper form-inline">
+                            <table class="table table-bordered table-hover table-striped dataTable" id="searchable" role="grid" aria-describedby="searchable_info">
+                                <thead class="bordered-darkorange">
+                                    <tr role="row">
+                                        <th></th>
+                                        <th>钥匙柜</th>
+                                        <th>钥匙数量</th>
+                                        <th>在位数量</th>
+                                        <th>离位数量</th>
+                                        <th>错位数量</th>
+                                        <th>开关门日志</th>
+                                        <th>钥匙使用日志</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr role="row" class="even">
+                                        <td>1</td>
+                                        <td>1号钥匙柜</td>
+                                        <td>45</td>
+                                        <td>35</td>
+                                        <td>8</td>
+                                        <td>2</td>
+                                        <td>50</td>
+                                        <td>100</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="dpmlogchart_{$dpm.departmentno}" class="widget-overview" style="height: 300px; padding: 10px;"></div>
+                        <script type="text/javascript">
+                        $(function (){
+                            var dpmlogchart = echarts.init(document.getElementById('dpmlogchart_{$dpm.departmentno}'));
+                            dpmlogchart.showLoading({
+                                text: '正在努力的读取数据中...',
+                            });
+                            dpmlogchart.hideLoading();
+                            // ajax getting data...............
+
+                            // ajax callback
+                            dpmlogchart.hideLoading();
+
+                            // 图表使用-------------------
+                            var option = option = {
+                                title : {
+                                    text: '钥匙使用日志',
+                                    subtext: '最近七天'
+                                },
+                                tooltip : {
+                                    trigger: 'axis'
+                                },
+                                legend: {
+                                    data:['领取日志','归还日志']
+                                },
+                                color:['#ed4e2a', '#11a9cc'],
+                                toolbox: {
+                                    show : true,
+                                    feature : {
+                                        mark : {
+                                            show: true
+                                        },
+                                        dataView : {
+                                            show: true,
+                                            readOnly: false
+                                        },
+                                        magicType : {
+                                            show: true,
+                                            type: ['line', 'bar']
+                                        },
+                                        restore : {
+                                            show: true
+                                        },
+                                        saveAsImage : {
+                                            show: true
+                                        }
+                                    }
+                                },
+                                calculable : true,
+                                xAxis : [
+                                    {
+                                        type : 'category',
+                                        boundaryGap : false,
+                                        data : ['2016-04-01','2016-04-02','2016-04-03','2016-04-04','2016-04-05','2016-04-06','2016-04-07']
+                                    }
+                                ],
+                                yAxis : [
+                                    {
+                                        type : 'value',
+                                        axisLabel : {
+                                            formatter: '{literal}{value}{/literal}'
+                                        }
+                                    }
+                                ],
+                                series : [
+                                    {
+                                        name:'领取日志',
+                                        type:'line',
+                                        data:[11, 11, 15, 13, 12, 13, 10],
+                                        markPoint : {
+                                            data : [
+                                                {
+                                                    type : 'max',
+                                                    name: '最大值'
+                                                },
+                                                {
+                                                    type : 'min',
+                                                    name: '最小值'
+                                                }
+                                            ]
+                                        },
+                                        markLine : {
+                                            data : [
+                                                {
+                                                    type : 'average',
+                                                    name: '平均值'
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        name:'归还日志',
+                                        type:'line',
+                                        data:[1, -2, 2, 5, 3, 2, 0],
+                                        markPoint : {
+                                            data : [
+                                                {
+                                                    type : 'max',
+                                                    name: '最大值'
+                                                },
+                                                {
+                                                    type : 'min',
+                                                    name: '最小值'
+                                                }
+                                            ]
+                                        },
+                                        markLine : {
+                                            data : [
+                                                {
+                                                    type : 'average',
+                                                    name : '平均值'
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            };
+                            dpmlogchart.setOption(option);
+                        })
+                        </script>
                     </div>
                 </div>
+                {/foreach}
             </div>
         </div>
     </div>
+
+    <style type="text/css">
+    .navalinkbox a.item {
+        margin-right: 7px;
+    }
+    .navalinkbox a.item:hover {
+        text-decoration: none;
+    }
+    .navalinkbox a.item h5 {
+        background: #F5F5F5;
+    }
+    .navalinkbox a.item:hover h5 {
+        font-weight: 700;
+        background: #FFFFFF;
+    }
+    .navalinkbox a.active h5 {
+        font-weight: 700;
+        background: #FFFFFF;
+    }
+    </style>
+
 {include file="Common/foot.html"}

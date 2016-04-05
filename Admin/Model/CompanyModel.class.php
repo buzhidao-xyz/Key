@@ -66,4 +66,28 @@ class CompanyModel extends CommonModel
 
         return $department['total'] ? array_shift($department) : array();
     }
+
+    //获取部门信息通过no
+    public function getDepartmentByNO($departmentno=null)
+    {
+        if (!$departmentno) return false;
+
+        $department = M('department')->where(array('departmentno'=>$departmentno))->find();
+
+        return is_array($department) ? $department : array();
+    }
+
+    //保存部门信息
+    public function savedepartment($departmentid=null, $data=array())
+    {
+        if (!is_array($data) || empty($data)) return false;
+
+        if ($departmentid) {
+            $return = M("department")->where(array('departmentid'=>$departmentid))->save($data);
+        } else {
+            $return = M("department")->add($data);
+        }
+
+        return $return;
+    }
 }

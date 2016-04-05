@@ -36,6 +36,27 @@ class IndexController extends CommonController
     //系统主界面-控制面板
     public function dashboard()
     {
+        //公司列表
+        $subcompanylist = $this->company['subcompany'];
+        $this->assign('subcompanylist', $subcompanylist);
+        //当前subcompany
+        $subcompany = array();
+        $subcompanyno = $this->_getSubcompanyno();
+        if ($subcompanyno) {
+            $subcompany = $subcompanylist[$subcompanyno];
+        } else {
+            $subcompany = current($subcompanylist);
+        }
+        $subcompanyno = $subcompany['subcompanyno'];
+        $this->assign('subcompanyno', $subcompanyno);
+
+        //获取部门统计信息
+        foreach ($subcompany['department'] as $dpm) {
+            $department = $dpm;
+        }
+
+        // dump($subcompany);exit;
+        $this->assign('subcompany', $subcompany);
         $this->display();
     }
 }

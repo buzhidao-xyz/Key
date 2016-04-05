@@ -21,17 +21,23 @@ class MonitorServerModel extends CommonModel
 
         $where = array();
         if ($mtserverid) $where['a.mtserverid'] = $mtserverid;
-        if ($mtserverip) $where['a.mtserverip'] = $mtserverip;
+        if ($mtserverip) $where['a.mtserverip'] = array('like', '%'.$mtserverip.'%');
 
-        $join = $departmentno ? ' __MONITORSERVER_DEPARTMENT__ b on a.mtserverid=b.mtserverid and departmentno='.$departmentno : null;
+        $field = 'a.*';
+        $join = null;
+        if ($departmentno) {
+            $field .= ', b.departmentno';
+            $join = ' __DEPARTMENT_MONITORSERVER__ b on a.mtserverid=b.mtserverid and departmentno='.$departmentno;
+        }
+
         $total = M('monitorserver')->alias('a')->join($join)->where($where)->count();
-        $data = M('monitorserver')->alias('a')->join($join)->where($where)->order('createtime asc')->limit($start, $length)->select();
+        $data = M('monitorserver')->alias('a')->field($field)->join($join)->where($where)->order('createtime asc')->limit($start, $length)->select();
 
         //获取监控软件监控的部门
         $where1 = array();
-        if ($mtserverid) $where1['mtserverid'] = $mtserverid;
         if ($departmentno) $where1['departmentno'] = $departmentno;
-        $mtserverdepartment = M('monitorserver_department')->where($where1)->select();
+        if ($mtserverid) $where1['mtserverid'] = $mtserverid;
+        $mtserverdepartment = M('department_monitorserver')->where($where1)->select();
 
         //组合关联的departmentno
         if (is_array($data)&&!empty($data)) {
@@ -67,8 +73,8 @@ class MonitorServerModel extends CommonModel
     {
         if (!$mtserverid || !is_array($data) || empty($data)) return false;
 
-        M('monitorserver_department')->where(array('mtserverid'=>$mtserverid))->delete();
+        M('department_monitorserver')->where(array('mtserverid'=>$mtserverid))->delete();
 
-        M('monitorserver_department')->addAll($data);
+        M('department_monitorserver')->addAll($data);
     }
 }

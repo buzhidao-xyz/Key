@@ -15,9 +15,30 @@ class UserModel extends CommonModel
     }
 
     //获取员工信息
-    public function getUser()
+    public function getUser($userid=null, $username=null, $departmentno=null, $userno=null, $codeno=null, $cardno=null, $start=0, $length=9999)
     {
+        $where = array();
+        if ($userid) $where['userid'] = is_array($userid) ? array('in', $userid) : $userid;
+        if ($username) $where['username'] = array('like', '%'.$username.'%');
+        if ($departmentno) $where['departmentno'] = $departmentno;
+        if ($userno) $where['userno'] = $userno;
+        if ($codeno) $where['codeno'] = $codeno;
+        if ($cardno) $where['cardno'] = $cardno;
 
+        $total = M('user')->where($where)->count();
+        $data = M('user')->where($where)->order('userno asc')->limit($start, $length)->select();
+
+        return array('total'=>$total, 'data'=>is_array($data)?$data:array());
+    }
+
+    //获取员工信息 By departmentno+userno
+    public function getUserByUserno($departmentno=null, $userno=null)
+    {
+        if (!$departmentno || !$userno) return false;
+
+        $userinfo = $this->getUser(null, null, $departmentno, $userno, null, null);
+
+        return $userinfo['total'] ? array_shift($userinfo) : array();
     }
 
     //查询员工编号是否已存在

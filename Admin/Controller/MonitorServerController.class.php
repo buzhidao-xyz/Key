@@ -86,7 +86,7 @@ class MonitorServerController extends CommonController
 
         //获取departmentnos
         $departmentnos = $this->_getDepartmentnos();
-        if (!is_array($departmentnos) || empty($departmentnos)) $this->ajaxReturn(1, '请填写服务器port！');
+        if (!is_array($departmentnos) || empty($departmentnos)) $this->ajaxReturn(1, '请选择监控的派出所！');
 
         $online = $this->_getOnline();
 
@@ -106,8 +106,8 @@ class MonitorServerController extends CommonController
             $mtsdata = array();
             foreach ($departmentnos as $departmentno) {
                 $mtsdata[] = array(
-                    'mtserverid' => $mtserverid,
                     'departmentno' => $departmentno,
+                    'mtserverid' => $mtserverid,
                 );
             }
             D('MonitorServer')->savemtserverdepartment($mtserverid, $mtsdata);

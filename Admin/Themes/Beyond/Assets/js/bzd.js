@@ -120,3 +120,18 @@ function bootboxInit() {
         }
     });
 }
+
+$(function (){
+    //modal-edit
+    $("a.btn-edit-modal").on('click', function (){
+        $.get($(this).attr("href"), {}, function (data){
+            if (!data.error) {
+                $(window.parent.document).find("#modalpanel").html(data.data.html).show();
+                window.parent.bootboxInit();
+            } else {
+                alertPanelShow('error', data.msg);
+            }
+        });
+        return false;
+    });
+});

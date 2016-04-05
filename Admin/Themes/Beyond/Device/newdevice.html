@@ -33,21 +33,38 @@
                     </div>
                     <div class="widget-body">
                         <div id="horizontal-form">
-                            <form name="mtserverform" method="post" action="{$ANY.__APP__}?s=MonitorServer/newmtserversave" class="form-horizontal" role="form">
+                            <form name="deviceform" method="post" action="{$ANY.__APP__}?s=Device/newdevicesave" class="form-horizontal" role="form">
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">服务器IP</label>
+                                    <label class="col-sm-2 control-label no-padding-right">设备名称</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="mtserverip" placeholder="服务器IP 例：192.168.1.100">
-                                        <p class="help-block"></p>
+                                        <input type="text" class="form-control" name="devicename" placeholder="设备名称 例：门禁机">
+                                        <!-- <p class="help-block"></p> -->
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">服务器port</label>
+                                    <label class="col-sm-2 control-label no-padding-right">设备类型</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="mtserverport" placeholder="服务器端口 例：8080">
+                                        <select name="devicetypeid" class="select2el" style="width:100%;">
+                                            <option value="">--请选择设备类型--</option>
+                                            {foreach $devicetypelist as $devicetype}
+                                            <option value="{$devicetype.devicetypeid}">{$devicetype.devicetypename}</option>
+                                            {/foreach}
+                                        </select>
                                     </div>
                                 </div>
-                                {include file="Public/scpdpm_select.html"}
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">设备IP</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="deviceip" placeholder="设备IP 例：192.168.10.11">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">设备PORT</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="deviceport" placeholder="设备PORT 例：8090">
+                                    </div>
+                                </div>
+                                {include file="Public/scpdpm_cabinets.html"}
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
                                         <div class="checkbox">
@@ -73,8 +90,8 @@
 
 <script type="text/javascript">
 $(function (){
-    //用户Form提交
-    $("form[name=mtserverform]").submit(function (){
+    //deviceform提交
+    $("form[name=deviceform]").submit(function (){
         var url = $(this).attr('action');
         var postdata = $(this).serialize();
         $.post(url, postdata, function (data){

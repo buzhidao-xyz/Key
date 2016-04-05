@@ -64,4 +64,18 @@ class CabinetController extends CommonController
     {
         
     }
+
+    //ajax获取钥匙柜信息
+    public function ajaxGetCabinet()
+    {
+        $departmentno = $this->_getDepartmentno();
+        if (!$departmentno) $this->ajaxReturn(1, '钥匙柜信息错误！');
+
+        $cabinetlist = D('Cabinet')->getCabinet(null, null, $departmentno, 0, 9999);
+        $cabinetlist = $cabinetlist['data'];
+
+        $this->ajaxReturn(0, '', array(
+            'cabinetlist' => $cabinetlist
+        ));
+    }
 }

@@ -39,7 +39,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">服务器IP</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="mtserverip" placeholder="服务器IP 例：192.168.1.100">
+                                        <input type="text" class="form-control" name="mtserverip" value="{$mtserverip}" placeholder="服务器IP 例：192.168.1.100">
                                         <p class="help-block"></p>
                                     </div>
                                 </div>
@@ -89,7 +89,7 @@
                                         <td>{$data.lastheartbeattime}</td>
                                         <td>
                                             <a href="javascript:;" class="btn btn-sky">编辑</a>
-                                            <a href="javascript:;" class="btn btn-danger">删除</a>
+                                            <!-- <a href="javascript:;" class="btn btn-danger">删除</a> -->
                                         </td>
                                     </tr>
                                     {/foreach}

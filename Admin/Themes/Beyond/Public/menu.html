@@ -79,7 +79,7 @@
                             <ul class="submenu">
                                 {foreach $subcompany.department as $department}
                                 <li>
-                                    <a href="{$ANY.__APP__}?s=Monitor/rtmonitor" target="main">
+                                    <a href="{$ANY.__APP__}?s=Monitor/rtmonitor&departmentno={$department.departmentno}" target="main">
                                         <i class="menu-icon fa fa-bar-chart-o"></i>
                                         <span class="menu-text">{$department.departmentname}</span>
                                     </a>
