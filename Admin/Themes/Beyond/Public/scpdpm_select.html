@@ -27,7 +27,10 @@ $(function (){
     //获取子公司列表
     $("select[name=subcompanyno]").change(function (){
         $("select[name=departmentno]").html('<option value="">--请选择派出所--</option>').select2();
-
+        $("select[name=cabinetno]").html('<option value="">--请选择钥匙柜--</option>').select2();
+        $("#userbox").html('<p class="m-t-5" style="color: #747474;">--请选择警员--</p>');
+        $("#keysbox").html('<p class="m-t-5" style="color: #747474;">--请选择钥匙--</p>');
+        
         var url = JS_APP + '?s=Company/ajaxGetDepartment';
         var params = {
             subcompanyno: $(this).val()

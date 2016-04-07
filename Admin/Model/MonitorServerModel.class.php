@@ -15,7 +15,7 @@ class MonitorServerModel extends CommonModel
     }
 
     //获取监控软件
-    public function getMtserver($mtserverid=null, $mtserverip=null, $departmentno=null, $start=0, $length=0)
+    public function getMtserver($mtserverid=null, $mtserverip=null, $departmentno=null, $start=0, $length=9999)
     {
         if (!$length) return false;
 
@@ -66,15 +66,5 @@ class MonitorServerModel extends CommonModel
         }
 
         return $return;
-    }
-
-    //保存监控软件监控的部门信息
-    public function savemtserverdepartment($mtserverid=null, $data=array())
-    {
-        if (!$mtserverid || !is_array($data) || empty($data)) return false;
-
-        M('department_monitorserver')->where(array('mtserverid'=>$mtserverid))->delete();
-
-        M('department_monitorserver')->addAll($data);
     }
 }

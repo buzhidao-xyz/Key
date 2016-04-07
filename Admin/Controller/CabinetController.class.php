@@ -62,7 +62,50 @@ class CabinetController extends CommonController
     //管理钥匙柜
     public function cabinetlist()
     {
-        
+        $subcompanyno = $this->_getSubcompanyno();
+
+        $departmentno = $this->_getDepartmentno();
+        if ($subcompanyno && !$departmentno) {
+            if (isset($this->company['subcompany'][$subcompanyno]['department'])) {
+                foreach ($this->company['subcompany'][$subcompanyno]['department'] as $department) {
+                    $departmentno[] = $department['departmentno'];
+                }
+            }
+        }
+
+        $cabinetname = $this->_getCabinetname();
+
+        list($start, $length) = $this->_mkPage();
+        $cabinetlist = D('Cabinet')->getCabinet(null, $cabinetname, $departmentno, $start, $length);
+        $total = $cabinetlist['total'];
+        $datalist = $cabinetlist['data'];
+
+        foreach ($datalist as $k=>$d) {
+            $subcompanyno = 0;
+            foreach ($this->company['subcompany'] as $subcompany) {
+                if (isset($subcompany['department'])) {
+                    foreach ($subcompany['department'] as $department) {
+                        if ($department['departmentno'] == $d['departmentno']) {
+                            $subcompanyno = $subcompany['subcompanyno'];
+                        }
+                    }
+                }
+            }
+
+            $datalist[$k]['subcompanyno'] = $subcompanyno;
+        }
+        $this->assign('datalist', $datalist);
+
+        $params = array(
+            'subcompanyno' => $subcompanyno,
+            'departmentno' => $departmentno,
+            'cabinetname' => $cabinetname,
+        );
+        $this->assign('param', $params);
+        //解析分页数据
+        $this->_mkPagination($total, $params);
+
+        $this->display();
     }
 
     //ajax获取钥匙柜信息

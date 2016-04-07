@@ -4,7 +4,7 @@
     <div class="page-header position-relative page-header-fixed">
         <div class="header-title">
             <h1>
-                监控软件 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+                管理钥匙柜 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
             </h1>
         </div>
         <!--Header Buttons-->
@@ -27,19 +27,19 @@
     <div class="page-body">
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
-                <h5 class="row-title before-warning"><i class="glyphicon glyphicon-plane warning"></i>管理监控软件</h5>
+                <h5 class="row-title before-warning"><i class="glyphicon glyphicon-plane warning"></i>管理钥匙柜</h5>
                 <div class="widget">
                     <div class="widget-header bordered-bottom bordered-warning">
-                        <span class="widget-caption">查询监控软件信息表单</span>
+                        <span class="widget-caption">查询钥匙柜信息表单</span>
                     </div>
                     <div class="widget-body">
                         <div id="horizontal-form">
-                            <form name="mtserverform" method="post" action="{$ANY.__APP__}?s=MonitorServer/mtserver" class="form-horizontal" role="form">
+                            <form name="mtserverform" method="post" action="{$ANY.__APP__}?s=Cabinet/cabinetlist" class="form-horizontal" role="form">
                                 {include file="Public/scpdpm_select.html"}
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">服务器IP</label>
+                                    <label class="col-sm-2 control-label no-padding-right">钥匙柜名称</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="mtserverip" value="{$mtserverip}" placeholder="服务器IP 例：192.168.1.100">
+                                        <input type="text" class="form-control" name="cabinetname" value="{$cabinetname}" placeholder="钥匙柜名称 例：1号钥匙柜">
                                         <p class="help-block"></p>
                                     </div>
                                 </div>
@@ -58,7 +58,7 @@
             <div class="col-xs-12 col-md-12">
                 <div class="widget">
                     <div class="widget-header bg-sky">
-                        <span class="widget-caption">监控软件信息列表</span>
+                        <span class="widget-caption">钥匙柜信息列表</span>
                         <div class="widget-buttons">
                             <a href="#" data-toggle="collapse">
                                 <i class="fa fa-minus"></i>
@@ -71,10 +71,11 @@
                                 <thead class="bordered-darkorange">
                                     <tr role="row">
                                         <th></th>
-                                        <th>服务器IP</th>
-                                        <th>服务器port</th>
-                                        <th>状态</th>
-                                        <th>上次心跳时间</th>
+                                        <th>区分局</th>
+                                        <th>派出所</th>
+                                        <th>编号</th>
+                                        <th>钥匙柜</th>
+                                        <th>创建时间</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -83,13 +84,14 @@
                                     {foreach $datalist as $data}
                                     <tr role="row" class="even">
                                         <td>{$data.ROW_NUMBER}</td>
-                                        <td>{$data.mtserverip}</td>
-                                        <td>{$data.mtserverport}</td>
-                                        <td>{if $data.online}<font color="green">在线</font>{else}<font color="red">离线</font>{/if}</td>
-                                        <td>{$data.lastheartbeattime|substr:0:19}</td>
+                                        <td>{$company['subcompany'][$data.subcompanyno]['subcompanyname']}</td>
+                                        <td>{$company['subcompany'][$data.subcompanyno]['department'][$data.departmentno]['departmentname']}</td>
+                                        <td>{$data.cabinetno}</td>
+                                        <td>{$data.cabinetname}</td>
+                                        <td>{$data.createtime|substr:0:19}</td>
                                         <td>
                                             <a href="javascript:;" class="btn btn-sky">编辑</a>
-                                            <!-- <a href="javascript:;" class="btn btn-danger">删除</a> -->
+                                            <a href="{$ANY.__APP__}?s=Access/sendCabinetAccess&departmentno={$data.departmentno}&cabinetno={$data.cabinetno}" id="sendCabinetAccess" class="btn btn-warning">下发门禁权限</a>
                                         </td>
                                     </tr>
                                     {/foreach}
@@ -109,4 +111,16 @@
         </div>
     </div>
 
+<script type="text/javascript">
+$(function (){
+//下发门禁权限
+$("a#sendCabinetAccess").click(function (){
+    $.get($(this).attr('href'), {}, function (data){
+        ajaxCallback(data);
+    }, 'json');
+
+    return false;
+});
+})
+</script>
 {include file="Common/foot.html"}

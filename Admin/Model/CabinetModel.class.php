@@ -20,10 +20,10 @@ class CabinetModel extends CommonModel
         $where = array();
         if ($cabinetid) $where['cabinetid'] = $cabinetid;
         if ($cabinetname) $where['cabinetname'] = $cabinetname;
-        if ($departmentno) $where['departmentno'] = $departmentno;
+        if ($departmentno) $where['departmentno'] = is_array($departmentno) ? array('in', $departmentno) : $departmentno;
 
         $total = M('cabinet')->where($where)->count();
-        $data = M('cabinet')->where($where)->order('createtime asc')->limit($start, $length)->select();
+        $data = M('cabinet')->where($where)->order('departmentno asc, cabinetno asc')->limit($start, $length)->select();
 
         return array('total'=>$total, 'data'=>is_array($data)?$data:array());
     }

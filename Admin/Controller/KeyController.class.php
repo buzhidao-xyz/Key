@@ -287,4 +287,20 @@ class KeyController extends CommonController
     {
         
     }
+
+    //ajax获取keys
+    public function ajaxGetKey()
+    {
+        $departmentno = $this->_getDepartmentno();
+        if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
+
+        $cabinetno = $this->_getCabinetno();
+
+        $keylist = D('Key')->getKey(null, null, null, $departmentno, $cabinetno);
+        $keylist = $keylist['data'];
+
+        $this->ajaxReturn(0, '', array(
+            'keylist' => $keylist
+        ));
+    }
 }

@@ -47,6 +47,8 @@ class FingerModel extends CommonModel
 
         M('userfinger')->where(array('departmentno'=>$departmentno, 'userno'=>$userno, 'fingerindex'=>array('in', $fingerindex)))->delete();
 
-        M('userfinger')->addAll($data);
+        $result = M('userfinger')->addAll($data);
+
+        return $result;
     }
 }

@@ -6,7 +6,7 @@
  */
 namespace Api\Controller;
 
-class KeyController extends CommonController
+class FingerController extends CommonController
 {
     public function __construct()
     {
@@ -33,17 +33,15 @@ class KeyController extends CommonController
 
         //获取指纹信息
         $finger = mRequest('finger', false);
-        $finger = json_decode($finger, true);
-        if (!is_array($finger) || empty($finger)) $this->apiReturn(1, '未知finger！');
+        // if (!is_array($finger) || empty($finger)) $this->apiReturn(1, '未知finger！');
 
         //获取员工信息
         $userinfo = D('User')->getUserByUserno($departmentno, $userno);
+        if (!is_array($userinfo) || empty($userinfo)) $this->apiReturn(1, '未知警员信息！');
 
         $data = array();
         foreach ($finger as $d) {
-            $userfingerid = guid();
             $data[] = array(
-                'userfingerid' => $userfingerid,
                 'departmentno' => $departmentno,
                 'userno'       => $userno,
                 'fingerindex'  => $d['index'],

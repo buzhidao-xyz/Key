@@ -18,7 +18,7 @@ class KeyController extends CommonController
     {
         $keylockno = mRequest('keylockno');
 
-        return $keylockno;
+        return (int)$keylockno;
     }
 
     //获取keycardid

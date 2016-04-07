@@ -113,7 +113,7 @@ class KeyModel extends CommonModel
 
         //获取使领取时限
         if (is_array($data)) {
-            $keyids = array();
+            $keyids = array('');
             foreach ($data as $k=>$d) {
                 $keyids[] = $d['keyid'];
             }

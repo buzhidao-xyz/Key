@@ -182,15 +182,29 @@ class UserController extends CommonController
         }
     }
 
+    //导入员工信息
+    public function importuser()
+    {
+        
+    }
+
     //管理员工
     public function userlist()
     {
         
     }
 
-    //管理员工
-    public function importuser()
+    //AJAX获取警员信息
+    public function ajaxGetUser()
     {
-        
+        $departmentno = $this->_getDepartmentno();
+        if (!$departmentno) $this->ajaxReturn(1, '钥匙柜信息错误！');
+
+        $userlist = D('User')->getUser(null, null, $departmentno);
+        $userlist = $userlist['data'];
+
+        $this->ajaxReturn(0, '', array(
+            'userlist' => $userlist
+        ));
     }
 }

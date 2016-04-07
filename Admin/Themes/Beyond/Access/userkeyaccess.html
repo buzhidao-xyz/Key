@@ -1,0 +1,190 @@
+{include file="Common/head.html"}
+    <!-- Page Header -->
+    <div class="page-header position-relative page-header-fixed">
+        <div class="header-title">
+            <h1>
+                门禁钥匙权限 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+            </h1>
+        </div>
+        <!--Header Buttons-->
+        <div class="header-buttons">
+            <a class="sidebar-toggler" href="#">
+                <i class="fa fa-arrows-h"></i>
+            </a>
+            <a class="refresh" id="refresh-toggler" href="#">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </a>
+            <a class="fullscreen" id="fullscreen-toggler" href="#">
+                <i class="glyphicon glyphicon-fullscreen"></i>
+            </a>
+        </div>
+        <!--Header Buttons End-->
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Page Body -->
+    <div class="page-body">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>警员钥匙权限配置</h5>
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-sky">
+                        <span class="widget-caption">钥匙柜门禁配置信息表单</span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="horizontal-form">
+                            <form name="userkeyform" method="post" action="{$ANY.__APP__}?s=Access/userkeyaccesssave" class="form-horizontal" role="form">
+                                {include file="Public/scpdpm_select.html"}
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">警员信息</label>
+                                    <div class="col-sm-10">
+                                        <div id="userbox">
+                                            <p class="m-t-5" style="color: #747474;">--请选择警员--</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10" style="border-top: 1px solid #ed4e2a;">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="checkall-userbox" value="1" class="colored-success">
+                                                <span class="text">全选</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">钥匙柜</label>
+                                    <div class="col-sm-10">
+                                        <select name="cabinetno" class="select2el" style="width:100%;">
+                                            <option value="">--请选择钥匙柜--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">钥匙信息</label>
+                                    <div class="col-sm-10">
+                                        <div id="keysbox">
+                                            <p class="m-t-5" style="color: #747474;">--请选择钥匙--</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10" style="border-top: 1px solid #ed4e2a;">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="checkall-keysbox" value="1" class="colored-success">
+                                                <span class="text">全选</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-sky submit">保存</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+$(function (){
+    //userbox全选
+    $("input[name=checkall-userbox]").click(function (){
+        if ($(this).attr('checked')) {
+            $("#userbox").find("input.useritem").attr('checked', 'checked');
+        } else {
+            $("#userbox").find("input.useritem").attr('checked', false);
+        }
+    });
+    //keysbox全选
+    $("input[name=checkall-keysbox]").click(function (){
+        if ($(this).attr('checked')) {
+            $("#keysbox").find("input.useritem").attr('checked', 'checked');
+        } else {
+            $("#keysbox").find("input.useritem").attr('checked', false);
+        }
+    });
+
+    $("select[name=departmentno]").change(function (){
+        //获取警员列表
+        $("#userbox").html('<p class="m-t-5" style="color: #747474;">--请选择警员--</p>');
+        var url = JS_APP + '?s=User/ajaxGetUser';
+        var params = {
+            departmentno: $(this).val()
+        }
+        $.get(url, params, function (data){
+            if (data.error) {
+                alertPanelShow('error', data.msg);
+            } else {
+                for (index in data.data.userlist) {
+                    var html = '<div class="checkbox" style="padding-bottom: 10px;">'
+                             + '<label>'
+                             + '<input type="checkbox" name="usernos[]" value="'+data.data.userlist[index].userno+'" class="useritem">'
+                             + '<span class="text">'+data.data.userlist[index].username+'['+data.data.userlist[index].codeno+']'+'</span>'
+                             + '</label>'
+                             + '</div>';
+                    $("#userbox").append(html);
+                }
+            }
+        });
+
+        //获取钥匙柜列表
+        $("select[name=cabinetno]").html('<option value="">--请选择钥匙柜--</option>').select2();
+        var url = JS_APP + '?s=Cabinet/ajaxGetCabinet';
+        var params = {
+            departmentno: $(this).val()
+        }
+        $.get(url, params, function (data){
+            if (data.error) {
+                alertPanelShow('error', data.msg);
+            } else {
+                for (index in data.data.cabinetlist) {
+                    var html = '<option value="'+data.data.cabinetlist[index].cabinetno+'">'+data.data.cabinetlist[index].cabinetname+'</option>';
+                    $("select[name=cabinetno]").append(html);
+                }
+            }
+        });
+    });
+
+    $("select[name=cabinetno]").change(function (){
+        //获取钥匙列表
+        $("#keysbox").html('<p class="m-t-5" style="color: #747474;">--请选择钥匙--</p>');
+        var url = JS_APP + '?s=Key/ajaxGetKey';
+        var params = {
+            departmentno: $("select[name=departmentno]").val(),
+            cabinetno: $(this).val()
+        }
+        $.get(url, params, function (data){
+            if (data.error) {
+                alertPanelShow('error', data.msg);
+            } else {
+                for (index in data.data.keylist) {
+                    var html = '<div class="checkbox" style="padding-bottom: 10px;">'
+                             + '<label>'
+                             + '<input type="checkbox" name="keynos[]" value="'+data.data.keylist[index].keyno+'" class="useritem">'
+                             + '<span class="text">'+data.data.keylist[index].keyshowname+'['+data.data.keylist[index].keyno+']'+'</span>'
+                             + '</label>'
+                             + '</div>';
+                    $("#keysbox").append(html);
+                }
+            }
+        });
+    });
+
+    //form提交
+    $("form[name=userkeyform]").submit(function (){
+        var url = $(this).attr('action');
+        var postdata = $(this).serialize();
+        $.post(url, postdata, function (data){
+            ajaxCallback(data);
+        }, 'json');
+        return false;
+    });
+})
+</script>
+{include file="Common/foot.html"}

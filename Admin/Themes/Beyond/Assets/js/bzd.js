@@ -28,6 +28,7 @@ var ajaxCallback = function(data) {
     var status = data.error ? 'error' : 'success';
     alertPanelShow(status, data.msg);
     if (!data.error) {
+        $("button.submit").addClass('disabled');
         setTimeout(function (){
             if ("location" in data.data) {
                 location.href = data.data.location;

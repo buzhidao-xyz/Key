@@ -18,7 +18,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-sm-2 control-label no-padding-right">所在钥匙柜</label>
+    <label class="col-sm-2 control-label no-padding-right">钥匙柜</label>
     <div class="col-sm-10">
         <select name="cabinetno" class="select2el" style="width:100%;">
             <option value="">--请选择钥匙柜--</option>
@@ -31,6 +31,7 @@ $(function (){
     $("select[name=subcompanyno]").change(function (){
         $("select[name=departmentno]").html('<option value="">--请选择派出所--</option>').select2();
         $("select[name=cabinetno]").html('<option value="">--请选择钥匙柜--</option>').select2();
+        $("#userbox").html('<p class="m-t-5" style="color: #747474;">--请选择警员--</p>');
 
         var url = JS_APP + '?s=Company/ajaxGetDepartment';
         var params = {
@@ -47,7 +48,7 @@ $(function (){
         });
     });
 
-    //获取部门列表
+    //获取钥匙柜列表
     $("select[name=departmentno]").change(function (){
         $("select[name=cabinetno]").html('<option value="">--请选择钥匙柜--</option>').select2();
 

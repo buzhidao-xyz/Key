@@ -83,11 +83,7 @@ class MonitorServerController extends CommonController
         if (!$mtserverip) $this->ajaxReturn(1, '请填写服务器IP！');
         $mtserverport = $this->_getMtserverport();
         if (!$mtserverport) $this->ajaxReturn(1, '请填写服务器port！');
-
-        //获取departmentnos
-        $departmentnos = $this->_getDepartmentnos();
-        if (!is_array($departmentnos) || empty($departmentnos)) $this->ajaxReturn(1, '请选择监控的派出所！');
-
+        
         $online = $this->_getOnline();
 
         //生成mtserverid
@@ -102,16 +98,6 @@ class MonitorServerController extends CommonController
         );
         $result = D('MonitorServer')->savemtserver(null, $data);
         if ($result) {
-            //保存监控的部门信息
-            $mtsdata = array();
-            foreach ($departmentnos as $departmentno) {
-                $mtsdata[] = array(
-                    'departmentno' => $departmentno,
-                    'mtserverid' => $mtserverid,
-                );
-            }
-            D('MonitorServer')->savemtserverdepartment($mtserverid, $mtsdata);
-
             $this->ajaxReturn(0, '保存成功！');
         } else {
             $this->ajaxReturn(1, '保存失败！');

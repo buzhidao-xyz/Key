@@ -18,7 +18,7 @@ class UserController extends CommonController
     {
         $userno = mRequest('userno');
 
-        return $userno;
+        return (int)$userno;
     }
 
     //获取username

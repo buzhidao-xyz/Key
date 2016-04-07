@@ -36,8 +36,8 @@ class UserModel extends CommonModel
     {
         if (!$departmentno || !$userno) return false;
 
-        $userinfo = $this->getUser(null, null, $departmentno, $userno, null, null);
+        $userinfo = $this->getUser(null, null, $departmentno, $userno);
 
-        return $userinfo['total'] ? array_shift($userinfo) : array();
+        return $userinfo['total'] ? array_shift($userinfo['data']) : array();
     }
 }

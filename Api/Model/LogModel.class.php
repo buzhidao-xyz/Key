@@ -48,9 +48,9 @@ class LogModel extends CommonModel
         if (!is_array($data) || empty($data)) return false;
 
         if ($logid) {
-            $return = M("cabinetdoorlogg")->where(array('logid'=>$logid))->save($data);
+            $return = M("cabinetdoorlog")->where(array('logid'=>$logid))->save($data);
         } else {
-            $return = M("cabinetdoorlogg")->add($data);
+            $return = M("cabinetdoorlog")->add($data);
         }
 
         return $return;

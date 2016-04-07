@@ -247,4 +247,36 @@ class BaseController extends Controller
             return $location;
         }
     }
+
+    /**
+     * socket-tcp交互
+     * $data:'aa bb 00 05 55 01 01 01 00 00 ee ff'
+     */
+    protected function _socketTcpSend($ip=null, $port=null, $data=null)
+    {
+        $result = 0;
+
+        $data = str_split(str_replace(' ', '', $data), 2);
+        $socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"));
+        //设置超时5秒
+        socket_set_option($socket, SOL_SOCKET, SO_SNDTIMEO, array(
+            "sec"  => 5, // Timeout in seconds
+            "usec" => 0   // I assume timeout in microseconds
+        ));
+        if (socket_connect($socket, $ip, $port)) {
+            //逐组数据发送
+            foreach ($data as $d) {
+                socket_write($socket, chr(hexdec($d)));
+            }
+
+            //采用2进制方式接收数据
+            $resultb = socket_read($socket, 1024, PHP_BINARY_READ);
+            //将2进制数据转换成16进制
+            $result = bin2hex($resultb);
+        }
+        //关闭Socket
+        socket_close($socket);
+
+        return $result;
+    }
 }

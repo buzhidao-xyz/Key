@@ -151,11 +151,14 @@ class LogController extends CommonController
         $cabinetno = $this->_getCabinetno();
         if (!$cabinetno) $this->apiReturn(1, '未知cabinetno！');
         
+        $photopath = $this->_getPhotopath();
+
         $photologid = guid();
         $data = array(
             'photologid'   => $photologid,
             'departmentno' => $departmentno,
             'cabinetno'    => $cabinetno,
+            'photofile'    => $photopath,
             'rectime'      => mkDateTime()
         );
         $result = D('Log')->savePhotolog(null, $data);
@@ -203,11 +206,14 @@ class LogController extends CommonController
         $cabinetno = $this->_getCabinetno();
         if (!$cabinetno) $this->apiReturn(1, '未知cabinetno！');
         
+        $videopath = $this->_getVideopath();
+
         $videologid = guid();
         $data = array(
             'videologid'   => $videologid,
             'departmentno' => $departmentno,
             'cabinetno'    => $cabinetno,
+            'videofile'    => $videopath,
             'rectime'      => mkDateTime()
         );
         $result = D('Log')->saveVideolog(null, $data);
@@ -262,9 +268,15 @@ class LogController extends CommonController
         $action = $this->_getAction();
         $alarm = $this->_getAlarm();
 
+        //图片日志ID
+        $photologid = $this->_getPhotologid();
+        //视频日志ID
+        $videologid = $this->_getVideologid();
+
         //获取员工信息
         $userinfo = D('User')->getUser(null, null, $departmentno, $userno, null, $usercardno);
         $userinfo = current($userinfo['data']);
+        // if (!is_array($userinfo) || empty($userinfo)) $this->apiReturn(1, '未知警员信息！');
 
         $logid = guid();
         $data = array(
@@ -276,6 +288,8 @@ class LogController extends CommonController
             'codeno'       => isset($userinfo['codeno']) ? $userinfo['codeno'] : 0,
             'action'       => $action,
             'alarm'        => $alarm,
+            'photologid'   => $photologid,
+            'videologid'   => $videologid,
             'logtime'      => mkDateTime(),
         );
         $result = D('Log')->saveCabinetdoorlog(null, $data);
@@ -304,17 +318,24 @@ class LogController extends CommonController
         $actionflag = $this->_getActionflag();
         $userno = $this->_getUserno();
 
+        //图片日志ID
+        $photologid = $this->_getPhotologid();
+        //视频日志ID
+        $videologid = $this->_getVideologid();
+
         //获取员工信息
         $userinfo = D('User')->getUser(null, null, $departmentno, $userno);
         $userinfo = current($userinfo['data']);
+        // if (!is_array($userinfo) || empty($userinfo)) $this->apiReturn(1, '未知警员信息！');
 
         //获取钥匙信息
         if ($keycardid) {
-            $keyinfo = D('Key')->getKey(nul, null, null, null, null, null, null, $keycardid);
+            $keyinfo = D('Key')->getKey(null, null, null, null, null, null, null, $keycardid);
         } else {
-            $keyinfo = D('Key')->getKey(nul, null, null, $departmentno, $cabinetno, null, $keylockno);
+            $keyinfo = D('Key')->getKey(null, null, null, $departmentno, $cabinetno, null, $keylockno);
         }
         $keyinfo = current($keyinfo['data']);
+        if (!is_array($keyinfo) || empty($keyinfo)) $this->apiReturn(1, '未知钥匙信息！');
 
         //更新钥匙状态
         $keystatus = $action;
@@ -336,9 +357,12 @@ class LogController extends CommonController
             'codeno'       => isset($userinfo['codeno']) ? $userinfo['codeno'] : 0,
             'action'       => $action,
             'actionflag'   => $actionflag,
+            'photologid'   => $photologid,
+            'videologid'   => $videologid,
             'logtime'      => mkDateTime(),
         );
         if ((int)$actionflag==2) $data['keyposwrong'] = $keylockno;
+
         $result = D('Log')->saveKeyuselog(null, $data);
         if ($result) {
             $this->apiReturn(0, '新增成功！', array(
