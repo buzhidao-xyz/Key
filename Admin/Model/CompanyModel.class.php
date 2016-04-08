@@ -54,9 +54,8 @@ class CompanyModel extends CommonModel
 
         $total = M('department')->where($where)->count();
         $data = M('department')->alias('a')
-              ->field('a.*, b.mtserverid, c.mtserverip, c.mtserverport, c.online, c.lastheartbeattime')
-              ->join(' LEFT JOIN __DEPARTMENT_MONITORSERVER__ b on a.departmentno=b.departmentno ')
-              ->join(' LEFT JOIN __MONITORSERVER__ c on b.mtserverid=c.mtserverid ')
+              ->field('a.*, b.mtserverip, b.mtserverport, b.online, b.lastheartbeattime')
+              ->join(' LEFT JOIN __MONITORSERVER__ b on a.mtserverid=b.mtserverid ')
               ->where($where)
               ->order('departmentno asc')
               ->select();
@@ -96,37 +95,5 @@ class CompanyModel extends CommonModel
         }
 
         return $return;
-    }
-
-    //保存监控软件监控的部门信息
-    public function savedepartmentmtserver($departmentno=null, $data=array())
-    {
-        if (!$departmentno || !is_array($data) || empty($data)) return false;
-
-        M('department_monitorserver')->where(array('departmentno'=>$departmentno))->delete();
-
-        $result = M('department_monitorserver')->add($data);
-        return $result;
-    }
-
-    //获取部门关联的监控软件
-    public function getDepartmentMTServer($departmentno=null)
-    {
-        $where = array();
-        if ($departmentno) $where['departmentno'] = is_array($departmentno) ? array('in', $departmentno) : $departmentno;
-
-        $result = M('department_monitorserver')
-                ->alias('a')
-                ->field('a.*, b.mtserverip, b.mtserverport, b.online, b.lastheartbeattime')
-                ->join(' __MONITORSERVER__ b on a.mtserverid=b.mtserverid ')
-                ->where($where)
-                ->select();
-
-        $data = array();
-        foreach ($result as $d) {
-            $data[$d['departmentno']] = $d;
-        }
-
-        return $data;
     }
 }

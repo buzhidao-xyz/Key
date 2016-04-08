@@ -27,29 +27,11 @@ class MonitorServerModel extends CommonModel
         $join = null;
         if ($departmentno) {
             $field .= ', b.departmentno';
-            $join = ' __DEPARTMENT_MONITORSERVER__ b on a.mtserverid=b.mtserverid and departmentno='.$departmentno;
+            $join = ' __DEPARTMENT__ b on a.mtserverid=b.mtserverid and b.departmentno='.$departmentno;
         }
 
         $total = M('monitorserver')->alias('a')->join($join)->where($where)->count();
         $data = M('monitorserver')->alias('a')->field($field)->join($join)->where($where)->order('createtime asc')->limit($start, $length)->select();
-
-        //获取监控软件监控的部门
-        $where1 = array();
-        if ($departmentno) $where1['departmentno'] = $departmentno;
-        if ($mtserverid) $where1['mtserverid'] = $mtserverid;
-        $mtserverdepartment = M('department_monitorserver')->where($where1)->select();
-
-        //组合关联的departmentno
-        if (is_array($data)&&!empty($data)) {
-            foreach ($data as $k=>$d) {
-                $data[$k]['departmentno'] = array();
-                foreach ($mtserverdepartment as $mtsdpm) {
-                    if ($mtsdpm['mtserverid'] == $d['mtserverid']) {
-                        $data[$k]['departmentno'][] = $mtsdpm['departmentno'];
-                    }
-                }
-            }
-        }
 
         return array('total'=>$total, 'data'=>is_array($data)?$data:array());
     }

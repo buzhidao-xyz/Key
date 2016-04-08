@@ -86,10 +86,7 @@ class MonitorServerController extends CommonController
         
         $online = $this->_getOnline();
 
-        //生成mtserverid
-        $mtserverid = guid();
         $data = array(
-            'mtserverid'        => $mtserverid,
             'mtserverip'        => $mtserverip,
             'mtserverport'      => $mtserverport,
             'online'            => $online,

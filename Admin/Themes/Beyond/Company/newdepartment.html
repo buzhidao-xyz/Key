@@ -3,7 +3,7 @@
     <div class="page-header position-relative page-header-fixed">
         <div class="header-title">
             <h1>
-                监控软件 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+                企业管理 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
             </h1>
         </div>
         <!--Header Buttons-->
@@ -26,36 +26,44 @@
     <div class="page-body">
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
-                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>添加监控软件</h5>
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>新增派出所</h5>
+                <div class="oplinks">
+                    <a href="{$ANY.__APP__}?s=Company/department" class="btn btn-sky">管理派出所</a>
+                    <a href="{$ANY.__APP__}?s=Company/newdepartment" class="btn btn-darkorange">新增派出所</a>
+                </div>
                 <div class="widget">
                     <div class="widget-header bordered-bottom bordered-sky">
-                        <span class="widget-caption">监控软件信息表单</span>
+                        <span class="widget-caption">派出所信息表单</span>
                     </div>
                     <div class="widget-body">
                         <div id="horizontal-form">
-                            <form name="mtserverform" method="post" action="{$ANY.__APP__}?s=MonitorServer/newmtserversave" class="form-horizontal" role="form">
+                            <form name="departmentform" method="post" action="{$ANY.__APP__}?s=Company/newdepartmentsave" class="form-horizontal" role="form">
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">监控软件服务器IP</label>
+                                    <label class="col-sm-2 control-label no-padding-right">区分局</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="mtserverip" placeholder="服务器IP 例：192.168.1.100">
-                                        <p class="help-block"></p>
+                                        <select name="subcompanyid" class="select2el" style="width:100%;">
+                                            <option value="">--请选择区分局--</option>
+                                            {foreach $company.subcompany as $subcompany}
+                                            <option value="{$subcompany.subcompanyid}">{$subcompany.subcompanyname}</option>
+                                            {/foreach}
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">监控软件服务器port</label>
+                                    <label class="col-sm-2 control-label no-padding-right">派出所名称</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="mtserverport" placeholder="服务器端口 例：8080">
+                                        <input type="text" class="form-control" name="departmentname" placeholder="派出所名称 例：局前街派出所">
                                     </div>
                                 </div>
-                                <!-- {include file="Public/scpdpm_checkbox.html"} -->
                                 <div class="form-group">
-                                    <div class="col-sm-offset-2 col-sm-10">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" name="online" value="1" class="colored-success" checked="checked">
-                                                <span class="text">在线</span>
-                                            </label>
-                                        </div>
+                                    <label class="col-sm-2 control-label no-padding-right">区分局</label>
+                                    <div class="col-sm-10">
+                                        <select name="mtserverid" class="select2el" style="width:100%;">
+                                            <option value="">--请选择监控软件--</option>
+                                            {foreach $mtserverlist as $mtserver}
+                                            <option value="{$mtserver.mtserverid}">{$mtserver.mtserverip}:{$mtserver.mtserverport}</option>
+                                            {/foreach}
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -74,7 +82,7 @@
 <script type="text/javascript">
 $(function (){
     //Form提交
-    $("form[name=mtserverform]").submit(function (){
+    $("form[name=departmentform]").submit(function (){
         var url = $(this).attr('action');
         var postdata = $(this).serialize();
         $.post(url, postdata, function (data){

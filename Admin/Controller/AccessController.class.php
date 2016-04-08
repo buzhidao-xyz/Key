@@ -100,13 +100,19 @@ class AccessController extends CommonController
         $cabinetno = $this->_getCabinetno();
         if (!$cabinetno) $this->ajaxReturn(1, '未知钥匙柜！');
 
-        //获取部门关联的监控软件
-        $mtserverinfo = M('department_monitorserver')->alias('a')
-                      ->field('a.*, b.mtserverip, b.mtserverport, b.online, b.lastheartbeattime')
-                      ->join(' __MONITORSERVER__ b on a.mtserverid=b.mtserverid')
-                      ->where(array('departmentno'=>$departmentno))
-                      ->find();
-        if (!is_array($mtserverinfo) || empty($mtserverinfo)) $this->ajaxReturn(1, '没有关联监控软件！');
+        //获取部门信息
+        $departmentinfo = array();
+        foreach ($this->company['subcompany'] as $subcompany) {
+            if (isset($subcompany['department'])) {
+                foreach ($subcompany['department'] as $department) {
+                    if ($department['departmentno'] == $departmentno) {
+                        $departmentinfo = $department;
+                        break(2);
+                    }
+                }
+            }
+        }
+        if (!$departmentinfo['mtserverid']) $this->ajaxReturn(1, '没有关联监控软件！');
 
         $departmentno = dechex($departmentno);
         if (strlen($departmentno)==1) $departmentno = '0'.$departmentno;
@@ -115,7 +121,7 @@ class AccessController extends CommonController
         if (strlen($cabinetno)==1) $cabinetno = '0'.$cabinetno;
         
         $data = 'AA BB 00 05 55 '.$departmentno.' '.$cabinetno.' 00 00 00 EE FF';
-        $result = $this->_socketTcpSend($mtserverinfo['mtserverip'], $mtserverinfo['mtserverport'], $data);
+        $result = $this->_socketTcpSend($departmentinfo['mtserverip'], $departmentinfo['mtserverport'], $data);
         if ($result) {
             $this->ajaxReturn(0, '下发门禁权限成功！');
         } else {

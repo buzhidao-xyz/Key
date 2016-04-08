@@ -75,7 +75,7 @@ class CompanyController extends CommonController
         $this->display();
     }
 
-    //部门管理
+    //管理部门
     public function department()
     {
         $departmentname = $this->_getDepartmentname();
@@ -96,56 +96,23 @@ class CompanyController extends CommonController
         $this->display();
     }
 
-    //编辑部门-保存
-    public function updepartmentsave()
+    //新增部门
+    public function newdepartment()
     {
-        $departmentid = $this->_getDepartmentid();
-        if (!$departmentid) $this->ajaxReturn(1, '未知派出所！');
-        $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '未知派出所！');
+        //获取监控软件列表
+        $mtserverlist = D('MonitorServer')->getMtserver();
+        $this->assign("mtserverlist", $mtserverlist['data']);
 
-        $departmentname = $this->_getDepartmentname();
-        if (!$departmentname) $this->ajaxReturn(1, '请填写派出所名称！');
-
-        $mtserverid = mRequest('mtserverid');
-        if (!$mtserverid) $this->ajaxReturn(1, '请选择监控软件！');
-
-        $data = array(
-            'departmentname' => $departmentname
-        );
-        $result = D('Company')->savedepartment($departmentid, $data);
-        if ($result) {
-            //关联监控软件
-            if ($mtserverid) {
-                $data = array(
-                    'departmentno' => $departmentno,
-                    'mtserverid' => $mtserverid
-                );
-                D('Company')->savedepartmentmtserver($departmentno, $data);
-            }
-
-            $this->ajaxReturn(0, '保存成功！');
-        } else {
-            $this->ajaxReturn(1, '保存失败！');
-        }
+        $this->display();
     }
 
-    //AJAX获取部门列表 通过subcompanyno
-    public function ajaxGetDepartment()
+    //新增部门-保存
+    public function newdepartmentsave()
     {
-        $subcompanyno = $this->_getSubcompanyno();
-        if (!$subcompanyno) $this->ajaxReturn(0, '', array('department'=>$department));
-
-        $company = $this->company;
-
-        $department = isset($company['subcompany'][$subcompanyno]) ? $company['subcompany'][$subcompanyno]['department'] : array();
-
-        $this->ajaxReturn(0, '', array(
-            'department' => $department
-        ));
+        
     }
 
-    //ajax获取部门编辑html
+    //编辑部门-ajax获取html
     public function ajaxGetDepartmentHtml()
     {
         $departmentno = $this->_getDepartmentno();
@@ -167,13 +134,52 @@ class CompanyController extends CommonController
 
         //获取监控软件列表
         $mtserverlist = D('MonitorServer')->getMtserver();
-        $mtserverlist = $mtserverlist['data'];
-        $this->assign("mtserverlist", $mtserverlist);
+        $this->assign("mtserverlist", $mtserverlist['data']);
 
         $html = $this->fetch('Company/department_modal');
 
         $this->ajaxReturn(0, '', array(
             'html' => $html
+        ));
+    }
+
+    //编辑部门-保存
+    public function updepartmentsave()
+    {
+        $departmentid = $this->_getDepartmentid();
+        if (!$departmentid) $this->ajaxReturn(1, '未知派出所！');
+
+        $departmentname = $this->_getDepartmentname();
+        if (!$departmentname) $this->ajaxReturn(1, '请填写派出所名称！');
+
+        $mtserverid = mRequest('mtserverid');
+        if (!$mtserverid) $this->ajaxReturn(1, '请选择监控软件！');
+
+        $data = array(
+            'departmentname' => $departmentname,
+            'mtserverid'     => $mtserverid,
+            'updatetime'     => mkDateTime()
+        );
+        $result = D('Company')->savedepartment($departmentid, $data);
+        if ($result) {
+            $this->ajaxReturn(0, '保存成功！');
+        } else {
+            $this->ajaxReturn(1, '保存失败！');
+        }
+    }
+
+    //AJAX获取部门列表 通过subcompanyno
+    public function ajaxGetDepartment()
+    {
+        $subcompanyno = $this->_getSubcompanyno();
+        if (!$subcompanyno) $this->ajaxReturn(0, '', array('department'=>$department));
+
+        $company = $this->company;
+
+        $department = isset($company['subcompany'][$subcompanyno]) ? $company['subcompany'][$subcompanyno]['department'] : array();
+
+        $this->ajaxReturn(0, '', array(
+            'department' => $department
         ));
     }
 }
