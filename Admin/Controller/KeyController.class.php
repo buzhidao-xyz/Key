@@ -285,7 +285,7 @@ class KeyController extends CommonController
     //管理钥匙
     public function keylist()
     {
-        
+        $this->display();
     }
 
     //ajax获取keys

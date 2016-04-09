@@ -1,6 +1,4 @@
 {include file="Common/head.html"}
-    <script src="{$SERVER.HOST.PUBLIC_SERVER}plugin/echarts-2.2.7/echarts-all.js"></script>
-
     <!-- Page Header -->
     <div class="page-header position-relative page-header-fixed">
         <div class="header-title">
@@ -28,7 +26,7 @@
     <div class="page-body">
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
-                <div class="navalinkbox">
+                <div class="navalinkbox" departmentno="{$departmentno}" cabinetno="{$cabinetno}">
                     {foreach $cabinetList as $cbt}
                     {if $cbt.cabinetno==$cabinetno}
                     <a href="{$ANY.__APP__}?s=Monitor/rtmonitor&departmentno={$departmentno}&cabinetno={$cbt.cabinetno}" class="item active">
@@ -47,31 +45,18 @@
                         <div class="widget">
                             <div class="widget-header bordered-bottom bordered-darkorange">
                                 <span class="widget-caption"><b>1号钥匙柜</b></span>
-                                <span class="widget-caption" style="color: #999; margin-left: 15px;">
-                                    &nbsp;【钥匙数量】: <font color="black">100</font>
-                                    &nbsp;【在位】: <font color="green">70</font>
-                                    &nbsp;【离位】: <font color="red">20</font>
-                                    &nbsp;【错位】: <font color="purple">10</font>
+                                <span class="widget-caption" id="cabinethtml" style="color: #999; margin-left: 15px;">
+                                    {include file="Monitor/rtmonitor_cabinet.html"}
                                 </span>
                                 <div class="widget-buttons">
+                                    <span class="darkorange">{'Y-m-d'|date}</span>
                                     <a href="#" data-toggle="collapse">
                                         <i class="fa fa-minus"></i>
                                     </a>
                                 </div>
                             </div>
-                            <div class="widget-body no-padding" style="height: 1000px; overflow-y: auto;">
-                                {foreach $keyList as $key}
-                                <div class="keyitem {if !$key.keystatus}keyout{/if}">
-                                    <div class="databox databox-sm radius-bordered databox-shadowed databox-vertical databox-white">
-                                        <div class="databox-top bordered-bottom-2 bordered-sky bg-blue sky">
-                                            <span><b>{$key.keyshowname}</b></span>
-                                        </div>
-                                        <div class="databox-bottom bg-white no-padding">
-                                            <img src="{$SERVER.HOST.HTTP_HOST}{$key.keytypeimage}" class="img-responsive center-block" style="width: 100px;">
-                                        </div>
-                                    </div>
-                                </div>
-                                {/foreach}
+                            <div class="widget-body no-padding" id="keyhtml" style="height: 1000px; overflow-y: auto;">
+                                {include file="Monitor/rtmonitor_key.html"}
                             </div>
                         </div>
                     </div>
@@ -86,35 +71,8 @@
                                 </div>
                             </div>
                             <div class="widget-body no-padding" style="height: 580px; overflow-y: auto;">
-                                <div id="searchable_wrapper" class="dataTables_wrapper form-inline">
-                                    <table class="table table-bordered table-hover table-striped dataTable" id="searchable" role="grid" aria-describedby="searchable_info">
-                                        <thead class="bordered-darkorange">
-                                            <tr role="row">
-                                                <th></th>
-                                                <th>【名称】-位置</th>
-                                                <th>动作</th>
-                                                <th>警员</th>
-                                                <th>时间</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {foreach $keyuseLogList as $kuselog}
-                                            <tr role="row" class="even">
-                                                <td>{$kuselog.ROW_NUMBER}</td>
-                                                <td>【{$kuselog.keyshowname}】-1</td>
-                                                <td>
-                                                    {if $kuselog.action}
-                                                    <span class="sky">归还</span>
-                                                    {else}
-                                                    <span class="danger">领取</span>
-                                                    {/if}
-                                                </td>
-                                                <td>{$kuselog.username}</td>
-                                                <td>{$kuselog.logtime|substr:11:8}</td>
-                                            </tr>
-                                            {/foreach}
-                                        </tbody>
-                                    </table>
+                                <div id="keyuseloghtml" class="dataTables_wrapper form-inline">
+                                    {include file="Monitor/rtmonitor_keyuselog.html"}
                                 </div>
                             </div>
                         </div>
@@ -128,27 +86,8 @@
                                 </div>
                             </div>
                             <div class="widget-body no-padding" style="height: 377px; overflow-y: auto;">
-                                <div id="searchable_wrapper" class="dataTables_wrapper form-inline">
-                                    <table class="table table-bordered table-hover table-striped dataTable" id="searchable" role="grid" aria-describedby="searchable_info">
-                                        <thead class="bordered-darkorange">
-                                            <tr role="row">
-                                                <th></th>
-                                                <th>动作</th>
-                                                <th>异常</th>
-                                                <th>警员</th>
-                                                <th>时间</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr role="row" class="even">
-                                                <td>1</td>
-                                                <td><span class="danger">开门</span></td>
-                                                <td><span class="danger">异常开门</span></td>
-                                                <td>测试员</td>
-                                                <td>2016-04-04 14:00:00</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div id="cabinetdoorloghtml" class="dataTables_wrapper form-inline">
+                                    {include file="Monitor/rtmonitor_cabinetdoorlog.html"}
                                 </div>
                             </div>
                         </div>
@@ -217,4 +156,33 @@
     }
     </style>
 
+    <script type="text/javascript">
+    $(function (){
+        //异步获取实时监控数据
+        var rtmonitorRun = function (){
+            // return false;
+            var departmentno = $(".navalinkbox").attr('departmentno');
+            var cabinetno = $(".navalinkbox").attr('cabinetno');
+            var url = "{$ANY.__APP__}?s=Monitor/rtmonitorRun&departmentno="+departmentno+"&cabinetno="+cabinetno;
+            $.get(url, {}, function (data){
+                if (data.error) {
+                    alertPanelShow('error', data.message);
+                } else {
+                    // 钥匙柜信息
+                    $("#cabinethtml").html(data.data.cabinethtml);
+                    // 钥匙列表
+                    $("#keyhtml").html(data.data.keyhtml);
+                    // 钥匙使用日志
+                    $("#keyuseloghtml").html(data.data.keyuseloghtml);
+                    // 钥匙柜开关门日志
+                    $("#cabinetdoorloghtml").html(data.data.cabinetdoorloghtml);
+                }
+            }, 'json');
+
+            setTimeout(rtmonitorRun, 15000);
+        }
+        // 启动实时监控 15秒
+        setTimeout(rtmonitorRun, 15000);
+    })
+    </script>
 {include file="Common/foot.html"}

@@ -1,0 +1,28 @@
+<table class="table table-bordered table-hover table-striped dataTable" role="grid" aria-describedby="searchable_info">
+    <thead class="bordered-darkorange">
+        <tr role="row">
+            <th></th>
+            <th>【名称】-位置</th>
+            <th>动作</th>
+            <th>警员</th>
+            <th>时间</th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach $keyuseLogList as $kuselog}
+        <tr role="row" class="even">
+            <td>{$kuselog.ROW_NUMBER}</td>
+            <td>【{$kuselog.keyshowname}】-1</td>
+            <td>
+                {if $kuselog.action}
+                <span class="sky">归还</span>
+                {else}
+                <span class="danger">领取</span>
+                {/if}
+            </td>
+            <td>{$kuselog.username}</td>
+            <td>{$kuselog.logtime|substr:11:8}</td>
+        </tr>
+        {/foreach}
+    </tbody>
+</table>

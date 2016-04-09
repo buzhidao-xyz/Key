@@ -1,6 +1,4 @@
 {include file="Common/head.html"}
-    <script src="{$SERVER.HOST.PUBLIC_SERVER}plugin/echarts-2.2.7/echarts-all.js"></script>
-
     <!-- Page Header -->
     <div class="page-header position-relative page-header-fixed">
         <div class="header-title">
@@ -46,10 +44,11 @@
                 <div class="widget">
                     <div class="widget-header bordered-bottom bordered-sky">
                         <span class="widget-caption"><b>{$dpm.departmentname}</b></span>
-                        <span class="widget-caption" style="color: #999; margin-left: 15px;">
-                            -监控服务：192.168.10.11:8090 <font color="green">[在线]</font>
+                        <span class="widget-caption" style="color: #777; margin-left: 15px;">
+                            -监控服务器：{$dpm.mtserverip}:{$dpm.mtserverport} <font color="green">[在线]</font>
                         </span>
                         <div class="widget-buttons">
+                            <span class="darkorange">{'Y-m-d'|date}</span>
                             <a href="#" data-toggle="collapse">
                                 <i class="fa fa-minus"></i>
                             </a>
@@ -71,34 +70,30 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {if is_array($dpm.cabinetlist)&&!empty($dpm.cabinetlist)}
+                                    {foreach $dpm.cabinetlist as $cabinet}
                                     <tr role="row" class="even">
-                                        <td>1</td>
-                                        <td>1号钥匙柜</td>
-                                        <td>45</td>
-                                        <td>35</td>
-                                        <td>8</td>
-                                        <td>2</td>
-                                        <td>50</td>
-                                        <td>100</td>
+                                        <td>{$cabinet.cabinetno}</td>
+                                        <td>{$cabinet.cabinetname}</td>
+                                        <td>{$cabinet.keynum}</td>
+                                        <td>{$cabinet.keyinnum}</td>
+                                        <td>{$cabinet.keyoutnum}</td>
+                                        <td>{$cabinet.keyerrnum}</td>
+                                        <td>{$cabinet.cabinetdoorlognum}</td>
+                                        <td>{$cabinet.keyuselognum}</td>
                                     </tr>
+                                    {/foreach}
+                                    {/if}
                                 </tbody>
                             </table>
                         </div>
-                        <div id="dpmlogchart_{$dpm.departmentno}" class="widget-overview" style="height: 300px; padding: 10px;"></div>
+                        <div id="dpmlogchart_{$dpm.departmentno}" class="widget-overview" style="height: 370px; padding: 10px;"></div>
                         <script type="text/javascript">
                         $(function (){
-                            var dpmlogchart = echarts.init(document.getElementById('dpmlogchart_{$dpm.departmentno}'));
-                            dpmlogchart.showLoading({
-                                text: '正在努力的读取数据中...',
-                            });
-                            dpmlogchart.hideLoading();
-                            // ajax getting data...............
-
-                            // ajax callback
-                            dpmlogchart.hideLoading();
+                            var dpmlogchart = echarts.init(document.getElementById('dpmlogchart_{$dpm.departmentno}'), 'shine');
 
                             // 图表使用-------------------
-                            var option = option = {
+                            var option = {
                                 title : {
                                     text: '钥匙使用日志',
                                     subtext: '最近七天'
@@ -113,12 +108,15 @@
                                 toolbox: {
                                     show : true,
                                     feature : {
+                                        dataZoom: {
+                                            show: true
+                                        },
                                         mark : {
                                             show: true
                                         },
                                         dataView : {
                                             show: true,
-                                            readOnly: false
+                                            readOnly: true
                                         },
                                         magicType : {
                                             show: true,
@@ -137,7 +135,7 @@
                                     {
                                         type : 'category',
                                         boundaryGap : false,
-                                        data : ['2016-04-01','2016-04-02','2016-04-03','2016-04-04','2016-04-05','2016-04-06','2016-04-07']
+                                        data : []
                                     }
                                 ],
                                 yAxis : [
@@ -152,7 +150,7 @@
                                     {
                                         name:'领取日志',
                                         type:'line',
-                                        data:[11, 11, 15, 13, 12, 13, 10],
+                                        data:[],
                                         markPoint : {
                                             data : [
                                                 {
@@ -177,7 +175,7 @@
                                     {
                                         name:'归还日志',
                                         type:'line',
-                                        data:[1, -2, 2, 5, 3, 2, 0],
+                                        data:[],
                                         markPoint : {
                                             data : [
                                                 {
@@ -201,6 +199,21 @@
                                     }
                                 ]
                             };
+
+                            //xAxis-日期
+                            {foreach $logdays as $day}
+                            option.xAxis[0].data.push('{$day}');
+                            {/foreach}
+
+                            //series-数据-keyoutlognum
+                            {foreach $dpm.keyoutlognum as $kn}
+                            option.series[0].data.push('{$kn}');
+                            {/foreach}
+                            //series-数据-keyinlognum
+                            {foreach $dpm.keyinlognum as $kn}
+                            option.series[1].data.push('{$kn}');
+                            {/foreach}
+
                             dpmlogchart.setOption(option);
                         })
                         </script>
@@ -231,4 +244,6 @@
     }
     </style>
 
+    <script src="{$SERVER.HOST.PUBLIC_SERVER}plugin/echarts/echarts.min.js"></script>
+    <script src="{$SERVER.HOST.PUBLIC_SERVER}plugin/echarts/theme/shine.js"></script>
 {include file="Common/foot.html"}

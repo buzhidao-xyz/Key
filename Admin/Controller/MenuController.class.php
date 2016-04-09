@@ -30,6 +30,10 @@ class MenuController extends CommonController
         $this->display();
     }
 
+    public function group(){}
+
+    public function node(){}
+
     //ajax获取菜单html
     public function ajaxNodeHtml()
     {

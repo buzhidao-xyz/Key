@@ -136,4 +136,23 @@ class KeyModel extends CommonModel
         
         return array('total'=>$total, 'data'=>is_array($data)?$data:array());
     }
+
+    //钥匙数量统计
+    public function getKeynumByDepartmentCabinet($departmentno=null, $cabinetno=null, $keystatus=null)
+    {
+        $where = array();
+        if ($departmentno) $where['departmentno'] = is_array($departmentno) ? array('in', $departmentno) : $departmentno;
+        if ($cabinetno) $where['cabinetno'] = is_array($cabinetno) ? array('in', $cabinetno) : $cabinetno;
+        if ($keystatus!==null) $where['keystatus'] = $keystatus;
+
+        $keylist = M('keys')->field('departmentno, cabinetno, count(keyid) as keynum')->where($where)->group('departmentno, cabinetno')->select();
+        $keynumlist = array();
+        if (is_array($keylist)&&!empty($keylist)) {
+            foreach ($keylist as $key) {
+                $keynumlist[$key['departmentno'].'-'.$key['cabinetno']] = $key['keynum'];
+            }
+        }
+
+        return $keynumlist;
+    }
 }

@@ -109,7 +109,33 @@ class CompanyController extends CommonController
     //新增部门-保存
     public function newdepartmentsave()
     {
-        
+        $subcompanyid = $this->_getSubcompanyid();
+        if (!$subcompanyid) $this->ajaxReturn(1, '请选择区分局！');
+
+        $departmentname = $this->_getDepartmentname();
+        if (!$departmentname) $this->ajaxReturn(1, '请填写派出所名称！');
+
+        $mtserverid = mRequest('mtserverid');
+        if (!$mtserverid) $this->ajaxReturn(1, '请选择监控软件！');
+
+        $maxdepartmentno = D('Company')->getMaxDepartmentno();
+
+        $departmentno = $maxdepartmentno+1;
+        $data = array(
+            'departmentname' => $departmentname,
+            'departmentno'   => $departmentno,
+            'subcompanyid'   => $subcompanyid,
+            'maxuserno'      => 0,
+            'mtserverid'     => $mtserverid,
+            'createtime'     => mkDateTime(),
+            'updatetime'     => mkDateTime(),
+        );
+        $result = D('Company')->savedepartment(null, $data);
+        if ($result) {
+            $this->ajaxReturn(0, '保存成功！');
+        } else {
+            $this->ajaxReturn(1, '保存失败！');
+        }
     }
 
     //编辑部门-ajax获取html

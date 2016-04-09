@@ -17,7 +17,9 @@ class CabinetModel extends CommonModel
     //获取钥匙柜
     public function getCabinet($cabinetid=null, $cabinetname=null, $departmentno=null, $start=0, $length=9999)
     {
-        $where = array();
+        $where = array(
+            'isdelete' => 0
+        );
         if ($cabinetid) $where['cabinetid'] = $cabinetid;
         if ($cabinetname) $where['cabinetname'] = $cabinetname;
         if ($departmentno) $where['departmentno'] = is_array($departmentno) ? array('in', $departmentno) : $departmentno;
@@ -31,7 +33,11 @@ class CabinetModel extends CommonModel
     //获取钥匙柜信息
     public function getCabinetByID($cabinetid=null)
     {
+        if (!$cabinetid) return false;
 
+        $cabinetinfo = $this->getCabinet($cabinetid);
+
+        return $cabinetinfo['total'] ? current($cabinetinfo['data']) : array();
     }
 
     //获取某部门最大的钥匙柜编号

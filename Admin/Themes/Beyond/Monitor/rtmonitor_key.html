@@ -1,0 +1,12 @@
+{foreach $keyList as $key}
+<div class="keyitem {if !$key.keystatus}keyout{/if}">
+    <div class="databox databox-sm radius-bordered databox-shadowed databox-vertical databox-white">
+        <div class="databox-top bordered-bottom-2 bordered-sky bg-blue sky">
+            <span><b>{$key.keyshowname}</b></span>
+        </div>
+        <div class="databox-bottom bg-white no-padding">
+            <img src="{$SERVER.HOST.HTTP_HOST}{$key.keytypeimage}" class="img-responsive center-block" style="width: 100px;">
+        </div>
+    </div>
+</div>
+{/foreach}

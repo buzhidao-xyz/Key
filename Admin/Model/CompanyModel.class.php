@@ -83,6 +83,14 @@ class CompanyModel extends CommonModel
         return is_array($department) ? $department : array();
     }
 
+    //获取最大的departmentno
+    public function getMaxDepartmentno()
+    {
+        $department = M('department')->order('departmentno desc')->find();
+
+        return is_array($department)&&!empty($department) ? $department['departmentno'] : 0;
+    }
+
     //保存部门信息
     public function savedepartment($departmentid=null, $data=array())
     {

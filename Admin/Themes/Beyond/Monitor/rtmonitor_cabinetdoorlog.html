@@ -1,0 +1,36 @@
+<table class="table table-bordered table-hover table-striped dataTable" id="searchable" role="grid" aria-describedby="searchable_info">
+    <thead class="bordered-darkorange">
+        <tr role="row">
+            <th></th>
+            <th>动作</th>
+            <th>异常</th>
+            <th>警员</th>
+            <th>时间</th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach $cabinetdoorLogList as $cdoorlog}
+        <tr role="row" class="even">
+            <td>{$cdoorlog.ROW_NUMBER}</td>
+            <td>
+                {if $cdoorlog.action}
+                <span class="sky">关门</span>
+                {else}
+                <span class="danger">开门</span>
+                {/if}
+            </td>
+            <td>
+                {if !$cdoorlog.alarm}
+                <span class="sky">正常</span>
+                {elseif $cdoorlog.alarm==1}
+                <span class="danger">异常开门</span>
+                {elseif $cdoorlog.alarm==2}
+                <span class="danger">长时间未关门</span>
+                {/if}
+            </td>
+            <td>{$cdoorlog.username}</td>
+            <td>{$cdoorlog.logtime|substr:11:8}</td>
+        </tr>
+        {/foreach}
+    </tbody>
+</table>
