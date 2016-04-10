@@ -17,7 +17,9 @@ class UserModel extends CommonModel
     //获取员工信息
     public function getUser($userid=null, $username=null, $departmentno=null, $userno=null, $codeno=null, $cardno=null, $start=0, $length=9999)
     {
-        $where = array();
+        $where = array(
+            'status' => 1
+        );
         if ($userid) $where['userid'] = is_array($userid) ? array('in', $userid) : $userid;
         if ($username) $where['username'] = array('like', '%'.$username.'%');
         if ($departmentno) $where['departmentno'] = $departmentno;
@@ -47,6 +49,7 @@ class UserModel extends CommonModel
         if (!$codeno) return false;
 
         $where = array(
+            'status' => 1,
             'codeno' => $codeno
         );
         if ($userid) $where['userid']=array('neq', $userid);

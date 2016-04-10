@@ -88,7 +88,7 @@
                                         <td>{if $data.online}<font color="green">在线</font>{else}<font color="red">离线</font>{/if}</td>
                                         <td>{$data.lastheartbeattime|substr:0:19}</td>
                                         <td>
-                                            <a href="javascript:;" class="btn btn-sky">编辑</a>
+                                            <a href="{$ANY.__APP__}?s=MonitorServer/ajaxGetMTServerHtml&mtserverid={$data.mtserverid}" class="btn btn-sky btn-edit-modal">编辑</a>
                                             <!-- <a href="javascript:;" class="btn btn-danger">删除</a> -->
                                         </td>
                                     </tr>

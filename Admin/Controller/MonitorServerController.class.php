@@ -100,4 +100,46 @@ class MonitorServerController extends CommonController
             $this->ajaxReturn(1, '保存失败！');
         }
     }
+
+    //编辑监控软件
+    public function ajaxGetMTServerHtml()
+    {
+        $mtserverid = mRequest('mtserverid');
+        if (!$mtserverid) $this->ajaxReturn(1, '未知监控软件！');
+
+        //获取监控软件列表
+        $mtserverlist = D('MonitorServer')->getMtserver($mtserverid);
+        if (!$mtserverlist['total']) $this->ajaxReturn(1, '未知监控软件！');
+
+        $this->assign("mtserverinfo", current($mtserverlist['data']));
+
+        $html = $this->fetch('MonitorServer/upmtserver_modal');
+
+        $this->ajaxReturn(0, '', array(
+            'html' => $html
+        ));
+    }
+
+    //编辑监控软件-保存
+    public function upmtserversave()
+    {
+        $mtserverid = mRequest('mtserverid');
+        if (!$mtserverid) $this->ajaxReturn(1, '未知监控软件！');
+
+        $mtserverip = $this->_getMtserverip();
+        if (!$mtserverip) $this->ajaxReturn(1, '请填写服务器IP！');
+        $mtserverport = $this->_getMtserverport();
+        if (!$mtserverport) $this->ajaxReturn(1, '请填写服务器port！');
+        
+        $data = array(
+            'mtserverip'   => $mtserverip,
+            'mtserverport' => $mtserverport,
+        );
+        $result = D('MonitorServer')->savemtserver($mtserverid, $data);
+        if ($result) {
+            $this->ajaxReturn(0, '保存成功！');
+        } else {
+            $this->ajaxReturn(1, '保存失败！');
+        }
+    }
 }

@@ -450,4 +450,182 @@ class LogController extends CommonController
             ));
         }
     }
+
+    //批量上传钥匙柜开/关门动作日志
+    public function cabinetdoorlogupload()
+    {
+        // $departmentno = $this->_getDepartmentno();
+        // if (!$departmentno) $this->apiReturn(1, '未知departmentno！');
+        // $cabinetno = $this->_getCabinetno();
+        // if (!$cabinetno) $this->apiReturn(1, '未知cabinetno！');
+
+        $logs = mRequest('logs', false);
+        if (!is_array($logs)||empty($logs)) $this->apiReturn(1, 'logs内容为空！');
+
+        $departmentnos = array(0);
+        $usernos = array(0);
+        $usercardnos = array(0);
+        $logdata = array();
+        foreach ($logs as $log) {
+            $departmentnos[] = $log['departmentno'];
+            $usernos[] = $log['userno'];
+            $usercardnos[] = $log['usercardno'];
+            $logdata[] = array(
+                'departmentno' => isset($log['departmentno']) ? $log['departmentno'] : 0,
+                'cabinetno'    => isset($log['cabinetno']) ? $log['cabinetno'] : 0,
+                'userno'       => isset($log['userno']) ? $log['userno'] : 0,
+                'usercardno'   => isset($log['usercardno']) ? $log['usercardno'] : 0,
+                'action'       => isset($log['action']) ? $log['action'] : 0,
+                'alarm'        => isset($log['alarm']) ? $log['alarm'] : 0,
+                'photologid'   => isset($log['photologid']) ? $log['photologid'] : '',
+                'videologid'   => isset($log['videologid']) ? $log['videologid'] : '',
+                'logtime'      => isset($log['logtime']) ? mkDateTime(strtotime($log['logtime'])) : mkDateTime(),
+            );
+        }
+
+        //获取员工信息
+        $userlist = D('User')->getUser(null, null, $departmentnos, $usernos, null, $usercardnos);
+        $userlist = $userlist['data'];
+        // if (!is_array($userlist) || empty($userlist)) $this->apiReturn(1, '未知警员信息！');
+
+        $data = array();
+        foreach ($logdata as $log) {
+            //员工信息
+            $userinfo = array();
+            foreach ($userlist as $user) {
+                if ($user['departmentno']==$log['departmentno'] && ($user['cardno']==$log['usercardno']||$user['userno']==$log['userno'])) {
+                    $userinfo = $user;
+                    break;
+                }
+            }
+
+            //日志数据
+            $data[] = array(
+                'departmentno' => $log['departmentno'],
+                'cabinetno'    => $log['cabinetno'],
+                'userno'       => isset($userinfo['userno']) ? $userinfo['userno'] : 0,
+                'username'     => isset($userinfo['username']) ? $userinfo['username'] : 0,
+                'codeno'       => isset($userinfo['codeno']) ? $userinfo['codeno'] : 0,
+                'action'       => $log['action'],
+                'alarm'        => $log['alarm'],
+                'photologid'   => $log['photologid'],
+                'videologid'   => $log['videologid'],
+                'logtime'      => $log['logtime'],
+            );
+        }
+        $result = M("cabinetdoorlog")->addAll($data);
+        if ($result) {
+            $this->apiReturn(0, '上传成功！', array(
+                'status' => 1
+            ));
+        } else {
+            $this->apiReturn(1, '上传失败！', array(
+                'status' => 0
+            ));
+        }
+    }
+
+    //批量上传钥匙领取/归还动作日志
+    public function keyuselogupload()
+    {
+        // $departmentno = $this->_getDepartmentno();
+        // if (!$departmentno) $this->apiReturn(1, '未知departmentno！');
+        // $cabinetno = $this->_getCabinetno();
+        // if (!$cabinetno) $this->apiReturn(1, '未知cabinetno！');
+
+        $logs = mRequest('logs', false);
+        if (!is_array($logs)||empty($logs)) $this->apiReturn(1, 'logs内容为空！');
+
+        $departmentnos = array(0);
+        $cabinetnos = array(0);
+        $usernos = array(0);
+        $keylocknos = array(0);
+        $keycardids = array('');
+        $logdata = array();
+        foreach ($logs as $log) {
+            $departmentnos[] = $log['departmentno'];
+            $cabinetnos[] = $log['cabinetno'];
+            $usernos[] = $log['userno'];
+            $keylocknos[] = $log['keylockno'];
+            $keycardids[] = $log['keycardid'];
+            $logdata[] = array(
+                'departmentno' => isset($log['departmentno']) ? $log['departmentno'] : 0,
+                'cabinetno'    => isset($log['cabinetno']) ? $log['cabinetno'] : 0,
+                'userno'       => isset($log['userno']) ? $log['userno'] : 0,
+                'keylockno'    => isset($log['keylockno']) ? $log['keylockno'] : 0,
+                'keycardid'    => isset($log['keycardid']) ? $log['keycardid'] : 0,
+                'action'       => isset($log['action']) ? $log['action'] : 0,
+                'actionflag'   => isset($log['actionflag']) ? $log['actionflag'] : 0,
+                'photologid'   => isset($log['photologid']) ? $log['photologid'] : '',
+                'videologid'   => isset($log['videologid']) ? $log['videologid'] : '',
+                'logtime'      => isset($log['logtime']) ? mkDateTime(strtotime($log['logtime'])) : mkDateTime(),
+            );
+        }
+
+        //获取员工信息
+        $userlist = D('User')->getUser(null, null, $departmentnos, $usernos);
+        $userlist = $userlist['data'];
+        // if (!is_array($userlist) || empty($userlist)) $this->apiReturn(1, '未知警员信息！');
+
+        //获取钥匙信息
+        $keylist = array();
+        $keylistc = array();
+        if (is_array($keycardids)&&!empty($keycardids)) {
+            $keylistc = D('Key')->getKey(null, null, null, null, null, null, null, $keycardids);
+            $keylistc = $keylistc['data'];
+        }
+        $keylist = D('Key')->getKey(null, null, null, $departmentnos, $cabinetnos, null, $keylocknos);
+        $keylist = array_merge($keylistc, $keylist['data']);
+        if (!is_array($keylist) || empty($keylist)) $this->apiReturn(1, '未知钥匙信息！');
+
+        $data = array();
+        foreach ($logdata as $log) {
+            //员工信息
+            $userinfo = array();
+            foreach ($userlist as $user) {
+                if ($user['departmentno']==$log['departmentno'] && ($user['cardno']==$log['usercardno']||$user['userno']==$log['userno'])) {
+                    $userinfo = $user;
+                    break;
+                }
+            }
+
+            //钥匙信息
+            $keyinfo = array();
+            foreach ($keylist as $key) {
+                if ($key['departmentno']==$log['departmentno'] && $key['cabinetno']==$log['cabinetno'] && ($key['keyrfid']==$log['keycardid']||$key['keypos']==$log['keylockno'])) {
+                    $keyinfo = $key;
+                    break;
+                }
+            }
+
+            //日志数据
+            $data[] = array(
+                'departmentno' => $log['departmentno'],
+                'cabinetno'    => $log['cabinetno'],
+                'keyno'        => isset($keyinfo['keyno']) ? $keyinfo['keyno'] : 0,
+                'keypos'       => isset($keyinfo['keypos']) ? $keyinfo['keypos'] : 0,
+                'keyrfid'      => isset($keyinfo['keyrfid']) ? $keyinfo['keyrfid'] : 0,
+                'keyshowname'  => isset($keyinfo['keyshowname']) ? $keyinfo['keyshowname'] : 0,
+                'userno'       => isset($userinfo['userno']) ? $userinfo['userno'] : 0,
+                'username'     => isset($userinfo['username']) ? $userinfo['username'] : 0,
+                'codeno'       => isset($userinfo['codeno']) ? $userinfo['codeno'] : 0,
+                'action'       => $log['action'],
+                'actionflag'   => $log['actionflag'],
+                'photologid'   => $log['photologid'],
+                'videologid'   => $log['videologid'],
+                'keyposwrong'  => (int)$actionflag==2 ? $log['keylockno'] : 0,
+                'logtime'      => $log['logtime'],
+            );
+        }
+        $result = M("keyuselog")->addAll($data);
+        if ($result) {
+            $this->apiReturn(0, '上传成功！', array(
+                'status' => 1
+            ));
+        } else {
+            $this->apiReturn(1, '上传失败！', array(
+                'status' => 0
+            ));
+        }
+    }
 }

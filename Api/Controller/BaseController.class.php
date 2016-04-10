@@ -36,9 +36,10 @@ class BaseController extends Controller
     private function _getPhpinput()
     {
         $phpinput = file_get_contents("php://input");
-        $phpinput = $phpinput ? json_decode($phpinput, true) : array();
+        $phpinputdata = json_decode($phpinput, true);
+        !is_array($phpinputdata) ? $phpinputdata = array() : null;
 
-        $_REQUEST = array_merge($_REQUEST, $phpinput);
+        $_REQUEST = array_merge($_REQUEST, $phpinputdata, array('phpinput'=>$phpinput));
     }
 
     /**

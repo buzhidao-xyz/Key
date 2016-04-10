@@ -26,18 +26,19 @@
     <div class="page-body">
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
-                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>新增钥匙</h5>
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>编辑钥匙信息</h5>
                 <div class="widget">
                     <div class="widget-header bordered-bottom bordered-sky">
                         <span class="widget-caption">钥匙信息表单</span>
                     </div>
                     <div class="widget-body">
                         <div id="horizontal-form">
-                            <form name="keyform" method="post" action="{$ANY.__APP__}?s=Key/newkeysave" class="form-horizontal" role="form">
+                            <form name="keyform" method="post" action="{$ANY.__APP__}?s=Key/upkeysave" class="form-horizontal" role="form">
+                                <input type="hidden" name="keyid" value="{$keyinfo.keyid}">
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">钥匙名称</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="keyname" placeholder="钥匙名称 长度10个汉字以内！">
+                                        <input type="text" class="form-control" name="keyname" value="{$keyinfo.keyname}" placeholder="钥匙名称 长度10个汉字以内！">
                                         <!-- <p class="help-block danger m-b-5">*钥匙名称10个字以内！</p> -->
                                     </div>
                                 </div>
@@ -47,7 +48,7 @@
                                         <select name="keytypeid" class="select2el" style="width:100%;">
                                             <option value="">--请选择钥匙类型--</option>
                                             {foreach $keytypelist as $keytype}
-                                            <option value="{$keytype.keytypeid}">{$keytype.keytypename}</option>
+                                            <option value="{$keytype.keytypeid}" {if $keytype.keytypeid==$keyinfo.keytypeid}selected{/if}>{$keytype.keytypename}</option>
                                             {/foreach}
                                         </select>
                                     </div>
@@ -55,20 +56,20 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">车牌号码</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="keyshowname" placeholder="车牌号码 例：常A12Z57">
+                                        <input type="text" class="form-control" name="keyshowname" value="{$keyinfo.keyshowname}" placeholder="车牌号码 例：常A12Z57">
                                     </div>
                                 </div>
                                 {include file="Public/scpdpm_cabinet.html"}
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">钥匙位置</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="keypos" placeholder="钥匙位置 例：1、2...">
+                                        <input type="text" class="form-control" name="keypos" value="{$keyinfo.keypos}" placeholder="钥匙位置 例：1、2...">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">钥匙RFID</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="keyrfid" placeholder="钥匙RFID标签码">
+                                        <input type="text" class="form-control" name="keyrfid" value="{$keyinfo.keyrfid}" placeholder="钥匙RFID标签码">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -76,19 +77,19 @@
                                     <div class="col-sm-10">
                                         <div class="radio">
                                             <label>
-                                                <input type="radio" name="usetimeflag" value="1" class="colored-blue">
+                                                <input type="radio" name="usetimeflag" value="1" class="colored-blue" {if $keyinfo.usetimeflag==1}checked="checked"{/if}>
                                                 <span class="text">是</span>
                                             </label>
                                         </div>
                                         <div class="radio">
                                             <label>
-                                                <input type="radio" name="usetimeflag" value="0" class="colored-blue" checked="checked">
+                                                <input type="radio" name="usetimeflag" value="0" class="colored-blue" {if $keyinfo.usetimeflag==0}checked="checked"{/if}>
                                                 <span class="text">否</span>
                                             </label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group" id="usetimebox" style="display: none;">
+                                <div class="form-group" id="usetimebox" {if $keyinfo.usetimeflag==0}style="display: none;"{/if}>
                                     <label class="col-sm-2 control-label no-padding-right"><b>领取时限</b></label>
                                     <div class="col-sm-10">
                                         <div class="row m-b-10">
@@ -97,7 +98,7 @@
                                             </label>
                                             <div class="col-xs-3">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control datetimepickerele" name="usetimebegin[1]" placeholder="开始时间 时:分 例：08:30">
+                                                    <input type="text" class="form-control datetimepickerele" name="usetimebegin[1]" value="{$keyinfo.usetime[0].begintime}" placeholder="开始时间 时:分 例：08:30">
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-clock-o"></i>
                                                     </span>
@@ -106,7 +107,7 @@
                                             <div style="float: left; line-height: 34px;">到</div>
                                             <div class="col-xs-3">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control datetimepickerele" name="usetimeend[1]" placeholder="结束时间 时:分 例：12:00">
+                                                    <input type="text" class="form-control datetimepickerele" name="usetimeend[1]" value="{$keyinfo.usetime[0].endtime}" placeholder="结束时间 时:分 例：12:00">
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-clock-o"></i>
                                                     </span>
@@ -119,7 +120,7 @@
                                             </label>
                                             <div class="col-xs-3">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control datetimepickerele" name="usetimebegin[2]" placeholder="开始时间 时:分 例：13:30">
+                                                    <input type="text" class="form-control datetimepickerele" name="usetimebegin[2]" value="{$keyinfo.usetime[1].begintime}" placeholder="开始时间 时:分 例：13:30">
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-clock-o"></i>
                                                     </span>
@@ -128,7 +129,7 @@
                                             <div style="float: left; line-height: 34px;">到</div>
                                             <div class="col-xs-3">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control datetimepickerele" name="usetimeend[2]" placeholder="结束时间 时:分 例：17:00">
+                                                    <input type="text" class="form-control datetimepickerele" name="usetimeend[2]" value="{$keyinfo.usetime[1].begintime}" placeholder="结束时间 时:分 例：17:00">
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-clock-o"></i>
                                                     </span>
@@ -141,7 +142,7 @@
                                             </label>
                                             <div class="col-xs-3">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control datetimepickerele" name="usetimebegin[3]" placeholder="开始时间 时:分 例：20:00">
+                                                    <input type="text" class="form-control datetimepickerele" name="usetimebegin[3]" value="{$keyinfo.usetime[2].begintime}" placeholder="开始时间 时:分 例：20:00">
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-clock-o"></i>
                                                     </span>
@@ -150,7 +151,7 @@
                                             <div style="float: left; line-height: 34px;">到</div>
                                             <div class="col-xs-3">
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control datetimepickerele" name="usetimeend[3]" placeholder="结束时间 时:分 例：23:00">
+                                                    <input type="text" class="form-control datetimepickerele" name="usetimeend[3]" value="{$keyinfo.usetime[2].begintime}" placeholder="结束时间 时:分 例：23:00">
                                                     <span class="input-group-addon">
                                                         <i class="fa fa-clock-o"></i>
                                                     </span>
@@ -165,32 +166,22 @@
                                     <div class="col-sm-10">
                                         <div class="radio">
                                             <label>
-                                                <input type="radio" name="returntimeflag" value="1" class="colored-blue">
+                                                <input type="radio" name="returntimeflag" value="1" class="colored-blue" {if $keyinfo.returntimeflag==1}checked="checked"{/if}>
                                                 <span class="text">是</span>
                                             </label>
                                         </div>
                                         <div class="radio">
                                             <label>
-                                                <input type="radio" name="returntimeflag" value="0" class="colored-blue" checked="checked">
+                                                <input type="radio" name="returntimeflag" value="0" class="colored-blue" {if $keyinfo.returntimeflag==0}checked="checked"{/if}>
                                                 <span class="text">否</span>
                                             </label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group" id="returntimebox" style="display: none;">
+                                <div class="form-group" id="returntimebox" {if $keyinfo.returntimeflag==0}style="display: none;"{/if}>
                                     <label class="col-sm-2 control-label no-padding-right"><b>归还时限</b></label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="returntime" value="" placeholder="归还时限（小时） 例：8">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-sm-offset-2 col-sm-10">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" name="keystatus" value="1" class="colored-success" checked="checked">
-                                                <span class="text">在位</span>
-                                            </label>
-                                        </div>
+                                        <input type="text" class="form-control" name="returntime" value="{$keyinfo.returntime}" placeholder="归还时限（小时） 例：8">
                                     </div>
                                 </div>
                                 <div class="form-group">

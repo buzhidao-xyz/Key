@@ -1,0 +1,139 @@
+{include file="Common/head.html"}
+<link href="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/dataTables.bootstrap.css" rel="stylesheet">
+    <!-- Page Header -->
+    <div class="page-header position-relative page-header-fixed">
+        <div class="header-title">
+            <h1>
+                钥匙管理 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+            </h1>
+        </div>
+        <!--Header Buttons-->
+        <div class="header-buttons">
+            <a class="sidebar-toggler" href="#">
+                <i class="fa fa-arrows-h"></i>
+            </a>
+            <a class="refresh" id="refresh-toggler" href="#">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </a>
+            <a class="fullscreen" id="fullscreen-toggler" href="#">
+                <i class="glyphicon glyphicon-fullscreen"></i>
+            </a>
+        </div>
+        <!--Header Buttons End-->
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Page Body -->
+    <div class="page-body">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <h5 class="row-title before-warning"><i class="glyphicon glyphicon-plane warning"></i>管理钥匙</h5>
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-warning">
+                        <span class="widget-caption">查询钥匙信息表单</span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="horizontal-form">
+                            <form name="mtserverform" method="post" action="{$ANY.__APP__}?s=Key/keylist" class="form-horizontal" role="form">
+                                {include file="Public/scpdpm_cabinet.html"}
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">钥匙类型</label>
+                                    <div class="col-sm-10">
+                                        <select name="keytypeid" class="select2el" style="width:100%;">
+                                            <option value="">--请选择钥匙类型--</option>
+                                            {foreach $keytypelist as $keytype}
+                                            <option value="{$keytype.keytypeid}">{$keytype.keytypename}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">钥匙名称</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="keyname" value="{$keyname}" placeholder="钥匙名称、显示名称 关键字">
+                                        <p class="help-block"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-warning">查询</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="widget">
+                    <div class="widget-header bg-sky">
+                        <span class="widget-caption">钥匙信息列表</span>
+                        <div class="widget-buttons">
+                            <a href="#" data-toggle="collapse">
+                                <i class="fa fa-minus"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="widget-body no-padding">
+                        <div id="searchable_wrapper" class="dataTables_wrapper form-inline">
+                            <table class="table table-bordered table-hover table-striped dataTable" id="searchable" role="grid" aria-describedby="searchable_info">
+                                <thead class="bordered-darkorange">
+                                    <tr role="row">
+                                        <th></th>
+                                        <th>钥匙名称</th>
+                                        <th>显示名称</th>
+                                        <th>钥匙类型</th>
+                                        <th>标签号</th>
+                                        <th>派出所</th>
+                                        <th>钥匙柜</th>
+                                        <th>位置</th>
+                                        <th>状态</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {if isset($datalist)&&is_array($datalist)&&!empty($datalist)}
+                                    {foreach $datalist as $data}
+                                    <tr role="row" class="even">
+                                        <td>{$data.ROW_NUMBER}</td>
+                                        <td>{$data.keyname}</td>
+                                        <td>{$data.keyshowname}</td>
+                                        <td>{$keytypelist[$data.keytypeid]['keytypename']}</td>
+                                        <td>{$data.keyrfid}</td>
+                                        <td>{$data.departmentname}</td>
+                                        <td>{$data.cabinetname}</td>
+                                        <td>{$data.keypos}</td>
+                                        <td>
+                                            {if $data.keystatus==0}
+                                            <span class="danger">离位</span>
+                                            {else if $data.keystatus==1}
+                                            <span class="sky">在位</span>
+                                            {else if $data.keystatus==2}
+                                            <span class="warning">错位</span>
+                                            {/if}
+                                        </td>
+                                        <td>
+                                            <a href="{$ANY.__APP__}?s=Key/upkey&keyid={$data.keyid}" class="btn btn-sky">编辑</a>
+                                            <a href="{$ANY.__APP__}?s=Key/deletekey&keyid={$data.keyid}" class="btn btn-danger btn-ajax-delete">删除</a>
+                                        </td>
+                                    </tr>
+                                    {/foreach}
+                                    {/if}
+                                </tbody>
+                            </table>
+                            <div class="row DTTTFooter">
+                                <div class="col-xs-4"></div>
+                                <div class="col-xs-8">
+                                    {include file="Public/pagination.html"}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{include file="Common/foot.html"}

@@ -39,6 +39,8 @@ class CabinetController extends CommonController
         if (!$cabinetname) $this->ajaxReturn(1, '请填写钥匙柜名称！');
         $departmentno = $this->_getDepartmentno();
         if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
+        $keylocknonum = mRequest('keylocknonum');
+        if (!$keylocknonum) $this->ajaxReturn(1, '请填写钥匙锁孔数量！');
 
         //获取某部门最大的钥匙柜编号
         $maxcabinetno = D('Cabinet')->getMaxCabinetno($departmentno);
@@ -48,6 +50,8 @@ class CabinetController extends CommonController
             'cabinetname'  => $cabinetname,
             'departmentno' => $departmentno,
             'cabinetno'    => $cabinetno,
+            'keylocknonum' => $keylocknonum,
+            'isdelete'     => 0,
             'createtime'   => mkDateTime(),
             'updatetime'   => mkDateTime(),
         );
@@ -106,6 +110,63 @@ class CabinetController extends CommonController
         $this->_mkPagination($total, $params);
 
         $this->display();
+    }
+
+    //编辑钥匙柜信息
+    public function ajaxGetCabinetHtml()
+    {
+        $cabinetid = mRequest('cabinetid');
+        if (!$cabinetid) $this->ajaxReturn(1, '钥匙柜信息错误！');
+
+        $cabinetinfo = D('Cabinet')->getCabinetByID($cabinetid);
+
+        //subcompanyno
+        foreach ($this->company['subcompany'] as $subcompany) {
+            if (isset($subcompany['department'])) {
+                foreach ($subcompany['department'] as $department) {
+                    if ($department['departmentno'] == $cabinetinfo['departmentno']) {
+                        $cabinetinfo['subcompanyno'] = $subcompany['subcompanyno'];
+                        break(2);
+                    }
+                }
+            }
+        }
+        $this->assign('subcompanyno', $cabinetinfo['subcompanyno']);
+        $this->assign('departmentno', $cabinetinfo['departmentno']);
+
+        $this->assign('cabinetinfo', $cabinetinfo);
+        $html = $this->fetch('Cabinet/upcabinet_modal');
+
+        $this->ajaxReturn(0, '', array(
+            'html' => $html
+        ));
+    }
+
+    //编辑钥匙柜信息
+    public function upcabinetsave()
+    {
+        $cabinetid = mRequest('cabinetid');
+        if (!$cabinetid) $this->ajaxReturn(1, '钥匙柜信息错误！');
+
+        $cabinetname = $this->_getCabinetname();
+        if (!$cabinetname) $this->ajaxReturn(1, '请填写钥匙柜名称！');
+        $departmentno = $this->_getDepartmentno();
+        if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
+        $keylocknonum = mRequest('keylocknonum');
+        if (!$keylocknonum) $this->ajaxReturn(1, '请填写钥匙锁孔数量！');
+
+        $data = array(
+            'cabinetname'  => $cabinetname,
+            'departmentno' => $departmentno,
+            'keylocknonum' => $keylocknonum,
+            'updatetime'   => mkDateTime(),
+        );
+        $result = D('Cabinet')->savecabinet($cabinetid, $data);
+        if ($result) {
+            $this->ajaxReturn(0, '保存成功！');
+        } else {
+            $this->ajaxReturn(1, '保存失败！');
+        }
     }
 
     //ajax获取钥匙柜信息

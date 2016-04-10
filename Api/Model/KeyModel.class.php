@@ -17,15 +17,17 @@ class KeyModel extends CommonModel
     //获取钥匙信息
     public function getKey($keyid=null, $keytypeid=null, $keyshowname=null, $departmentno=null, $cabinetno=null, $keyno=null, $keypos=null, $keyrfid=null, $start=0, $legnth=9999)
     {
-        $where = array();
+        $where = array(
+            'isdelete' => 0
+        );
         if ($keyid) $where['keyid'] = is_array($keyid) ? array('in', $keyid) : $keyid;
         if ($keytypeid) $where['keytypeid'] = $keytypeid;
         if ($keyshowname) $where['keyshowname'] = array('like', '%'.$keyshowname.'%');
-        if ($departmentno) $where['departmentno'] = $departmentno;
-        if ($cabinetno) $where['cabinetno'] = $cabinetno;
-        if ($keyno) $where['keyno'] = $keyno;
-        if ($keypos) $where['keypos'] = $keypos;
-        if ($keyrfid) $where['keyrfid'] = $keyrfid;
+        if ($departmentno) $where['departmentno'] = is_array($departmentno) ? array('in', $departmentno) : $departmentno;
+        if ($cabinetno) $where['cabinetno'] = is_array($cabinetno) ? array('in', $cabinetno) : $cabinetno;
+        if ($keyno) $where['keyno'] = is_array($keyno) ? array('in', $keyno) : $keyno;
+        if ($keypos) $where['keypos'] = is_array($keypos) ? array('in', $keypos) : $keypos;
+        if ($keyrfid) $where['keyrfid'] = is_array($keyrfid) ? array('in', $keyrfid) : $keyrfid;
 
         $total = M('keys')->where($where)->count();
         $data = M('keys')->alias('a')
@@ -38,7 +40,7 @@ class KeyModel extends CommonModel
 
         //获取使领取时限
         if (is_array($data)) {
-            $keyids = array();
+            $keyids = array('0');
             foreach ($data as $k=>$d) {
                 $keyids[] = $d['keyid'];
             }

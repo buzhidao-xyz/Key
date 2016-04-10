@@ -54,19 +54,9 @@ $("form[name=ajax-form]").submit(function() {
 });
 
 //AJAX请求 启用/禁用、显示/隐藏、删除
-$("a.btnenable, a.btndelete, a.btnajax").on('click', function (){
+$("a.btn-ajax, a.btn-ajax-enable, a.btn-ajax-delete").on('click', function (){
     $.post($(this).attr('href'), {}, function (data){
-        var status = data.error ? 'error' : 'success';
-        alertPanelShow(status, data.msg);
-        if (!data.error) {
-            var location_href = "";
-            if ("location" in data.data) {
-                location_href = data.data.location;
-            }
-            setTimeout(function (){
-                location.href = location_href ? location_href : location.href;
-            }, 300);
-        }
+        ajaxCallback(data);
     }, 'json');
 
     return false;

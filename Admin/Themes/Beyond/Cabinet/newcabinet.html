@@ -34,6 +34,7 @@
                     <div class="widget-body">
                         <div id="horizontal-form">
                             <form name="cabinetform" method="post" action="{$ANY.__APP__}?s=Cabinet/newcabinetsave" class="form-horizontal" role="form">
+                                {include file="Public/scpdpm_select.html"}
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">钥匙柜名称</label>
                                     <div class="col-sm-10">
@@ -41,7 +42,13 @@
                                         <p class="help-block"></p>
                                     </div>
                                 </div>
-                                {include file="Public/scpdpm_select.html"}
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">钥匙锁孔数量</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="keylocknonum" placeholder="钥匙锁孔数量 例：24">
+                                        <p class="help-block"></p>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
                                         <button type="submit" class="btn btn-sky">保存</button>

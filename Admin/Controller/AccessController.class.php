@@ -91,6 +91,44 @@ class AccessController extends CommonController
         }
     }
 
+    //【下发】钥匙信息
+    public function sendCabinetKeys()
+    {
+        $departmentno = $this->_getDepartmentno();
+        if (!$departmentno) $this->ajaxReturn(1, '未知派出所！');
+
+        $cabinetno = $this->_getCabinetno();
+        if (!$cabinetno) $this->ajaxReturn(1, '未知钥匙柜！');
+
+        //获取部门信息
+        $departmentinfo = array();
+        foreach ($this->company['subcompany'] as $subcompany) {
+            if (isset($subcompany['department'])) {
+                foreach ($subcompany['department'] as $department) {
+                    if ($department['departmentno'] == $departmentno) {
+                        $departmentinfo = $department;
+                        break(2);
+                    }
+                }
+            }
+        }
+        if (!$departmentinfo['mtserverid']) $this->ajaxReturn(1, '没有关联监控软件！');
+
+        $departmentno = dechex($departmentno);
+        if (strlen($departmentno)==1) $departmentno = '0'.$departmentno;
+
+        $cabinetno = dechex($cabinetno);
+        if (strlen($cabinetno)==1) $cabinetno = '0'.$cabinetno;
+        
+        $data = 'AA BB 00 05 56 '.$departmentno.' '.$cabinetno.' 00 00 00 EE FF';
+        $result = $this->_socketTcpSend($departmentinfo['mtserverip'], $departmentinfo['mtserverport'], $data);
+        if ($result) {
+            $this->ajaxReturn(0, '下发门禁权限成功！');
+        } else {
+            $this->ajaxReturn(1, '下发门禁权限失败！');
+        }
+    }
+
     //【下发】门禁权限
     public function sendCabinetAccess()
     {

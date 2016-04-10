@@ -31,6 +31,15 @@
     <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/jquery/jquery-migrate-1.1.0.min.js"></script>
     <!--Skin Script: Place this script in head to load scripts for skins and rtl support-->
     <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/js/skins.min.js"></script>
+    
+    <script type="text/javascript">
+    var JS_APP = '{$ANY.__APP__}';
+    
+    var JS_SERVER    = '{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/js/';
+    var CSS_SERVER   = '{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/';
+    var IMAGE_SERVER = '{$SERVER.HOST.IMAGE_SERVER}Themes/Beyond/Assets/img/';
+    </script>
+
 </head>
 
 <body>
@@ -64,6 +73,8 @@
     <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/charts/sparkline/jquery.sparkline.js"></script>
     <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/charts/sparkline/sparkline-init.js"></script>
 
+    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/select2/select2.js"></script>
+
     <!-- bzd js -->
     <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/js/bzd.js"></script>
     
@@ -76,8 +87,6 @@
             themefifthcolor = getThemeColorFromCss('themefifthcolor');
         });
     </script>
-
-    <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/select2/select2.js"></script>
 </body>
 <!-- /Body -->
 

@@ -90,8 +90,9 @@
                                         <td>{$data.cabinetname}</td>
                                         <td>{$data.createtime|substr:0:19}</td>
                                         <td>
-                                            <a href="javascript:;" class="btn btn-sky">编辑</a>
-                                            <a href="{$ANY.__APP__}?s=Access/sendCabinetAccess&departmentno={$data.departmentno}&cabinetno={$data.cabinetno}" id="sendCabinetAccess" class="btn btn-warning">下发门禁权限</a>
+                                            <a href="{$ANY.__APP__}?s=Cabinet/ajaxGetCabinetHtml&cabinetid={$data.cabinetid}" class="btn btn-sky btn-edit-modal">编辑</a>
+                                            <a href="{$ANY.__APP__}?s=Access/sendCabinetKeys&departmentno={$data.departmentno}&cabinetno={$data.cabinetno}" id="sendCabinetKeys" class="btn btn-warning">下发钥匙信息</a>
+                                            <a href="{$ANY.__APP__}?s=Access/sendCabinetAccess&departmentno={$data.departmentno}&cabinetno={$data.cabinetno}" id="sendCabinetAccess" class="btn btn-darkorange">下发门禁权限</a>
                                         </td>
                                     </tr>
                                     {/foreach}
@@ -111,16 +112,24 @@
         </div>
     </div>
 
-<script type="text/javascript">
-$(function (){
-//下发门禁权限
-$("a#sendCabinetAccess").click(function (){
-    $.get($(this).attr('href'), {}, function (data){
-        ajaxCallback(data);
-    }, 'json');
+    <script type="text/javascript">
+    $(function (){
+        //下发钥匙信息
+        $("a#sendCabinetKeys").click(function (){
+            $.get($(this).attr('href'), {}, function (data){
+                ajaxCallback(data);
+            }, 'json');
 
-    return false;
-});
-})
-</script>
+            return false;
+        });
+        //下发门禁权限
+        $("a#sendCabinetAccess").click(function (){
+            $.get($(this).attr('href'), {}, function (data){
+                ajaxCallback(data);
+            }, 'json');
+
+            return false;
+        });
+    })
+    </script>
 {include file="Common/foot.html"}

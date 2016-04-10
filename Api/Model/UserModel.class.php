@@ -20,10 +20,10 @@ class UserModel extends CommonModel
         $where = array();
         if ($userid) $where['userid'] = is_array($userid) ? array('in', $userid) : $userid;
         if ($username) $where['username'] = array('like', '%'.$username.'%');
-        if ($departmentno) $where['departmentno'] = $departmentno;
+        if ($departmentno) $where['departmentno'] = is_array($departmentno) ? array('in', $departmentno) : $departmentno;
         if ($userno) $where['userno'] = is_array($userno) ? array('in', $userno) : $userno;
         if ($codeno) $where['codeno'] = $codeno;
-        if ($cardno) $where['cardno'] = $cardno;
+        if ($cardno) $where['cardno'] = is_array($cardno) ? array('in', $cardno) : $cardno;
 
         $total = M('user')->where($where)->count();
         $data = M('user')->where($where)->order('userno asc')->limit($start, $length)->select();

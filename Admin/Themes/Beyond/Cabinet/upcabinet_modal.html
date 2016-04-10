@@ -1,0 +1,66 @@
+<div id="modalhtml" title="钥匙柜-编辑" class="modal-darkorange" style="display: none;">
+    <form role="form" name="modalform" method="post" action="javascript:;" doaction="{$ANY.__APP__}?s=Cabinet/upcabinetsave">
+        <input type="hidden" name="cabinetid" value="{$cabinetinfo.cabinetid}">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-title"><b>区分局：</b></div>
+                <div class="form-group">
+                    <select name="subcompanyno" class="select2el" style="width:100%;">
+                        <option value="">--请选择区分局--</option>
+                        {foreach $company.subcompany as $subcompany}
+                        <option value="{$subcompany.subcompanyno}" {if isset($subcompanyno)&&$subcompanyno==$subcompany.subcompanyno}selected="selected"{/if}>{$subcompany.subcompanyname}</option>
+                        {/foreach}
+                    </select>
+                </div>
+                <div class="form-title"><b>派出所：</b></div>
+                <div class="form-group">
+                    <select name="departmentno" class="select2el" style="width:100%;">
+                        <option value="">--请选择派出所--</option>
+                        {if isset($subcompanyno)&&$subcompanyno}
+                        {foreach $company.subcompany[$subcompanyno].department as $department}
+                        <option value="{$department.departmentno}" {if isset($departmentno)&&$departmentno==$department.departmentno}selected="selected"{/if}>{$department.departmentname}</option>
+                        {/foreach}
+                        {/if}
+                    </select>
+                </div>
+                <div class="form-title"><b>钥匙柜名称：</b></div>
+                <div class="form-group">
+                    <input type="text" name="cabinetname" value="{$cabinetinfo.cabinetname}" class="form-control" placeholder="钥匙柜名称 例：1号钥匙柜">
+                </div>
+                <div class="form-title"><b>钥匙锁孔数量：</b></div>
+                <div class="form-group">
+                    <input type="text" name="keylocknonum" value="{$cabinetinfo.keylocknonum}" class="form-control" placeholder="钥匙锁孔数量 例：24">
+                </div>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+    $(function (){
+        setTimeout(function (){
+            $(".select2el").select2();
+        }, 100);
+
+        //获取子公司列表
+        $("select[name=subcompanyno]").change(function (){
+            $("select[name=departmentno]").html('<option value="">--请选择派出所--</option>').select2();
+            
+            var url = JS_APP + '?s=Company/ajaxGetDepartment';
+            var params = {
+                subcompanyno: $(this).val()
+            }
+            $.get(url, params, function (data){
+                if (data.error) {
+                    alertPanelShow('error', data.msg);
+                } else {
+                    var DPMObj = $("select[name=departmentno]");
+                    for (index in data.data.department) {
+                        // var departmentno = DPMObj.attr('departmentno');
+                        // var selected = departmentno==data.data.department[index].departmentno ? 'selected="selected"' : '';
+                        DPMObj.append('<option value="'+data.data.department[index].departmentno+'">'+data.data.department[index].departmentname+'</option>');
+                    }
+                }
+            });
+        });
+    });
+    </script>
+</div>

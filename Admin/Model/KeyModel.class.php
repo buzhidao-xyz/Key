@@ -90,22 +90,26 @@ class KeyModel extends CommonModel
     }
 
     //获取钥匙信息
-    public function getKey($keyid=null, $keytypeid=null, $keyshowname=null, $departmentno=null, $cabinetno=null, $keyno=null, $keypos=null, $keyrfid=null, $start=0, $legnth=9999)
+    public function getKey($keyid=null, $keytypeid=null, $keyname=null, $departmentno=null, $cabinetno=null, $keyno=null, $keypos=null, $keyrfid=null, $start=0, $legnth=9999)
     {
-        $where = array();
+        $where = array(
+            'a.isdelete' => 0
+        );
         if ($keyid) $where['keyid'] = is_array($keyid) ? array('in', $keyid) : $keyid;
         if ($keytypeid) $where['keytypeid'] = $keytypeid;
-        if ($keyshowname) $where['keyshowname'] = array('like', '%'.$keyshowname.'%');
-        if ($departmentno) $where['departmentno'] = $departmentno;
-        if ($cabinetno) $where['cabinetno'] = $cabinetno;
-        if ($keyno) $where['keyno'] = $keyno;
-        if ($keypos) $where['keypos'] = $keypos;
-        if ($keyrfid) $where['keyrfid'] = $keyrfid;
+        if ($keyname) $where['_complex'] = array('_logic'=>'or', 'keyname'=>array('like', '%'.$keyname.'%'), 'keyshowname'=>array('like', '%'.$keyname.'%'));
+        if ($departmentno) $where['a.departmentno'] = is_array($departmentno) ? array('in', $departmentno) : $departmentno;
+        if ($cabinetno) $where['a.cabinetno'] = is_array($cabinetno) ? array('in', $cabinetno) : $cabinetno;
+        if ($keyno) $where['keyno'] = is_array($keyno) ? array('in', $keyno) : $keyno;
+        if ($keypos) $where['keypos'] = is_array($keypos) ? array('in', $keypos) : $keypos;
+        if ($keyrfid) $where['keyrfid'] = is_array($keyrfid) ? array('in', $keyrfid) : $keyrfid;
 
-        $total = M('keys')->where($where)->count();
+        $total = M('keys')->alias('a')->where($where)->count();
         $data = M('keys')->alias('a')
-                         ->field('a.*, b.keytypename, b.keytypeimage')
+                         ->field('a.*, b.keytypename, b.keytypeimage, c.cabinetname, d.departmentname')
                          ->join(' __KEYTYPE__ b on a.keytypeid=b.keytypeid ')
+                         ->join(' __CABINET__ c on a.departmentno=c.departmentno and a.cabinetno=c.cabinetno ')
+                         ->join(' __DEPARTMENT__ d on a.departmentno=d.departmentno ')
                          ->where($where)
                          ->order('anyphp.departmentno asc, anyphp.cabinetno asc, anyphp.keypos asc')
                          ->limit($start, $length)
@@ -113,7 +117,7 @@ class KeyModel extends CommonModel
 
         //获取使领取时限
         if (is_array($data)) {
-            $keyids = array('');
+            $keyids = array('0');
             foreach ($data as $k=>$d) {
                 $keyids[] = $d['keyid'];
             }
@@ -133,8 +137,18 @@ class KeyModel extends CommonModel
                 $data[$k]['usetime'] = isset($keyusetimes[$d['keyid']]) ? $keyusetimes[$d['keyid']] : array();
             }
         }
-        
+
         return array('total'=>$total, 'data'=>is_array($data)?$data:array());
+    }
+
+    //获取钥匙信息 通过keyid
+    public function getKeyByID($keyid=null)
+    {
+        if (!$keyid) return false;
+
+        $keyinfo = $this->getKey($keyid);
+
+        return $keyinfo['total'] ? current($keyinfo['data']) : array();
     }
 
     //钥匙数量统计
