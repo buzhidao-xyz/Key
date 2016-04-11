@@ -61,7 +61,7 @@ class MonitorController extends CommonController
         $ymd = date('Y-m-d', TIMESTAMP);
         $begintime = $ymd.' 00:00:00';
         $endtime = $ymd.' 23:59:59';
-        $keyuseLogList = D('Log')->getKeyuseLog(null, $departmentno, $cabinetno, null, null, null, null, $begintime, $endtime, 0, 99);
+        $keyuseLogList = D('Log')->getKeyuseLog(null, $departmentno, $cabinetno, null, null, null, null, null, $begintime, $endtime, 0, 99);
         $keyuseLogTotal = $keyuseLogList['total'];
         $keyuseLogList = $keyuseLogList['data'];
         $this->assign('keyuseLogList', $keyuseLogList);
@@ -70,7 +70,7 @@ class MonitorController extends CommonController
         $ymd = date('Y-m-d', TIMESTAMP);
         $begintime = $ymd.' 00:00:00';
         $endtime = $ymd.' 23:59:59';
-        $cabinetdoorLogList = D('Log')->getCabinetdoorLog(null, $departmentno, $cabinetno, null, null, null, $begintime, $endtime, 0, 99);
+        $cabinetdoorLogList = D('Log')->getCabinetdoorLog(null, $departmentno, $cabinetno, null, null, null, null, $begintime, $endtime, 0, 99);
         $cabinetdoorLogTotal = $cabinetdoorLogList['total'];
         $cabinetdoorLogList = $cabinetdoorLogList['data'];
         $this->assign('cabinetdoorLogList', $cabinetdoorLogList);
