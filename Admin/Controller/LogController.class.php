@@ -66,7 +66,12 @@ class LogController extends CommonController
     //钥匙使用日志
     public function keyuselog()
     {
+        $subcompanyno = $this->_getSubcompanyno();
         $departmentno = $this->_getDepartmentno();
+        if ($departmentno) {
+            $cabinetlist = D('Cabinet')->getCabinet(null, null, $departmentno);
+            $this->assign('cabinetlist', $cabinetlist['data']);
+        }
         $cabinetno = $this->_getCabinetno();
         //钥匙名称、显示名称
         $keyname = $this->_getKeyname();
@@ -95,6 +100,42 @@ class LogController extends CommonController
             'departmentno' => $departmentno,
             'cabinetno'    => $cabinetno,
             'keyname'      => $keyname,
+            'username'     => $username,
+            'begintime'    => $begintime,
+            'endtime'      => $endtime,
+        );
+        $this->assign('param', $params);
+        //解析分页数据
+        $this->_mkPagination($total, $params);
+
+        $this->display();
+    }
+    //钥匙柜开关门日志
+    public function dooropenlog()
+    {
+        $subcompanyno = $this->_getSubcompanyno();
+        $departmentno = $this->_getDepartmentno();
+        if ($departmentno) {
+            $cabinetlist = D('Cabinet')->getCabinet(null, null, $departmentno);
+            $this->assign('cabinetlist', $cabinetlist['data']);
+        }
+        $cabinetno = $this->_getCabinetno();
+        $username = $this->_getUsername();
+
+        $begintime = $this->_getBegintime();
+        $endtime = $this->_getEndtime();
+
+        list($start, $length) = $this->_mkPage();
+        $data = D('Log')->getCabinetdoorLog(null, $departmentno, $cabinetno, null, $username, null, null, $begintime, $endtime, $start, $length);
+        $total = $data['total'];
+        $datalist = $data['data'];
+
+        $this->assign('datalist', $datalist);
+
+        $params = array(
+            'subcompanyno' => $subcompanyno,
+            'departmentno' => $departmentno,
+            'cabinetno'    => $cabinetno,
             'username'     => $username,
             'begintime'    => $begintime,
             'endtime'      => $endtime,

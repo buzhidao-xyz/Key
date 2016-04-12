@@ -23,8 +23,8 @@ class LogModel extends CommonModel
     {
         $where = array();
         if ($logid) $where['logid'] = is_array($logid) ? array('in', $logid) : $logid;
-        if ($departmentno) $where['departmentno'] = is_array($departmentno) ? array('in', $departmentno) : $departmentno;
-        if ($cabinetno) $where['cabinetno'] = is_array($cabinetno) ? array('in', $cabinetno) : $cabinetno;
+        if ($departmentno) $where['a.departmentno'] = is_array($departmentno) ? array('in', $departmentno) : $departmentno;
+        if ($cabinetno) $where['a.cabinetno'] = is_array($cabinetno) ? array('in', $cabinetno) : $cabinetno;
         if ($userno) $where['userno'] = $userno;
         if ($action!==null) $where['action'] = $action;
         if ($alarm!==null) $where['alarm'] = $alarm;
@@ -32,8 +32,13 @@ class LogModel extends CommonModel
         if ($endtime!==null) $where['logtime'] = array('elt', $endtime);
         if ($begintime!==null && $endtime!==null) $where['logtime'] = array('between', array($begintime, $endtime));
 
-        $total = M('cabinetdoorlog')->where($where)->count();
-        $data = M('cabinetdoorlog')->where($where)
+        $total = M('cabinetdoorlog')->alias('a')->where($where)->count();
+        $data = M('cabinetdoorlog')->alias('a')
+                                   ->field('a.*, c.cabinetname, d.departmentname, v.videofile, v.videosize, v.videolength')
+                                   ->join(' __CABINET__ c on a.departmentno=c.departmentno and a.cabinetno=c.cabinetno ')
+                                   ->join(' __DEPARTMENT__ d on a.departmentno=d.departmentno ')
+                                   ->join(' LEFT JOIN __VIDEOLOG__ v on v.videologid=a.videologid ')
+                                   ->where($where)
                                    ->order('logtime desc')
                                    ->limit($start, $length)
                                    ->select();
@@ -75,7 +80,7 @@ class LogModel extends CommonModel
         if ($logid) $where['logid'] = is_array($logid) ? array('in', $logid) : $logid;
         if ($departmentno) $where['a.departmentno'] = is_array($departmentno) ? array('in', $departmentno) : $departmentno;
         if ($cabinetno) $where['a.cabinetno'] = is_array($cabinetno) ? array('in', $cabinetno) : $cabinetno;
-        if ($keyno) $where['keyno'] = is_array($keyno) ? array('in', $keyno) : $keyno;
+        if ($keyno) $where['a.keyno'] = is_array($keyno) ? array('in', $keyno) : $keyno;
         if ($userno) $where['userno'] = $userno;
         if ($action!==null) $where['action'] = $action;
         if ($actionflag!==null) $where['actionflag'] = $actionflag;
@@ -85,7 +90,7 @@ class LogModel extends CommonModel
 
         $total = M('keyuselog')->alias('a')->where($where)->count();
         $data = M('keyuseLog')->alias('a')
-                              ->field('a.*, b.keyname, c.cabinetname, d.departmentname, v.videofile')
+                              ->field('a.*, b.keyname, c.cabinetname, d.departmentname, v.videofile, v.videosize, v.videolength')
                               ->join(' __KEYS__ b on a.departmentno=b.departmentno and a.cabinetno=b.cabinetno and a.keyno=b.keyno ')
                               ->join(' __CABINET__ c on a.departmentno=c.departmentno and a.cabinetno=c.cabinetno ')
                               ->join(' __DEPARTMENT__ d on a.departmentno=d.departmentno ')

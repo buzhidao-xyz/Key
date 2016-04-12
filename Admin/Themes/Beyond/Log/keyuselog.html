@@ -87,7 +87,7 @@
             <div class="col-xs-12 col-md-12">
                 <div class="widget">
                     <div class="widget-header bg-sky">
-                        <span class="widget-caption">钥匙信息列表</span>
+                        <span class="widget-caption">钥匙使用日志信息列表</span>
                         <div class="widget-buttons">
                             <a href="#" data-toggle="collapse">
                                 <i class="fa fa-minus"></i>
@@ -132,7 +132,7 @@
                                             <span class="sky">归还</span>
                                             {/if}
                                         </td>
-                                        <td>{if $data.videologid}<a href="javascript:;">播放</a>{else}无{/if}</td>
+                                        <td>{if $data.videologid}<a href="{$ANY.__APP__}?s=Log/videoplay&videologid={$data.videologid}">播放</a>{else}无{/if}</td>
                                         <td>{$data.logtime|substr:0:19}</td>
                                         <td>
                                             <a href="{$ANY.__APP__}?s=Log/keyuselogdetail&logid={$data.logid}" class="btn btn-sky">详情</a>

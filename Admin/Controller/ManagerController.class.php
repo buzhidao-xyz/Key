@@ -13,6 +13,8 @@ class ManagerController extends CommonController
         parent::__construct();
     }
 
+    public function index(){}
+
     //获取管理员ID
     private function _getManagerID()
     {
@@ -111,7 +113,7 @@ class ManagerController extends CommonController
     }
 
     //管理员
-    public function index()
+    public function managerlist()
     {
         list($start, $length) = $this->_mkPage();
         $this->_getManager($start, $length);
