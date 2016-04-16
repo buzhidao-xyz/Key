@@ -107,7 +107,7 @@ class KeyModel extends CommonModel
     }
 
     //获取钥匙信息
-    public function getKey($keyid=null, $keytypeid=null, $keyname=null, $departmentno=null, $cabinetno=null, $keyno=null, $keypos=null, $keyrfid=null, $start=0, $legnth=9999)
+    public function getKey($keyid=null, $keytypeid=null, $keyname=null, $departmentno=null, $cabinetno=null, $keyno=null, $keypos=null, $keyrfid=null, $start=0, $length=9999)
     {
         $where = array(
             'a.isdelete' => 0

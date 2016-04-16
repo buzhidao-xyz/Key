@@ -104,7 +104,7 @@ class LogController extends CommonController
             'begintime'    => $begintime,
             'endtime'      => $endtime,
         );
-        $this->assign('param', $params);
+        $this->assign('params', $params);
         //解析分页数据
         $this->_mkPagination($total, $params);
 
@@ -140,7 +140,7 @@ class LogController extends CommonController
             'begintime'    => $begintime,
             'endtime'      => $endtime,
         );
-        $this->assign('param', $params);
+        $this->assign('params', $params);
         //解析分页数据
         $this->_mkPagination($total, $params);
 

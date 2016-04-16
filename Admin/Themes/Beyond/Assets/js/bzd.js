@@ -32,6 +32,7 @@ var ajaxCallback = function(data) {
         setTimeout(function (){
             if ("location" in data.data) {
                 location.href = data.data.location;
+                return true;
             }
             location.reload();
         }, 3000);

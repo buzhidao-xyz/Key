@@ -34,18 +34,17 @@
                     </div>
                     <div class="widget-body">
                         <div id="horizontal-form">
-                            <form name="mtserverform" method="post" action="{$ANY.__APP__}?s=Manager/managerlist" class="form-horizontal" role="form">
-                                {include file="Public/scpdpm_select.html"}
+                            <form name="managerform" method="post" action="{$ANY.__APP__}?s=Manager/managerlist" class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">账号</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="account" value="{$account}" placeholder="管理员账号 关键字">
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">警员信息</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="username" value="{$username}" placeholder="警员名称、警号 关键字">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">管理员账号</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="account" value="{$account}" placeholder="管理员账号 关键字">
                                     </div>
                                 </div>
                                 <div class="form-group">

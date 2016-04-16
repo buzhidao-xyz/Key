@@ -71,6 +71,8 @@ class AccessController extends CommonController
                         'index'  => (int)$fd['fingerindex'],
                         'flag'   => (int)$fd['flag'],
                         'data'   => $fd['fingerdata'],
+                        'datahash' => $fd['datahash'],
+                        'datahashcur' => md5($fd['fingerdata']),
                         'length' => (int)$fd['length'],
                     );
                 }

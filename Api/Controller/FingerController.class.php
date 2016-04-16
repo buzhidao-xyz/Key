@@ -48,6 +48,7 @@ class FingerController extends CommonController
                 'flag'         => $d['flag'],
                 'fingerdata'   => $d['data'],
                 'length'       => $d['length'],
+                'datahash'     => md5($d['data']),
                 'createtime'   => mkDateTime(),
                 'updatetime'   => mkDateTime(),
             );

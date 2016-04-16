@@ -172,6 +172,8 @@ class CommonController extends BaseController
             'listpage'  => $listpage,
         );
         $this->assign('pagination', $pagination);
+        $this->pagination = $pagination;
+
         return $pagination;
     }
 

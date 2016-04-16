@@ -219,7 +219,7 @@ class UserController extends CommonController
             'departmentno' => $departmentno,
             'username' => $username,
         );
-        $this->assign('param', $params);
+        $this->assign('params', $params);
         //解析分页数据
         $this->_mkPagination($total, $params);
 

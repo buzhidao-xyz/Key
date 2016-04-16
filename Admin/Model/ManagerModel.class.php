@@ -20,15 +20,18 @@ class ManagerModel extends CommonModel
     }
 
     //获取管理员
-    public function getManager($managerid=null, $account=null, $start=0, $length=9999)
+    public function getManager($managerid=null, $account=null, $username=null, $start=0, $length=9999)
     {
         if ($start==0 && $length==0) return array();
         
-        $where = array(
-            
-        );
+        $where = array();
         if ($managerid) $where['a.managerid'] = $managerid;
         if ($account) $where['a.account'] = array('like', '%'.$account.'%');
+
+        //如果有警员信息关键字
+        if ($username) {
+            $userlist = D('User')->getUser(null, $username);
+        }
 
         //查询数据总量
         $total  = M('manager')->alias("a")

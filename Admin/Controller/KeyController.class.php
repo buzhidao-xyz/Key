@@ -404,9 +404,12 @@ class KeyController extends CommonController
             'keytypeid' => $keytypeid,
             'keyname' => $keyname,
         );
-        $this->assign('param', $params);
+        $this->assign('params', $params);
         //解析分页数据
         $this->_mkPagination($total, $params);
+
+        $jumpurl = urlencode(str_replace('&', '|||||', $this->pagination['url'].$this->pagination['curtpage']));
+        $this->assign('jumpurl', $jumpurl);
 
         $this->display();
     }
@@ -416,6 +419,9 @@ class KeyController extends CommonController
     {
         $keyid = $this->_getKeyid();
         if (!$keyid) exit;
+
+        $jumpurl = mRequest('jumpurl');
+        $this->assign('jumpurl', $jumpurl);
 
         $keyinfo = D('Key')->getKeyByID($keyid);
 
@@ -448,6 +454,8 @@ class KeyController extends CommonController
     {
         $keyid = $this->_getKeyid();
         if (!$keyid) $this->ajaxReturn(1, '请选择钥匙信息！');
+
+        $jumpurl = mRequest('jumpurl');
 
         //获取钥匙信息
         $keyinfo = D('Key')->getKeyByID($keyid);
@@ -507,8 +515,10 @@ class KeyController extends CommonController
 
             //保存车辆信息
             D('Key')->savecar($carid, $cardata);
-
-            $this->ajaxReturn(0, '保存成功！');
+        
+            $this->ajaxReturn(0, '保存成功！', array(
+                'location' => str_replace('|||||', '&', $jumpurl)
+            ));
         } else {
             $this->ajaxReturn(1, '保存失败！');
         }

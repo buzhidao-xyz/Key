@@ -135,6 +135,8 @@ class ManagerController extends CommonController
     //管理员
     public function managerlist()
     {
+        
+        
         list($start, $length) = $this->_mkPage();
         $this->_getManager($start, $length);
 
