@@ -29,7 +29,7 @@ class CompanyModel extends CommonModel
         if ($subcompanyid) $where['subcompanyid'] = is_array($subcompanyid) ? array('in', $subcompanyid) : $subcompanyid;
 
         $total = M('subcompany')->where($where)->count();
-        $data = M('subcompany')->where($where)->order('subcompanyno asc')->select();
+        $data = M('subcompany')->where($where)->order('convert(int,subcompanyno) asc')->select();
 
         return array('total'=>$total, 'data'=>is_array($data)?$data:array());
     }
@@ -52,7 +52,7 @@ class CompanyModel extends CommonModel
         if ($departmentid) $where['departmentid'] = is_array($departmentid) ? array('in', $departmentid) : $departmentid;
 
         $total = M('department')->where($where)->count();
-        $data = M('department')->where($where)->order('departmentno asc')->select();
+        $data = M('department')->where($where)->order('convert(int,departmentno) asc')->select();
 
         return array('total'=>$total, 'data'=>is_array($data)?$data:array());
     }

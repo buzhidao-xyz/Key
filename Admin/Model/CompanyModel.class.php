@@ -29,7 +29,7 @@ class CompanyModel extends CommonModel
         if ($subcompanyid) $where['subcompanyid'] = is_array($subcompanyid) ? array('in', $subcompanyid) : $subcompanyid;
 
         $total = M('subcompany')->where($where)->count();
-        $data = M('subcompany')->where($where)->order('subcompanyno asc')->select();
+        $data = M('subcompany')->where($where)->order('convert(int,subcompanyno) asc')->select();
 
         return array('total'=>$total, 'data'=>is_array($data)?$data:array());
     }
@@ -57,7 +57,7 @@ class CompanyModel extends CommonModel
               ->field('a.*, b.mtserverip, b.mtserverport, b.online, b.lastheartbeattime')
               ->join(' LEFT JOIN __MONITORSERVER__ b on a.mtserverid=b.mtserverid ')
               ->where($where)
-              ->order('departmentno asc')
+              ->order('convert(int,departmentno) asc')
               ->select();
 
         return array('total'=>$total, 'data'=>is_array($data)?$data:array());
@@ -86,7 +86,7 @@ class CompanyModel extends CommonModel
     //获取最大的departmentno
     public function getMaxDepartmentno()
     {
-        $department = M('department')->order('departmentno desc')->find();
+        $department = M('department')->order('convert(int,departmentno) desc')->find();
 
         return is_array($department)&&!empty($department) ? $department['departmentno'] : 0;
     }

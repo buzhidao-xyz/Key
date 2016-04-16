@@ -60,7 +60,7 @@ class DeviceModel extends CommonModel
     {
         if (!$departmentno || !$devicetypeid) return false;
 
-        $deviceinfo = M("device")->where(array('departmentno'=>$departmentno, 'devicetypeid'=>$devicetypeid))->order('deviceno desc')->find();
+        $deviceinfo = M("device")->where(array('departmentno'=>$departmentno, 'devicetypeid'=>$devicetypeid))->order('convert(int,deviceno) desc')->find();
 
         return is_array($deviceinfo)&&!empty($deviceinfo) ? $deviceinfo['deviceno'] : 0;
     }

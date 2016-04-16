@@ -25,7 +25,7 @@ class CabinetModel extends CommonModel
         if ($departmentno) $where['departmentno'] = is_array($departmentno) ? array('in', $departmentno) : $departmentno;
 
         $total = M('cabinet')->where($where)->count();
-        $data = M('cabinet')->where($where)->order('departmentno asc, cabinetno asc')->limit($start, $length)->select();
+        $data = M('cabinet')->where($where)->order('convert(int,departmentno) asc, convert(int,cabinetno) asc')->limit($start, $length)->select();
 
         return array('total'=>$total, 'data'=>is_array($data)?$data:array());
     }
@@ -45,7 +45,7 @@ class CabinetModel extends CommonModel
     {
         if (!$departmentno) return false;
 
-        $cabinetinfo = M("cabinet")->where(array('departmentno'=>$departmentno))->order('cabinetno desc')->find();
+        $cabinetinfo = M("cabinet")->where(array('departmentno'=>$departmentno))->order('convert(int,cabinetno) desc')->find();
 
         return is_array($cabinetinfo)&&!empty($cabinetinfo) ? $cabinetinfo['cabinetno'] : 0;
     }

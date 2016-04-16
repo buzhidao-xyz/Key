@@ -22,7 +22,7 @@ class FingerModel extends CommonModel
         if ($fingerindex) $where['fingerindex'] = $fingerindex;
 
         $total = M('userfinger')->where($where)->count();
-        $result = M('userfinger')->where($where)->order('departmentno asc, userno asc')->select();
+        $result = M('userfinger')->where($where)->order('convert(int,departmentno) asc, convert(int,userno) asc')->select();
 
         //解析指纹信息
         $data = array();

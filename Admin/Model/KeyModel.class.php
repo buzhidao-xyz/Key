@@ -60,7 +60,7 @@ class KeyModel extends CommonModel
     {
         if (!$departmentno || !$cabinetno) return false;
 
-        $keyinfo = M("keys")->where(array('departmentno'=>$departmentno, 'cabinetno'=>$cabinetno))->order('keyno desc')->find();
+        $keyinfo = M("keys")->where(array('departmentno'=>$departmentno, 'cabinetno'=>$cabinetno))->order('convert(int,keyno) desc')->find();
 
         return is_array($keyinfo)&&!empty($keyinfo) ? $keyinfo['keyno'] : 0;
     }
@@ -89,6 +89,23 @@ class KeyModel extends CommonModel
         M('keys_usetime')->addAll($data);
     }
 
+    //保存车辆信息
+    public function savecar($carid=null, $data=array())
+    {
+        if (!is_array($data) || empty($data)) return false;
+
+        if ($carid) {
+            $return = M("cars")->where(array('carid'=>$carid))->save($data);
+        } else {
+            $where = array('departmentno'=>$data['departmentno'],'cabinetno'=>$data['cabinetno'],'keyno'=>$data['keyno']);
+            if (M('cars')->where($where)->count()) M('cars')->where($where)->delete();
+
+            $return = M("cars")->add($data);
+        }
+
+        return $return;
+    }
+
     //获取钥匙信息
     public function getKey($keyid=null, $keytypeid=null, $keyname=null, $departmentno=null, $cabinetno=null, $keyno=null, $keypos=null, $keyrfid=null, $start=0, $legnth=9999)
     {
@@ -106,12 +123,13 @@ class KeyModel extends CommonModel
 
         $total = M('keys')->alias('a')->where($where)->count();
         $data = M('keys')->alias('a')
-                         ->field('a.*, b.keytypename, b.keytypeimage, c.cabinetname, d.departmentname')
+                         ->field('a.*, cc.carid, cc.carname, cc.brand, cc.modelv, cc.parkplace, b.keytypename, b.keytypeimage, c.cabinetname, d.departmentname')
+                         ->join(' LEFT JOIN __CARS__ cc on a.departmentno=cc.departmentno and a.cabinetno=cc.cabinetno and a.keyno=cc.keyno ')
                          ->join(' __KEYTYPE__ b on a.keytypeid=b.keytypeid ')
                          ->join(' __CABINET__ c on a.departmentno=c.departmentno and a.cabinetno=c.cabinetno ')
                          ->join(' __DEPARTMENT__ d on a.departmentno=d.departmentno ')
                          ->where($where)
-                         ->order('anyphp.departmentno asc, anyphp.cabinetno asc, anyphp.keypos asc')
+                         ->order('convert(int,anyphp.departmentno) asc, convert(int,anyphp.cabinetno) asc, convert(int,anyphp.keypos) asc')
                          ->limit($start, $length)
                          ->select();
 

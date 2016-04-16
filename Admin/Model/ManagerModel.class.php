@@ -46,13 +46,27 @@ class ManagerModel extends CommonModel
                                 ->buildSql();
         //查询数据
         $result = M('manager')->alias('m')
-                              ->field('m.*')
-                              ->join('inner join '.$SubQuery.' sub on sub.managerid=m.managerid')
+                              ->field('m.*, b.rolename, b.rolerank')
+                              ->join(' inner join '.$SubQuery.' sub on sub.managerid=m.managerid ')
+                              ->join(' LEFT JOIN __ROLE__ b on m.roleid=b.roleid ')
                               ->select();
+        $userids = array('00000000-0000-0000-0000-000000000000');
         $data = array();
         if (is_array($result)&&!empty($result)) {
             foreach ($result as $d) {
+                if ($d['userid'] && $d['userid']!='0') $userids[] = $d['userid'];
+
                 $data[$d['managerid']] = $d;
+            }
+        }
+
+        //获取关联员工信息
+        $userlist = M('user')->where(array('userid'=>array('in', $userids)))->select();
+        if (is_array($userlist)&&!empty($userlist)) {
+            foreach ($data as $k=>$d) {
+                foreach ($userlist as $u) {
+                    if ($d['userid']==$u['userid']) $data[$k]['username'] = $u['username'];
+                }
             }
         }
 

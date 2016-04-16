@@ -167,6 +167,51 @@ class KeyController extends CommonController
         return (int)$keystatus;
     }
 
+    //获取carid
+    private function _getCarid()
+    {
+        $carid = mRequest('carid');
+        $this->assign('carid', $carid);
+
+        return $carid;
+    }
+
+    //获取carname
+    private function _getCarname()
+    {
+        $carname = mRequest('carname');
+        $this->assign('carname', $carname);
+
+        return $carname;
+    }
+
+    //获取brand
+    private function _getBrand()
+    {
+        $brand = mRequest('brand');
+        $this->assign('brand', $brand);
+
+        return $brand;
+    }
+
+    //获取modelv
+    private function _getModelv()
+    {
+        $modelv = mRequest('modelv');
+        $this->assign('modelv', $modelv);
+
+        return $modelv;
+    }
+
+    //获取parkplace
+    private function _getParkplace()
+    {
+        $parkplace = mRequest('parkplace');
+        $this->assign('parkplace', $parkplace);
+
+        return $parkplace;
+    }
+
     public function index(){}
 
     //钥匙类型
@@ -205,6 +250,39 @@ class KeyController extends CommonController
         } else {
             $this->ajaxReturn(1, '保存失败！');
         }
+    }
+
+    //获取车辆信息
+    private function _getCardata($carid=null, $departmentno=null, $cabinetno=null, $keyno=null)
+    {
+        $carname = $this->_getCarname();
+        // if (!$carname) $this->ajaxReturn(1, '请填写车辆名称！');
+
+        $brand = $this->_getBrand();
+        $modelv = $this->_getModelv();
+
+        $parkplace = $this->_getParkplace();
+        // if (!$parkplace) $this->ajaxReturn(1, '请填写车辆停放位置！');
+
+        //保存车辆信息
+        $cardata = array(
+            'carname'      => $carname,
+            'brand'        => $brand,
+            'modelv'       => $modelv,
+            'parkplace'    => $parkplace,
+        );
+        if (!$carid) {
+            $carid = guid();
+            $cardata = array_merge($cardata, array(
+                'carid'        => $carid,
+                'departmentno' => $departmentno,
+                'cabinetno'    => $cabinetno,
+                'keyno'        => $keyno,
+                'createtime'   => mkDateTime(),
+            ));
+        }
+
+        return $cardata;
     }
 
     //新增钥匙
@@ -250,8 +328,11 @@ class KeyController extends CommonController
 
         //计算设备编号
         $maxKeyno = D('Key')->getMaxKeyno($departmentno, $cabinetno);
-
         $keyno = $maxKeyno+1;
+
+        //获取车辆信息
+        $cardata = $this->_getCardata(null, $departmentno, $cabinetno, $keyno);
+
         $keyid = guid();
         $data = array(
             'keyid'          => $keyid,
@@ -286,6 +367,9 @@ class KeyController extends CommonController
                 }
                 D('Key')->savekeyusetime($keyid, $utdata);
             }
+
+            //保存车辆信息
+            D('Key')->savecar(null, $cardata);
 
             $this->ajaxReturn(0, '保存成功！');
         } else {
@@ -365,6 +449,10 @@ class KeyController extends CommonController
         $keyid = $this->_getKeyid();
         if (!$keyid) $this->ajaxReturn(1, '请选择钥匙信息！');
 
+        //获取钥匙信息
+        $keyinfo = D('Key')->getKeyByID($keyid);
+        if (!is_array($keyinfo)) $this->ajaxReturn(1, '请选择钥匙信息！');
+
         $keyname = $this->_getKeyname();
         if (!$keyname) $this->ajaxReturn(1, '请填写钥匙名称！');
 
@@ -373,15 +461,6 @@ class KeyController extends CommonController
 
         $keyshowname = $this->_getKeyshowname();
         if (!$keyshowname) $this->ajaxReturn(1, '请填写车牌号码！');
-
-        $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
-
-        $cabinetno = $this->_getCabinetno();
-        if (!$cabinetno) $this->ajaxReturn(1, '请选择所在钥匙柜！');
-
-        $keypos = $this->_getKeypos();
-        if (!$keypos) $this->ajaxReturn(1, '请填写钥匙位置！');
 
         $keyrfid = $this->_getKeyrfid();
         if (!$keyrfid) $this->ajaxReturn(1, '请填写钥匙RFID标签码！');
@@ -395,13 +474,15 @@ class KeyController extends CommonController
         if ($returntimeflag && !$returntime) $this->ajaxReturn(1, '请填写归还时限（小时）！');
         !$returntimeflag ? $returntime = 0 : null;
 
+        //获取carid
+        $carid = $this->_getCarid();
+        //获取车辆信息
+        $cardata = $this->_getCardata($carid, $keyinfo['departmentno'], $keyinfo['cabinetno'], $keyinfo['keyno']);
+
         $data = array(
             'keyname'        => $keyname,
             'keytypeid'      => $keytypeid,
             'keyshowname'    => $keyshowname,
-            'departmentno'   => $departmentno,
-            'cabinetno'      => $cabinetno,
-            'keypos'         => $keypos,
             'keyrfid'        => $keyrfid,
             'usetimeflag'    => $usetimeflag,
             'returntimeflag' => $returntimeflag,
@@ -423,6 +504,9 @@ class KeyController extends CommonController
                 }
                 D('Key')->savekeyusetime($keyid, $utdata);
             }
+
+            //保存车辆信息
+            D('Key')->savecar($carid, $cardata);
 
             $this->ajaxReturn(0, '保存成功！');
         } else {

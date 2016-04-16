@@ -54,7 +54,24 @@ class CompanyController extends CommonController
     //公司管理
     public function companym()
     {
+        $this->display();
+    }
 
+    //保存公司信息
+    public function companymsave()
+    {
+        $companyno = mRequest('companyno');
+        if (!$companyno) $this->ajaxReturn(1, '未知市局信息！');
+
+        $companyname = mRequest('companyname');
+        if (!$companyname) $this->ajaxReturn(1, '未知市局名称！');
+
+        $result = M('company')->where(array('companyno'=>$companyno))->save(array('companyname'=>$companyname));
+        if ($result) {
+            $this->ajaxReturn(0, '保存成功！');
+        } else {
+            $this->ajaxReturn(1, '保存失败！');
+        }
     }
 
     //子公司管理

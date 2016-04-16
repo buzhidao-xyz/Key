@@ -1,0 +1,83 @@
+{include file="Common/head.html"}
+    <!-- Page Header -->
+    <div class="page-header position-relative page-header-fixed">
+        <div class="header-title">
+            <h1>
+                账号管理 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+            </h1>
+        </div>
+        <!--Header Buttons-->
+        <div class="header-buttons">
+            <a class="sidebar-toggler" href="#">
+                <i class="fa fa-arrows-h"></i>
+            </a>
+            <a class="refresh" id="refresh-toggler" href="#">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </a>
+            <a class="fullscreen" id="fullscreen-toggler" href="#">
+                <i class="glyphicon glyphicon-fullscreen"></i>
+            </a>
+        </div>
+        <!--Header Buttons End-->
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Page Body -->
+    <div class="page-body">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>账号密码</h5>
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-sky">
+                        <span class="widget-caption">账号密码表单</span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="horizontal-form">
+                            <form name="chpasswdform" method="post" action="{$ANY.__APP__}?s=Manager/chpasswdsave" class="form-horizontal" role="form">
+                                <input type="hidden" name="managerid" value="{$managerinfo.managerid}">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">原密码</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" name="passwordo" value="" placeholder="原密码">
+                                        <p class="help-block danger m-b-5">*字母数字开始 字母数字下划线!@#$% 长度5-20</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">新密码</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" name="password" value="" placeholder="新密码">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">确认密码</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" name="passwordc" value="" placeholder="确认密码">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-sky">保存</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+$(function (){
+    //Form提交
+    $("form[name=chpasswdform]").submit(function (){
+        var url = $(this).attr('action');
+        var postdata = $(this).serialize();
+        $.post(url, postdata, function (data){
+            ajaxCallback(data);
+        }, 'json');
+        return false;
+    });
+})
+</script>
+{include file="Common/foot.html"}

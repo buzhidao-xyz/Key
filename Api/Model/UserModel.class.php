@@ -26,7 +26,7 @@ class UserModel extends CommonModel
         if ($cardno) $where['cardno'] = is_array($cardno) ? array('in', $cardno) : $cardno;
 
         $total = M('user')->where($where)->count();
-        $data = M('user')->where($where)->order('userno asc')->limit($start, $length)->select();
+        $data = M('user')->where($where)->order('convert(int,userno) asc')->limit($start, $length)->select();
 
         return array('total'=>$total, 'data'=>is_array($data)?$data:array());
     }

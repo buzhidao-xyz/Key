@@ -269,11 +269,14 @@ class BaseController extends Controller
     {
         $result = 0;
 
+        //socket流超时时间
+        // ini_set('default_socket_timeout', 27);
+
         $data = str_split(str_replace(' ', '', $data), 2);
         $socket = socket_create(AF_INET, SOCK_STREAM, getprotobyname("tcp"));
         //设置超时5秒
         socket_set_option($socket, SOL_SOCKET, SO_SNDTIMEO, array(
-            "sec"  => 5, // Timeout in seconds
+            "sec"  => 27, // Timeout in seconds
             "usec" => 0   // I assume timeout in microseconds
         ));
         if (socket_connect($socket, $ip, $port)) {
@@ -282,14 +285,14 @@ class BaseController extends Controller
                 socket_write($socket, chr(hexdec($d)));
             }
 
-            //采用2进制方式接收数据
-            $resultb = socket_read($socket, 1024, PHP_BINARY_READ);
+            //采用2进制方式接收数据 最大1个字节
+            $resultb = socket_read($socket, 1, PHP_BINARY_READ);
             //将2进制数据转换成16进制
             $result = bin2hex($resultb);
         }
         //关闭Socket
         socket_close($socket);
 
-        return $result;
+        return (int)$result;
     }
 }

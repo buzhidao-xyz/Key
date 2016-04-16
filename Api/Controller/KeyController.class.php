@@ -68,6 +68,7 @@ class KeyController extends CommonController
                 'returntimeflag'   => (int)$d['returntimeflag'],
                 'returntime'       => (int)$d['returntime'],
                 'keylocknocurrent' => (int)$d['keyposcurrent'],
+                'parkplace'        => $d['parkplace'] ? $d['parkplace'] : '',
             );
         }
 

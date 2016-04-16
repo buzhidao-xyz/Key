@@ -15,6 +15,15 @@ class UserController extends CommonController
         parent::__construct();
     }
 
+    //获取userid
+    private function _getUserid()
+    {
+        $userid = mRequest('userid');
+        $this->assign('userid', $userid);
+
+        return $userid;
+    }
+
     //获取员工名称
     private function _getUsername()
     {
@@ -65,6 +74,8 @@ class UserController extends CommonController
     {
         $photo = mRequest('photo');
         $this->assign('photo', $photo);
+
+        if (!$photo) $photo = '/Public/images/user/user_avatar_default.jpg';
 
         return $photo;
     }
@@ -165,7 +176,7 @@ class UserController extends CommonController
             'position' => $position,
             'photo'    => $photo,
             'access'   => $access,
-            'status'   => $status,
+            'status'   => 1,
             'createtime' => mkDateTime(),
             'updatetime' => mkDateTime()
         );
@@ -185,13 +196,122 @@ class UserController extends CommonController
     //导入员工信息
     public function importuser()
     {
-        
+        $this->display();
     }
 
     //管理员工
     public function userlist()
     {
-        
+        $subcompanyno = $this->_getSubcompanyno();
+        $departmentno = $this->_getDepartmentno();
+
+        $username = $this->_getUsername();
+
+        list($start, $length) = $this->_mkPage();
+        $data = D('User')->getUser(null, $username, $departmentno, null, null, null, $start, $length);
+        $total = $data['total'];
+        $datalist = $data['data'];
+
+        $this->assign('datalist', $datalist);
+
+        $params = array(
+            'subcompanyno' => $subcompanyno,
+            'departmentno' => $departmentno,
+            'username' => $username,
+        );
+        $this->assign('param', $params);
+        //解析分页数据
+        $this->_mkPagination($total, $params);
+
+        $this->display();
+    }
+
+    //编辑员工信息
+    public function upuser()
+    {
+        $userid = $this->_getUserid();
+        if (!$userid) exit;
+
+        $userinfo = D('User')->getUserByID($userid);
+        if (!is_array($userinfo) || empty($userinfo)) exit;
+
+        //subcompanyno
+        foreach ($this->company['subcompany'] as $subcompany) {
+            if (isset($subcompany['department'])) {
+                foreach ($subcompany['department'] as $department) {
+                    if ($department['departmentno'] == $userinfo['departmentno']) {
+                        $userinfo['subcompanyno'] = $subcompany['subcompanyno'];
+                        break(2);
+                    }
+                }
+            }
+        }
+
+        $this->assign('subcompanyno', $userinfo['subcompanyno']);
+        $this->assign('departmentno', $userinfo['departmentno']);
+
+        $this->assign('userinfo', $userinfo);
+        $this->display();
+    }
+
+    //编辑员工信息-保存
+    public function upusersave()
+    {
+        $userid = $this->_getUserid();
+        if (!$userid) $this->ajaxReturn(1, '未知警员信息！');
+
+        $username = $this->_getUsername();
+        if (!$username) $this->ajaxReturn(1, '请填写警员名称！');
+
+        $codeno = $this->_getCodeno();
+        if (!$codeno) $this->ajaxReturn(1, '请填写警员编号！');
+        //查询警员编号是否已存在
+        if (D("User")->ckUserCodenoExists($userid, $codeno)) $this->ajaxReturn(1, '该警员编号已存在！');
+
+        $cardno = $this->_getCardno();
+        $phone = $this->_getPhone();
+        $position = $this->_getPosition();
+        $photo = $this->_getPhoto();
+        $access = $this->_getAccess();
+
+        $subcompanyno = $this->_getSubcompanyno();
+        $departmentno = $this->_getDepartmentno();
+        if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
+
+        //获取部门信息
+        $departmentinfo = D('Company')->getDepartmentByNO($departmentno);
+
+        $data = array(
+            'username' => $username,
+            'codeno'   => $codeno,
+            'cardno'   => $cardno,
+            'phone'    => $phone,
+            'departmentno' => $departmentno,
+            'position' => $position,
+            'photo'    => $photo,
+            'access'   => $access,
+            'updatetime' => mkDateTime()
+        );
+        $result = D('User')->saveuser($userid, $data);
+        if ($result) {
+            $this->ajaxReturn(0, '保存成功！');
+        } else {
+            $this->ajaxReturn(1, '保存失败！');
+        }
+    }
+
+    //删除员工
+    public function deleteuser()
+    {
+        $userid = $this->_getUserid();
+        if (!$userid) $this->ajaxReturn(1, '未知警员信息！');
+
+        $result = M('user')->where(array('userid'=>$userid))->save(array('status'=>0));
+        if ($result) {
+            $this->ajaxReturn(0, '删除成功！');
+        } else {
+            $this->ajaxReturn(1, '删除失败！');
+        }
     }
 
     //AJAX获取警员信息

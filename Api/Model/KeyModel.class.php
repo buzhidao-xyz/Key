@@ -23,18 +23,19 @@ class KeyModel extends CommonModel
         if ($keyid) $where['keyid'] = is_array($keyid) ? array('in', $keyid) : $keyid;
         if ($keytypeid) $where['keytypeid'] = $keytypeid;
         if ($keyshowname) $where['keyshowname'] = array('like', '%'.$keyshowname.'%');
-        if ($departmentno) $where['departmentno'] = is_array($departmentno) ? array('in', $departmentno) : $departmentno;
-        if ($cabinetno) $where['cabinetno'] = is_array($cabinetno) ? array('in', $cabinetno) : $cabinetno;
-        if ($keyno) $where['keyno'] = is_array($keyno) ? array('in', $keyno) : $keyno;
+        if ($departmentno) $where['a.departmentno'] = is_array($departmentno) ? array('in', $departmentno) : $departmentno;
+        if ($cabinetno) $where['a.cabinetno'] = is_array($cabinetno) ? array('in', $cabinetno) : $cabinetno;
+        if ($keyno) $where['a.keyno'] = is_array($keyno) ? array('in', $keyno) : $keyno;
         if ($keypos) $where['keypos'] = is_array($keypos) ? array('in', $keypos) : $keypos;
         if ($keyrfid) $where['keyrfid'] = is_array($keyrfid) ? array('in', $keyrfid) : $keyrfid;
 
-        $total = M('keys')->where($where)->count();
+        $total = M('keys')->alias('a')->where($where)->count();
         $data = M('keys')->alias('a')
-                         ->field('a.*, b.keytypename, b.keytypeimage')
+                         ->field('a.*, cc.carid, cc.carname, cc.brand, cc.modelv, cc.parkplace, b.keytypename, b.keytypeimage')
+                         ->join(' LEFT JOIN __CARS__ cc on a.departmentno=cc.departmentno and a.cabinetno=cc.cabinetno and a.keyno=cc.keyno ')
                          ->join(' __KEYTYPE__ b on a.keytypeid=b.keytypeid ')
                          ->where($where)
-                         ->order('anyphp.departmentno asc, anyphp.cabinetno asc, anyphp.keypos asc')
+                         ->order('convert(int,anyphp.departmentno) asc, convert(int,anyphp.cabinetno) asc, convert(int,anyphp.keypos) asc')
                          ->limit($start, $length)
                          ->select();
 

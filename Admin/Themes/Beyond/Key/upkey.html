@@ -35,6 +35,7 @@
                         <div id="horizontal-form">
                             <form name="keyform" method="post" action="{$ANY.__APP__}?s=Key/upkeysave" class="form-horizontal" role="form">
                                 <input type="hidden" name="keyid" value="{$keyinfo.keyid}">
+                                <div class="form-title">钥匙信息</div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">钥匙名称</label>
                                     <div class="col-sm-10">
@@ -59,12 +60,17 @@
                                         <input type="text" class="form-control" name="keyshowname" value="{$keyinfo.keyshowname}" placeholder="车牌号码 例：常A12Z57">
                                     </div>
                                 </div>
-                                {include file="Public/scpdpm_cabinet.html"}
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">派出所</label>
+                                    <div class="col-sm-10"><p class="m-t-5 m-b-5">{$keyinfo.departmentname}</p></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">钥匙柜</label>
+                                    <div class="col-sm-10"><p class="m-t-5 m-b-5">{$keyinfo.cabinetname}</p></div>
+                                </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">钥匙位置</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="keypos" value="{$keyinfo.keypos}" placeholder="钥匙位置 例：1、2...">
-                                    </div>
+                                    <div class="col-sm-10"><p class="m-t-5 m-b-5">{$keyinfo.keypos}</p></div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">钥匙RFID</label>
@@ -182,6 +188,32 @@
                                     <label class="col-sm-2 control-label no-padding-right"><b>归还时限</b></label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="returntime" value="{$keyinfo.returntime}" placeholder="归还时限（小时） 例：8">
+                                    </div>
+                                </div>
+                                <div class="form-title">车辆信息</div>
+                                <input type="hidden" name="carid" value="{$keyinfo.carid}">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">名称</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="carname" value="{$keyinfo.carname}" placeholder="车辆名称 必填 例：苏E DA019">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">品牌</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="brand" value="{$keyinfo.brand}" placeholder="车辆品牌 例：奥迪">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">型号</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="modelv" value="{$keyinfo.modelv}" placeholder="车辆型号 例：A5">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">停放位置</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="parkplace" value="{$keyinfo.parkplace}" placeholder="车辆停放位置信息 必填">
                                     </div>
                                 </div>
                                 <div class="form-group">
