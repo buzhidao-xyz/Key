@@ -55,16 +55,17 @@ class MonitorController extends CommonController
         $keyLists = D('Key')->getKey(null, null, null, $departmentno, $cabinetno);
         $keyTotal = $keyLists['total'];
         $keyLists = $keyLists['data'];
-        $keyList = array();
+        $keyListc = array();
         foreach ($keyLists as $key) {
-            $keyList[$key['keypos']] = array_merge($key, array(
+            $keyListc[$key['keypos']] = array_merge($key, array(
                 'upflag' => 0,
-                'keymonitorname' => $key['keyname']
+                'keymonitorname' => $key['keyname'],
             ));
         }
-        foreach ($keyList as $keypos=>$key) {
+        $keyList = $keyListc;
+        foreach ($keyListc as $keypos=>$key) {
             if ($key['keystatus'] == 2) {
-                if (!$key['upflag']) $keyList[$key['keypos']]['keystatus'] = 0;
+                if (!$keyList[$key['keypos']]['upflag']) $keyList[$key['keypos']]['keystatus'] = 0;
 
                 $keyList[$key['keyposcurrent']]['keymonitorname'] = $key['keyname'];
                 $keyList[$key['keyposcurrent']]['keystatus'] = 2;
