@@ -338,14 +338,18 @@ class LogController extends CommonController
         if (!is_array($keyinfo) || empty($keyinfo)) $this->apiReturn(1, '未知钥匙信息！');
 
         //判断是否错位
-        $keystatus = $action;
-        if ($keycardid && $keylockno!=$keyinfo['keypos']) {
+        $keystatus = (int)$action;
+        if ($keystatus && $keycardid && $keylockno!=$keyinfo['keypos']) {
             $keystatus  = 2;
             $actionflag = 2;
         }
 
         //更新钥匙状态
-        M('keys')->where(array('keyid'=>$keyinfo['keyid']))->save(array('keystatus'=>$keystatus, 'keyposcurrent'=>$keylockno));
+        $keyposcurrent = $keystatus ? $keylockno : 0;
+        M('keys')->where(array('keyid'=>$keyinfo['keyid']))->save(array(
+            'keystatus'     => $keystatus,
+            'keyposcurrent' => $keyposcurrent,
+        ));
 
         //新增钥匙使用日志
         $logid = guid();

@@ -1,8 +1,9 @@
+<div style="width: 930px; overflow: hidden;">
 {foreach $keyList as $key}
 <div class="keyitem {if (int)$key.keystatus==0}keyout{elseif (int)$key.keystatus==2}keyerr{/if}">
     <div class="databox databox-sm radius-bordered databox-shadowed databox-vertical databox-white">
         <div class="databox-top bordered-bottom-2 bordered-sky bg-blue sky">
-            <span><b>{$key.keyname}</b></span>
+            <span><b>{$key.keymonitorname}</b></span>
         </div>
         <div class="databox-bottom bg-white no-padding">
             <img src="{$SERVER.HOST.HTTP_HOST}{$key.keytypeimage}" class="img-responsive center-block" style="width: 100px;">
@@ -10,3 +11,4 @@
     </div>
 </div>
 {/foreach}
+</div>

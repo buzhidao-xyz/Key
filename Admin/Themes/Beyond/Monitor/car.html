@@ -1,0 +1,163 @@
+{include file="Common/head.html"}
+    <!-- Page Header -->
+    <div class="page-header position-relative page-header-fixed">
+        <div class="header-title">
+            <h1>
+                {$department.departmentname} <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+            </h1>
+        </div>
+        <!--Header Buttons-->
+        <div class="header-buttons">
+            <a class="sidebar-toggler" href="#">
+                <i class="fa fa-arrows-h"></i>
+            </a>
+            <a class="refresh" id="refresh-toggler" href="#">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </a>
+            <a class="fullscreen" id="fullscreen-toggler" href="#">
+                <i class="glyphicon glyphicon-fullscreen"></i>
+            </a>
+        </div>
+        <!--Header Buttons End-->
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Page Body -->
+    <div class="page-body">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <div class="navalinkbox" departmentno="{$departmentno}" cabinetno="{$cabinetno}">
+                    {foreach $cabinetList as $cbt}
+                    {if $cbt.cabinetno==$cabinetno}
+                    <a href="{$ANY.__APP__}?s=Monitor/rtmonitor&departmentno={$departmentno}&cabinetno={$cbt.cabinetno}" class="item active">
+                        <h5 class="row-title before-darkorange"><i class="glyphicon glyphicon-plane darkorange"></i>{$cbt.cabinetname}</h5>
+                    </a>
+                    {else}
+                    <a href="{$ANY.__APP__}?s=Monitor/rtmonitor&departmentno={$departmentno}&cabinetno={$cbt.cabinetno}" class="item">
+                        <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>{$cbt.cabinetname}</h5>
+                    </a>
+                    {/if}
+                    {/foreach}
+                    <div class="oplinks">
+                        <a href="{$ANY.__APP__}?s=Monitor/car&departmentno={$departmentno}&cabinetno={$cabinetno}" class="btn btn-darkorange">车辆监控</a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="widget m-b-10">
+                            <div class="widget-header bg-sky">
+                                <span class="widget-caption">【保险】即将到期车辆信息</span>
+                                <div class="widget-buttons">
+                                    <a href="#" data-toggle="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="widget-body no-padding" style="height: 700px; overflow-y: auto;">
+                                <div id="keyuseloghtml" class="dataTables_wrapper form-inline">
+                                    <table class="table table-bordered table-hover table-striped dataTable">
+                                        <thead class="bordered-darkorange">
+                                            <tr role="row">
+                                                <th></th>
+                                                <th>名称</th>
+                                                <th>品牌 型号</th>
+                                                <th>位置</th>
+                                                <th>钥匙</th>
+                                                <th>投保人</th>
+                                                <th>保单到期时间</th>
+                                                <th>距离到期（天）</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {foreach $insurecarlist as $car}
+                                            <tr role="row" class="even">
+                                                <td>{$car.ROW_NUMBER}</td>
+                                                <td>{$car.carname}</td>
+                                                <td>{$car.brand} {$car.modelv}</td>
+                                                <td>{$car.parkplace}</td>
+                                                <td>{$car.keyname}</td>
+                                                <td>{$car.insureperson}</td>
+                                                <td>{$car.insureexpiretime|substr:0:10}</td>
+                                                <td><span class="darkorange">{$car.insuredaycaption}{$car.insuretodays}</span></td>
+                                            </tr>
+                                            {/foreach}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="widget">
+                            <div class="widget-header bg-warning">
+                                <span class="widget-caption">【保养】即将到期车辆信息</span>
+                                <div class="widget-buttons">
+                                    <a href="#" data-toggle="collapse">
+                                        <i class="fa fa-minus"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="widget-body no-padding" style="height: 700px; overflow-y: auto;">
+                                <div id="cabinetdoorloghtml" class="dataTables_wrapper form-inline">
+                                    <table class="table table-bordered table-hover table-striped dataTable">
+                                        <thead class="bordered-darkorange">
+                                            <tr role="row">
+                                                <th></th>
+                                                <th>名称</th>
+                                                <th>品牌 型号</th>
+                                                <th>位置</th>
+                                                <th>当前行驶</th>
+                                                <th>距离保养</th>
+                                                <th>下次保养日期</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {foreach $repaircarlist as $car}
+                                            <tr role="row" class="even">
+                                                <td>{$car.ROW_NUMBER}</td>
+                                                <td>{$car.carname}</td>
+                                                <td>{$car.brand} {$car.modelv}</td>
+                                                <td>{$car.parkplace}</td>
+                                                <td>{$car.currentkilometer}公里</td>
+                                                <td><span class="darkorange">{if $car.currentkilometer&&$car.repairkilometer}{$car.repaircaption}{$car.repairtokilometer}公里{/if}</span></td>
+                                                <td>{$car.nextrepairtime}</td>
+                                            </tr>
+                                            {/foreach}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style type="text/css">
+    .navalinkbox a.item {
+        margin-right: 7px;
+    }
+    .navalinkbox a.item:hover {
+        text-decoration: none;
+    }
+    .navalinkbox a.item h5 {
+        background: #F5F5F5;
+    }
+    .navalinkbox a.item:hover h5 {
+        font-weight: 700;
+        background: #FFFFFF;
+    }
+    .navalinkbox a.active h5 {
+        font-weight: 700;
+        background: #FFFFFF;
+    }
+    </style>
+
+    <script type="text/javascript">
+    $(function (){
+        
+    })
+    </script>
+{include file="Common/foot.html"}

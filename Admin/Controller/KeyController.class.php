@@ -207,6 +207,7 @@ class KeyController extends CommonController
     private function _getParkplace()
     {
         $parkplace = mRequest('parkplace');
+        if (mb_strlen($parkplace, 'UTF-8')>20) $this->ajaxReturn(1, '错误：车辆停放位置超过20汉字！');
         $this->assign('parkplace', $parkplace);
 
         return $parkplace;
@@ -606,7 +607,6 @@ class KeyController extends CommonController
             'usetimeflag'    => $usetimeflag,
             'returntimeflag' => $returntimeflag,
             'returntime'     => $returntime,
-            'keyposcurrent'  => $keypos,
             'updatetime'     => mkDateTime(),
         );
         $result = D('Key')->savekey($keyid, $data);

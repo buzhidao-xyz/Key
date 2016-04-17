@@ -38,13 +38,16 @@
                     </a>
                     {/if}
                     {/foreach}
+                    <div class="oplinks">
+                        <a href="{$ANY.__APP__}?s=Monitor/car&departmentno={$departmentno}&cabinetno={$cabinetno}" class="btn btn-darkorange">车辆监控</a>
+                    </div>
                 </div>
 
                 <div class="row">
                     <div class="col-xs-8 keysbox">
                         <div class="widget">
                             <div class="widget-header bordered-bottom bordered-darkorange">
-                                <span class="widget-caption"><b>1号钥匙柜</b></span>
+                                <span class="widget-caption"><b>{$cabinet.cabinetname}</b></span>
                                 <span class="widget-caption" id="cabinethtml" style="color: #999; margin-left: 15px;">
                                     {include file="Monitor/rtmonitor_cabinet.html"}
                                 </span>

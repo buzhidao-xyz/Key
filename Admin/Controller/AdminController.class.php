@@ -132,7 +132,7 @@ class AdminController extends BaseController
         ));
 
         //获取权限菜单信息
-        $access = $this->_getManagerAccess($managerInfo['super'], $managerInfo['roleid']);
+        $access = D('Manager')->getManagerAccess($managerInfo['super'], $managerInfo['roleid']);
 
         //session缓存管理员信息
         session('managerinfo', array(
@@ -159,80 +159,5 @@ class AdminController extends BaseController
         session_destroy();
 
         $this->_gotoLogin();
-    }
-
-    /**
-     * 获取管理员访问权限菜单
-     * @param  integer $super     是否超级管理员 如果是直接获取全部功能菜单 0否 1是
-     * @param  string  $roleid    管理员角色id
-     * @return array              节点菜单 已格式化
-     */
-    private function _getManagerAccess($super=0, $roleid=null)
-    {
-        if (!$super && !$roleid) return array();
-
-        //权限菜单
-        $access = array();
-
-        //管理员角色-节点菜单
-        $groupids = array(0);
-        $nodeids = array(0);
-
-        //如果是超级管理员-不需要获取角色-直接获取全部菜单信息
-        if ($super == 1) {
-            $groupids = array();
-            $nodeids = array();
-        }
-        //如果不是超级管理员-获取管理员角色-角色关联的菜单信息
-        if ($super !== 1) {
-            //根据管理员的角色id 获取角色-菜单信息
-            $rolenodelist = D('Role')->getRoleNode($roleid);
-            if (is_array($rolenodelist)&&!empty($rolenodelist)) {
-                foreach ($rolenodelist as $node) {
-                    $node['groupid']&&!in_array($node['groupid'], $groupids) ? $groupids[] = $node['groupid'] : null;
-                    $node['nodeid']&&!in_array($node['nodeid'], $nodeids) ? $nodeids[] = $node['nodeid'] : null;
-                }
-            }
-        }
-        
-        //获取组菜单
-        $grouplist = D('Menu')->getGroup($groupids);
-        if ($grouplist['total']) {
-            foreach ($grouplist['data'] as $group) {
-                $group['nodelist'] = array();
-                $access[$group['groupid']] = $group;
-            }
-        }
-        // dump($grouplist);exit;
-        //获取节点菜单
-        $nodelist = D('Menu')->getNode($nodeids);
-        //组合节点菜单 支持三级
-        $accessnode = array();
-        if ($nodelist['total']) {
-            foreach ($nodelist['data'] as $node) {
-                $node['nodelist'] = array();
-                //一级节点
-                $accessnode[$node['nodeid']] = $node;
-
-                $pnodeid = $node['pnodeid'];
-                if ($pnodeid) {
-                    //二级节点
-                    $accessnode[$pnodeid]['nodelist'][$node['nodeid']] = $node;
-
-                    $ppnodeid = $accessnode[$pnodeid]['pnodeid'];
-                    if (isset($accessnode[$ppnodeid])) {
-                        //三级节点
-                        $accessnode[$ppnodeid]['nodelist'][$pnodeid] = $accessnode[$pnodeid];
-                    }
-                }
-            }
-        }
-        
-        //组合组-节点菜单
-        foreach ($accessnode as $d) {
-            if ($d['groupid']&&!$d['pnodeid']) $access[$d['groupid']]['nodelist'][$d['nodeid']] = $d;
-        }
-
-        return $access;
     }
 }

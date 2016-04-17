@@ -40,6 +40,16 @@ class CabinetModel extends CommonModel
         return $cabinetinfo['total'] ? current($cabinetinfo['data']) : array();
     }
 
+    //获取钥匙柜信息
+    public function getCabinetByDepartmentnoCabinetno($departmentno=null, $cabinetno=0)
+    {
+        if (!$departmentno || !$cabinetno) return false;
+
+        $cabinetinfo = M("cabinet")->where(array('departmentno'=>$departmentno,'cabinetno'=>$cabinetno))->find();
+
+        return is_array($cabinetinfo) ? $cabinetinfo : array();
+    }
+
     //获取某部门最大的钥匙柜编号
     public function getMaxCabinetno($departmentno=null)
     {

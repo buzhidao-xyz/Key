@@ -19,6 +19,13 @@ class BaseController extends Controller
     //摄像头
     protected $_DEVICETYPE_SXT = 3;
 
+    //车辆保险提醒时限
+    protected $_car_insure_time = 30;
+    //车辆保养提醒时限
+    protected $_car_repair_time = 30;
+    //车浪保养公里限制
+    protected $_car_repair_kilometer = 300;
+
     public function __construct()
     {
         parent::__construct();

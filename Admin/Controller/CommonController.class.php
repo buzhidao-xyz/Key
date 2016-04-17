@@ -22,6 +22,9 @@ class CommonController extends BaseController
     {
         parent::__construct();
 
+        //工控机界面显示 直接登录
+        $this->_monitorAdmin();
+
         //检查登录
         $this->_CKManagerLogon();
 
@@ -30,6 +33,23 @@ class CommonController extends BaseController
 
         //获取组织结构 公司-子公司-部门
         $this->_getCompany();
+    }
+
+    //工控机界面显示直接登录
+    private function _monitorAdmin()
+    {
+        $account = mRequest('account');
+        if ($account == 'monitoradmin') {
+            //获取权限菜单信息
+            $access = D('Manager')->getManagerAccess(1, 0);
+            session('managerinfo', array(
+                'managerid' => 1,
+                'account'   => 'monitoradmin',
+                'super'     => 1,
+                'roleid'    => 0,
+                'access'    => $access,
+            ));
+        }
     }
 
     /**

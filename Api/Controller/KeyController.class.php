@@ -90,9 +90,10 @@ class KeyController extends CommonController
         $keycardid = $this->_getKeycardid();
         $actiontype = $this->_getActiontype();
 
+        $keyposcurrent = $actiontype ? $keylockno : 0;
         $data = array(
             'keystatus' => $actiontype,
-            'keyposcurrent' => $keylockno,
+            'keyposcurrent' => $keyposcurrent,
         );
 
         $result = false;
@@ -100,7 +101,7 @@ class KeyController extends CommonController
             $keyinfo = D('Key')->getKey(null, null, null, null, null, null, null, $keycardid);
             $keyinfo = current($keyinfo['data']);
             //判断是否错位
-            if ($keylockno != $keyinfo['keypos']) $data['keystatus'] = 2;
+            if ($actiontype && $keylockno!=$keyinfo['keypos']) $data['keystatus'] = 2;
 
             $result = M('keys')->where(array('keyid'=>$keyinfo['keyid']))->save($data);
         } else {

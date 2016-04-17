@@ -107,7 +107,7 @@ class KeyModel extends CommonModel
     }
 
     //获取钥匙信息
-    public function getKey($keyid=null, $keytypeid=null, $keyname=null, $departmentno=null, $cabinetno=null, $keyno=null, $keypos=null, $keyrfid=null, $start=0, $length=9999)
+    public function getKey($keyid=null, $keytypeid=null, $keyname=null, $departmentno=null, $cabinetno=null, $keyno=null, $keypos=null, $keyrfid=null, $start=0, $length=9999, $car=0, $carname=null)
     {
         $where = array(
             'a.isdelete' => 0
@@ -120,6 +120,9 @@ class KeyModel extends CommonModel
         if ($keyno) $where['keyno'] = is_array($keyno) ? array('in', $keyno) : $keyno;
         if ($keypos) $where['keypos'] = is_array($keypos) ? array('in', $keypos) : $keypos;
         if ($keyrfid) $where['keyrfid'] = is_array($keyrfid) ? array('in', $keyrfid) : $keyrfid;
+
+        if ($car) $where['carname'] = array('neq', '');
+        if ($carname) $where['carname'] = array('like', '%'.$carname.'%');
 
         $total = M('keys')->alias('a')->where($where)->count();
         $data = M('keys')->alias('a')
