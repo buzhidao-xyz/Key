@@ -274,9 +274,12 @@ class LogController extends CommonController
         $videologid = $this->_getVideologid();
 
         //获取员工信息
-        $userinfo = D('User')->getUser(null, null, $departmentno, $userno, null, $usercardno);
-        $userinfo = current($userinfo['data']);
-        // if (!is_array($userinfo) || empty($userinfo)) $this->apiReturn(1, '未知警员信息！');
+        $userinfo = array();
+        if ($userno || $usercardno) {
+            $userinfo = D('User')->getUser(null, null, $departmentno, $userno, null, $usercardno);
+            $userinfo = current($userinfo['data']);
+            // if (!is_array($userinfo) || empty($userinfo)) $this->apiReturn(1, '未知警员信息！');
+        }
 
         $logid = guid();
         $data = array(
@@ -324,9 +327,12 @@ class LogController extends CommonController
         $videologid = $this->_getVideologid();
 
         //获取员工信息
-        $userinfo = D('User')->getUser(null, null, $departmentno, $userno);
-        $userinfo = current($userinfo['data']);
-        // if (!is_array($userinfo) || empty($userinfo)) $this->apiReturn(1, '未知警员信息！');
+        $userinfo = array();
+        if ($userno) {
+            $userinfo = D('User')->getUser(null, null, $departmentno, $userno);
+            $userinfo = current($userinfo['data']);
+            // if (!is_array($userinfo) || empty($userinfo)) $this->apiReturn(1, '未知警员信息！');
+        }
 
         //获取钥匙信息
         if ($keycardid) {
