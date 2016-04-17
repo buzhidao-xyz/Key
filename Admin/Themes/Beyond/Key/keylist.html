@@ -101,18 +101,18 @@
                                         <td>{$data.keyname}</td>
                                         <td>{$keytypelist[$data.keytypeid]['keytypename']}</td>
                                         <td>{$data.keyrfid}</td>
-                                        <td>{$data.carname}</td>
+                                        <td><a href="{$ANY.__APP__}?s=Key/car&keyid={$data.keyid}&jumpurl={$jumpurl}">{$data.carname}</a></td>
                                         <td>{$data.parkplace}</td>
                                         <td>{$data.departmentname}</td>
                                         <td>{$data.cabinetname}</td>
                                         <td>{$data.keypos}</td>
                                         <td>
                                             {if $data.keystatus==0}
-                                            <span class="danger">离位</span>
+                                            <span class="gray">离位</span>
                                             {else if $data.keystatus==1}
                                             <span class="sky">在位</span>
                                             {else if $data.keystatus==2}
-                                            <span class="warning">错位</span>
+                                            <span class="darkorange">错位</span>
                                             {/if}
                                         </td>
                                         <td>

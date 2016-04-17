@@ -212,6 +212,69 @@ class KeyController extends CommonController
         return $parkplace;
     }
 
+    //获取insurephoto
+    private function _getInsurephoto()
+    {
+        $insurephoto = mRequest('insurephoto');
+        $this->assign('insurephoto', $insurephoto);
+
+        return $insurephoto;
+    }
+
+    //获取insureexpiretime
+    private function _getInsureexpiretime()
+    {
+        $insureexpiretime = mRequest('insureexpiretime');
+        $this->assign('insureexpiretime', $insureexpiretime);
+
+        return $insureexpiretime;
+    }
+
+    //获取insureperson
+    private function _getInsureperson()
+    {
+        $insureperson = mRequest('insureperson');
+        $this->assign('insureperson', $insureperson);
+
+        return $insureperson;
+    }
+
+    //获取currentkilometer
+    private function _getCurrentkilometer()
+    {
+        $currentkilometer = mRequest('currentkilometer');
+        $this->assign('currentkilometer', $currentkilometer);
+
+        return $currentkilometer;
+    }
+
+    //获取repairkilometer
+    private function _getRepairkilometer()
+    {
+        $repairkilometer = mRequest('repairkilometer');
+        $this->assign('repairkilometer', $repairkilometer);
+
+        return $repairkilometer;
+    }
+
+    //获取lastrepairtime
+    private function _getLastrepairtime()
+    {
+        $lastrepairtime = mRequest('lastrepairtime');
+        $this->assign('lastrepairtime', $lastrepairtime);
+
+        return $lastrepairtime;
+    }
+
+    //获取repairperiodtime
+    private function _getRepairperiodtime()
+    {
+        $repairperiodtime = mRequest('repairperiodtime');
+        $this->assign('repairperiodtime', $repairperiodtime);
+
+        return $repairperiodtime;
+    }
+
     public function index(){}
 
     //钥匙类型
@@ -252,6 +315,38 @@ class KeyController extends CommonController
         }
     }
 
+    //保单图片上传
+    public function insurephotoupload()
+    {
+        //初始化上传类
+        $Upload = new Upload();
+        $Upload->maxSize  = 500*1024;
+        $Upload->exts     = array('jpg', 'gif', 'png', 'jpeg');
+        $Upload->rootPath = UPLOAD_PATH;
+        $Upload->savePath = 'Key/car/';
+        $Upload->saveName = array('uniqid', array('', true));
+        $Upload->autoSub  = true;
+        $Upload->subName  = array('date', 'Ym');
+
+        //上传
+        $error = null;
+        $msg = '上传成功！';
+        $data = array();
+        $info = $Upload->upload();
+        if (!$info) {
+            $error = 1;
+            $msg = $Upload->getError();
+        } else {
+            $fileinfo = array_shift($info);
+            $data = array(
+                'filepath' => '/'.UPLOAD_PT.$fileinfo['savepath'],
+                'filename' => $fileinfo['savename'],
+            );
+        }
+
+        $this->ajaxReturn($error, $msg, $data);
+    }
+
     //获取车辆信息
     private function _getCardata($carid=null, $departmentno=null, $cabinetno=null, $keyno=null)
     {
@@ -264,13 +359,29 @@ class KeyController extends CommonController
         $parkplace = $this->_getParkplace();
         // if (!$parkplace) $this->ajaxReturn(1, '请填写车辆停放位置！');
 
+        $insurephoto = $this->_getInsurephoto();
+        $insureexpiretime = $this->_getInsureexpiretime();
+        $insureperson = $this->_getInsureperson();
+        $currentkilometer = $this->_getCurrentkilometer();
+        $repairkilometer = $this->_getRepairkilometer();
+        $lastrepairtime = $this->_getLastrepairtime();
+        $repairperiodtime = $this->_getRepairperiodtime();
+
         //保存车辆信息
         $cardata = array(
-            'carname'      => $carname,
-            'brand'        => $brand,
-            'modelv'       => $modelv,
-            'parkplace'    => $parkplace,
+            'carname'          => $carname,
+            'brand'            => $brand,
+            'modelv'           => $modelv,
+            'parkplace'        => $parkplace,
+            'insurephoto'      => $insurephoto,
+            'insureperson'     => $insureperson,
+            'currentkilometer' => $currentkilometer ? (int)$currentkilometer : 0,
+            'repairkilometer'  => $repairkilometer ? (int)$repairkilometer : 0,
+            'repairperiodtime' => $repairperiodtime ? (int)$repairperiodtime : 0,
         );
+        if ($insureexpiretime) $cardata['insureexpiretime'] = $insureexpiretime;
+        if ($lastrepairtime) $cardata['lastrepairtime'] = $lastrepairtime;
+
         if (!$carid) {
             $carid = guid();
             $cardata = array_merge($cardata, array(
@@ -515,10 +626,52 @@ class KeyController extends CommonController
 
             //保存车辆信息
             D('Key')->savecar($carid, $cardata);
-        
+
             $this->ajaxReturn(0, '保存成功！', array(
                 'location' => str_replace('|||||', '&', $jumpurl)
             ));
+        } else {
+            $this->ajaxReturn(1, '保存失败！');
+        }
+    }
+
+    //车辆信息
+    public function car()
+    {
+        $keyid = $this->_getKeyid();
+        if (!$keyid) exit;
+
+        $jumpurl = mRequest('jumpurl');
+        $this->assign('jumpurl', $jumpurl);
+
+        $keyinfo = D('Key')->getKeyByID($keyid);
+
+        $this->assign('keyinfo', $keyinfo);
+        $this->display();
+    }
+
+    //车辆信息-保存
+    public function carsave()
+    {
+        $keyid = $this->_getKeyid();
+        if (!$keyid) $this->ajaxReturn(1, '未知车辆信息！');
+
+        $jumpurl = mRequest('jumpurl');
+
+        //获取钥匙信息
+        $keyinfo = D('Key')->getKeyByID($keyid);
+        if (!is_array($keyinfo)) $this->ajaxReturn(1, '未知车辆信息！');
+
+        $carid = $this->_getCarid();
+        if (!$carid) $this->ajaxReturn(1, '未知车辆信息！');
+
+        //获取车辆信息
+        $cardata = $this->_getCardata($carid, $keyinfo['departmentno'], $keyinfo['cabinetno'], $keyinfo['keyno']);
+
+        //保存车辆信息
+        $result = D('Key')->savecar($carid, $cardata);
+        if ($result) {
+            $this->ajaxReturn(0, '保存成功！');
         } else {
             $this->ajaxReturn(1, '保存失败！');
         }

@@ -123,7 +123,7 @@ class KeyModel extends CommonModel
 
         $total = M('keys')->alias('a')->where($where)->count();
         $data = M('keys')->alias('a')
-                         ->field('a.*, cc.carid, cc.carname, cc.brand, cc.modelv, cc.parkplace, b.keytypename, b.keytypeimage, c.cabinetname, d.departmentname')
+                         ->field('a.*, cc.carid, cc.carname, cc.brand, cc.modelv, cc.parkplace, cc.insurephoto, cc.insureexpiretime, cc.insureperson, cc.currentkilometer, cc.repairkilometer, cc.lastrepairtime, cc.repairperiodtime, b.keytypename, b.keytypeimage, c.cabinetname, d.departmentname')
                          ->join(' LEFT JOIN __CARS__ cc on a.departmentno=cc.departmentno and a.cabinetno=cc.cabinetno and a.keyno=cc.keyno ')
                          ->join(' __KEYTYPE__ b on a.keytypeid=b.keytypeid ')
                          ->join(' __CABINET__ c on a.departmentno=c.departmentno and a.cabinetno=c.cabinetno ')

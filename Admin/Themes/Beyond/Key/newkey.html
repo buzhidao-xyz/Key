@@ -198,7 +198,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">名称</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="carname" placeholder="车辆名称 必填 例：苏E DA019">
+                                        <input type="text" class="form-control" name="carname" placeholder="车辆名称 例：苏E DA019">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -216,7 +216,61 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">停放位置</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="parkplace" placeholder="车辆停放位置信息 必填">
+                                        <input type="text" class="form-control" name="parkplace" placeholder="车辆停放位置信息">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">保单图片</label>
+                                    <div class="col-sm-10">
+                                        <input type="hidden" name="insurephoto" value="">
+                                        <input id="insurephotofile" type="file" name="insurephotofile" placeholder="请上传保单图片" class="file-loading">
+                                        <p class="help-block darkorange m-b-5">*大小:200K以下</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">投保到期时间</label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control datetimepickerinsuretime" name="insureexpiretime" placeholder="请选择投保到期时间 年-月-日">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-clock-o"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">投保执行人</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="insureperson" placeholder="投保执行人">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">当前行驶公里数</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="currentkilometer" placeholder="当前行驶公里数 例：7510">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">下次保养公里数</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="repairkilometer" placeholder="下次保养公里数 例：50000">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">上次保养时间</label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control datetimepickerlastrepairtime" name="lastrepairtime" placeholder="请选择上次保养时间 年-月-日">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-clock-o"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">保养周期（月）</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="repairperiodtime" placeholder="保养周期（月） 例：12">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -231,6 +285,18 @@
             </div>
         </div>
     </div>
+
+<link href="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+<script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+<script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-fileinput/js/fileinput_locale_zh.js"></script>
+<script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/js/class/bootstrap-fileinput.class.js"></script>
+<script>
+$(function (){
+    var BootstrapFileInputClassObj = new BootstrapFileInputClass();
+    //保单图片
+    BootstrapFileInputClassObj.Init("insurephoto", JS_APP+"?s=Key/insurephotoupload");
+})
+</script>
 
 <link href="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
 <script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
@@ -267,6 +333,18 @@ $(function (){
             $("input[name=returntime]").val('');
         }
     });
+
+    //投保时间、下次保养时间
+    var insuretimeInit = function (){
+        $(".datetimepickerinsuretime, .datetimepickerlastrepairtime").datetimepicker({
+            language: 'zh-CN',
+            startView: 'month',
+            minView: 'month',
+            maxView: 'year',
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+        });
+    }();
 
     //form提交
     $("form[name=keyform]").submit(function (){

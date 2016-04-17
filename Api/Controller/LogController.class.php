@@ -36,7 +36,7 @@ class LogController extends CommonController
     {
         $action = mRequest('action');
 
-        return $action;
+        return (int)$action;
     }
 
     //获取alarm
@@ -68,7 +68,7 @@ class LogController extends CommonController
     {
         $actionflag = mRequest('actionflag');
 
-        return $actionflag;
+        return (int)$actionflag;
     }
 
     //获取photologid
@@ -337,9 +337,14 @@ class LogController extends CommonController
         $keyinfo = current($keyinfo['data']);
         if (!is_array($keyinfo) || empty($keyinfo)) $this->apiReturn(1, '未知钥匙信息！');
 
-        //更新钥匙状态
+        //判断是否错位
         $keystatus = $action;
-        $keystatus = (int)$actionflag==2 ? $actionflag : $keystatus;
+        if ($keycardid && $keylockno!=$keyinfo['keypos']) {
+            $keystatus  = 2;
+            $actionflag = 2;
+        }
+
+        //更新钥匙状态
         M('keys')->where(array('keyid'=>$keyinfo['keyid']))->save(array('keystatus'=>$keystatus, 'keyposcurrent'=>$keylockno));
 
         //新增钥匙使用日志
@@ -361,7 +366,7 @@ class LogController extends CommonController
             'videologid'   => $videologid,
             'logtime'      => mkDateTime(),
         );
-        if ((int)$actionflag==2) $data['keyposwrong'] = $keylockno;
+        if ($actionflag==2) $data['keyposwrong'] = $keylockno;
 
         $result = D('Log')->saveKeyuselog(null, $data);
         if ($result) {

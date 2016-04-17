@@ -1,0 +1,173 @@
+{include file="Common/head.html"}
+    <!-- Page Header -->
+    <div class="page-header position-relative page-header-fixed">
+        <div class="header-title">
+            <h1>
+                车辆管理 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+            </h1>
+        </div>
+        <!--Header Buttons-->
+        <div class="header-buttons">
+            <a class="sidebar-toggler" href="#">
+                <i class="fa fa-arrows-h"></i>
+            </a>
+            <a class="refresh" id="refresh-toggler" href="#">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </a>
+            <a class="fullscreen" id="fullscreen-toggler" href="#">
+                <i class="glyphicon glyphicon-fullscreen"></i>
+            </a>
+        </div>
+        <!--Header Buttons End-->
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Page Body -->
+    <div class="page-body">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>编辑车辆信息</h5>
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-sky">
+                        <span class="widget-caption">车辆信息表单</span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="horizontal-form">
+                            <form name="keyform" method="post" action="{$ANY.__APP__}?s=Key/carsave" class="form-horizontal" role="form">
+                                <input type="hidden" name="keyid" value="{$keyinfo.keyid}">
+                                <input type="hidden" name="jumpurl" value="{$jumpurl}">
+                                <div class="form-title">车辆信息</div>
+                                <input type="hidden" name="carid" value="{$keyinfo.carid}">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">名称</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="carname" value="{$keyinfo.carname}" placeholder="车辆名称 例：苏E DA019">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">品牌</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="brand" value="{$keyinfo.brand}" placeholder="车辆品牌 例：奥迪">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">型号</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="modelv" value="{$keyinfo.modelv}" placeholder="车辆型号 例：A5">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">停放位置</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="parkplace" value="{$keyinfo.parkplace}" placeholder="车辆停放位置信息">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">保单图片</label>
+                                    <div class="col-sm-10">
+                                        {if $keyinfo.insurephoto}<p class="m-b-5"><img src="{$SERVER.HOST.HTTP_HOST}{$keyinfo.insurephoto}" class="img-responsive"></p>{/if}
+                                        <input type="hidden" name="insurephoto" value="{$keyinfo.insurephoto}">
+                                        <input id="insurephotofile" type="file" name="insurephotofile" placeholder="请上传保单图片" class="file-loading">
+                                        <p class="help-block darkorange m-b-5">*大小:200K以下</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">投保到期时间</label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control datetimepickerinsuretime" name="insureexpiretime" value="{$keyinfo.insureexpiretime|substr:0:10}" placeholder="请选择投保到期时间 年-月-日">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-clock-o"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">投保执行人</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="insureperson" value="{$keyinfo.insureperson}" placeholder="投保执行人">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">当前行驶公里数</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="currentkilometer" value="{$keyinfo.currentkilometer}" placeholder="当前行驶公里数 例：7510">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">下次保养公里数</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="repairkilometer" value="{$keyinfo.repairkilometer}" placeholder="下次保养公里数 例：50000">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">上次保养时间</label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control datetimepickerlastrepairtime" name="lastrepairtime" value="{$keyinfo.lastrepairtime|substr:0:10}" placeholder="请选择上次保养时间 年-月-日">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-clock-o"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">保养周期（月）</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="repairperiodtime" value="{$keyinfo.repairperiodtime}" placeholder="保养周期（月） 例：12">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-sky">保存</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<link href="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+<script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-fileinput/js/fileinput.min.js"></script>
+<script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-fileinput/js/fileinput_locale_zh.js"></script>
+<script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/js/class/bootstrap-fileinput.class.js"></script>
+<script>
+$(function (){
+    var BootstrapFileInputClassObj = new BootstrapFileInputClass();
+    //保单图片
+    BootstrapFileInputClassObj.Init("insurephoto", JS_APP+"?s=Key/insurephotoupload");
+})
+</script>
+
+<link href="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script src="{$SERVER.HOST.JS_SERVER}Themes/Beyond/Assets/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript">
+$(function (){
+    //投保时间、下次保养时间
+    var insuretimeInit = function (){
+        $(".datetimepickerinsuretime, .datetimepickerlastrepairtime").datetimepicker({
+            language: 'zh-CN',
+            startView: 'month',
+            minView: 'month',
+            maxView: 'year',
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+        });
+    }();
+
+    //form提交
+    $("form[name=keyform]").submit(function (){
+        var url = $(this).attr('action');
+        var postdata = $(this).serialize();
+        $.post(url, postdata, function (data){
+            ajaxCallback(data);
+        }, 'json');
+        return false;
+    });
+})
+</script>
+{include file="Common/foot.html"}

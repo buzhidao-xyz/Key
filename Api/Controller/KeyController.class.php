@@ -97,7 +97,12 @@ class KeyController extends CommonController
 
         $result = false;
         if ($keycardid) {
-            $result = M('keys')->where(array('keyefid'=>$keycardid))->save($data);
+            $keyinfo = D('Key')->getKey(null, null, null, null, null, null, null, $keycardid);
+            $keyinfo = current($keyinfo['data']);
+            //判断是否错位
+            if ($keylockno != $keyinfo['keypos']) $data['keystatus'] = 2;
+
+            $result = M('keys')->where(array('keyid'=>$keyinfo['keyid']))->save($data);
         } else {
             $result = M('keys')->where(array('departmentno'=>$departmentno,'cabinetno'=>$cabinetno,'keypos'=>$keylockno))->save($data);
         }

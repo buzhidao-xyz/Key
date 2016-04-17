@@ -45,7 +45,8 @@ if(function_exists('saeAutoLoader')){// 自动识别SAE环境
 
 defined('RUNTIME_PATH') or define('RUNTIME_PATH',   APP_PATH.'Runtime/');   // 系统运行时目录
 defined('PUBLIC_PATH')  or define('PUBLIC_PATH',    APP_PATH.'Public/');    // 系統公共静态文件目录
-defined('UPLOAD_PATH')  or define('UPLOAD_PATH',    APP_PATH.'Upload/');    // 系统上传目录
+defined('UPLOAD_PT')    or define('UPLOAD_PT',      'Upload/');             // 
+defined('UPLOAD_PATH')  or define('UPLOAD_PATH',    APP_PATH.UPLOAD_PT);    // 系统上传目录
 defined('LIB_PATH')     or define('LIB_PATH',       realpath(ANY_PATH.'Library').'/'); // 系统核心类库目录
 defined('CORE_PATH')    or define('CORE_PATH',      LIB_PATH.'Any/'); // Any类库目录
 defined('BEHAVIOR_PATH')or define('BEHAVIOR_PATH',  LIB_PATH.'Behavior/'); // 行为类库目录
