@@ -211,6 +211,7 @@ class CommonController extends BaseController
         $company = $companys;
         $subcompanycache = array();
         foreach ($subcompanys as $scp) {
+            $scp['department'] = array();
             $subcompanyno = $scp['subcompanyno'];
             $company['subcompany'][$subcompanyno] = $scp;
             $subcompanycache[$scp['subcompanyid']] = $scp;
@@ -247,19 +248,25 @@ class CommonController extends BaseController
     }
 
     //获取subcompanyno
-    protected function _getSubcompanyno()
+    protected function _getSubcompanyno($ck=false, $ajax=true)
     {
         $subcompanyno = mRequest('subcompanyno');
         $this->assign('subcompanyno', $subcompanyno);
+
+        $ck&&!$subcompanyno&&$ajax ? $this->ajaxReturn(1, '未知区分局编号！') : null;
+        $ck&&!$subcompanyno&&!$ajax ? $this->pageReturn(1, '未知区分局编号！') : null;
 
         return $subcompanyno;
     }
 
     //获取departmentno
-    protected function _getDepartmentno()
+    protected function _getDepartmentno($ck=false, $ajax=true)
     {
         $departmentno = mRequest('departmentno');
         $this->assign('departmentno', $departmentno);
+
+        $ck&&!$departmentno&&$ajax ? $this->ajaxReturn(1, '未知派出所编号！') : null;
+        $ck&&!$departmentno&&!$ajax ? $this->pageReturn(1, '未知派出所编号！') : null;
 
         return $departmentno;
     }
@@ -283,11 +290,25 @@ class CommonController extends BaseController
     }
 
     //获取cabinetno
-    protected function _getCabinetno()
+    protected function _getCabinetno($ck=false, $ajax=true)
     {
         $cabinetno = mRequest('cabinetno', false);
         $this->assign('cabinetno', $cabinetno);
 
+        $ck&&!$cabinetno&&$ajax ? $this->ajaxReturn(1, '未知钥匙柜编号！') : null;
+        $ck&&!$cabinetno&&!$ajax ? $this->pageReturn(1, '未知钥匙柜编号！') : null;
+
         return $cabinetno;
+    }
+
+    //获取exportaction
+    protected function _getExportaction()
+    {
+        $exportaction = mRequest('exportaction');
+        $this->assign('exportaction', $exportaction);
+
+        if (!$exportaction) $this->pageReturn(1, '未知导出动作！');
+
+        return $exportaction;
     }
 }

@@ -18,6 +18,7 @@
             <!-- /Sidebar Collapse -->
             <!-- headernav -->
             <div id="headernav" class="headernav">
+                <div class="headertitle">智能钥匙柜管理系统</div>
                 <ul class="list-unstyled list-inline">
                     {if is_array($managerinfo.access)&&!empty($managerinfo.access)}
                     {foreach $managerinfo.access as $group}
@@ -115,7 +116,16 @@
 .headernav {
     float: left;
     margin-left: 130px;
-    margin-top: 50px;
+}
+.headernav .headertitle {
+    width: auto;
+    height: 50px;
+    line-height: 40px;
+    font-size: 21px;
+    font-weight: 700;
+    color: #F1F1F1;
+    padding-left: 10px;
+    letter-spacing: 10px;
 }
 .headernav ul {
     margin-bottom: 0;

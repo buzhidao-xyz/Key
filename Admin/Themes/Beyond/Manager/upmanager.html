@@ -1,0 +1,140 @@
+{include file="Common/head.html"}
+    <!-- Page Header -->
+    <div class="page-header position-relative page-header-fixed">
+        <div class="header-title">
+            <h1>
+                管理员 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+            </h1>
+        </div>
+        <!--Header Buttons-->
+        <div class="header-buttons">
+            <a class="sidebar-toggler" href="#">
+                <i class="fa fa-arrows-h"></i>
+            </a>
+            <a class="refresh" id="refresh-toggler" href="#">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </a>
+            <a class="fullscreen" id="fullscreen-toggler" href="#">
+                <i class="glyphicon glyphicon-fullscreen"></i>
+            </a>
+        </div>
+        <!--Header Buttons End-->
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Page Body -->
+    <div class="page-body">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>编辑管理员</h5>
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-sky">
+                        <span class="widget-caption">管理员信息表单</span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="horizontal-form">
+                            <form name="ajax-form" method="post" action="{$ANY.__APP__}?s=Manager/upmanagersave" class="form-horizontal" role="form">
+                                <input type="hidden" name="managerid" value="{$managerinfo.managerid}">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">账号</label>
+                                    <div class="col-sm-10">
+                                        <p class="m-t-5 m-b-5">{$managerinfo.account}</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">密码</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" name="password" placeholder="登录密码">
+                                        <p class="help-block danger m-b-5">*不修改请留空</p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">管理员角色</label>
+                                    <div class="col-sm-10">
+                                        <select name="roleid" class="select2el" style="width:100%;">
+                                            <option value="">--请选择管理员角色--</option>
+                                            {foreach $rolelist as $role}
+                                            <option value="{$role.id}" {if $managerinfo.roleid==$role.id}selected{/if}>{$role.rolename}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">管理的派出所</label>
+                                    <div class="col-sm-10">
+                                        {foreach $company['subcompany'] as $subcompany}
+                                        <div class="col-xs-12 m-b-10 checkbox-box" style="border-bottom: 1px solid #ccc;">
+                                            <div class="checkbox clearbox" style="width: 100%; padding-bottom: 10px;">
+                                                <label>
+                                                    <input type="checkbox" name="subcompanynos[]" value="{$subcompany.subcompanyno}" class="checkbox-all">
+                                                    <span class="text" style="color: #777;">- {$subcompany.subcompanyname}</span>
+                                                </label>
+                                            </div>
+                                            <div class="checkbox-list" style="width: 100%; padding-bottom: 10px;">
+                                                {foreach $subcompany.department as $department}
+                                                <div class="checkbox" style="padding-bottom: 10px;">
+                                                    <label>
+                                                        <input type="checkbox" name="departmentnos[]" value="{$department.departmentno}" {if in_array($department.departmentno, $departmentnos)}checked="checked"{/if}>
+                                                        <span class="text">{$department.departmentname}</span>
+                                                    </label>
+                                                </div>
+                                                {/foreach}
+                                            </div>
+                                        </div>
+                                        {/foreach}
+                                    </div>
+                                </div>
+                                <div class="form-group" style="display: none;">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="status" value="1" class="colored-success" checked="checked">
+                                                <span class="text">启用</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-sky">保存</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+$(function (){
+    //全选
+    $("input.checkbox-all").click(function (){
+        if ($(this).attr("checked")) {
+            $(this).parents('.checkbox-box').find(".checkbox-list input[type=checkbox]").attr("checked", "checked");
+        } else {
+            $(this).parents('.checkbox-box').find(".checkbox-list input[type=checkbox]").attr("checked", false);
+        }
+    });
+    //选中checkbox
+    $(".checkbox-list input[type=checkbox]").click(function (){
+        if ($(this).attr("checked")) {
+            $(this).parents('.checkbox-list').prev().find('input[type=checkbox]').attr("checked", "checked");
+        } else {
+            var flag = 0;
+            $(this).parents('.checkbox-list').find("input[type=checkbox]").each(function (){
+                if ($(this).attr("checked")) flag++;
+            });
+            if (!flag) $(this).parents('.checkbox-list').prev().find('input[type=checkbox]').attr("checked", false);
+        }
+    });
+
+    $(".checkbox-list input[type=checkbox]").each(function (){
+        if ($(this).attr("checked")) {
+            $(this).parents('.checkbox-list').prev().find('input[type=checkbox]').attr("checked", "checked");
+        }
+    });
+})
+</script>
+{include file="Common/foot.html"}

@@ -23,7 +23,10 @@ class AccessController extends CommonController
 
     public function index(){}
 
-    //获取钥匙柜关联的员工信息
+    /**
+     * 获取钥匙柜关联的员工信息
+     * 如果钥匙柜没有配置员工权限 默认下发所有员工信息
+     */
     public function getcabinetuser()
     {
         $departmentno = $this->_getDepartmentno();
@@ -38,9 +41,12 @@ class AccessController extends CommonController
         $total = $cabinetuser['total'];
         $cabinetuser = $cabinetuser['data'];
 
-        $usernos = array(0);
-        foreach ($cabinetuser as $d) {
-            $usernos[] = $d['userno'];
+        $usernos = null;
+        if (count($cabinetuser)) {
+            $usernos = array(0);
+            foreach ($cabinetuser as $d) {
+                $usernos[] = $d['userno'];
+            }
         }
 
         //获取员工信息
@@ -51,6 +57,11 @@ class AccessController extends CommonController
             'total' => 0,
             'userlist' => array(),
         ));
+
+        $usernos = array(0);
+        foreach ($userlistdata as $d) {
+            $usernos[] = $d['userno'];
+        }
 
         //获取员工指纹信息
         $userfingerlist = D('Finger')->getUserFinger($departmentno, $usernos);

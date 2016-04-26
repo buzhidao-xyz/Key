@@ -21,6 +21,7 @@ class AccessController extends CommonController
     //钥匙柜门禁配置
     public function cabinetaccess()
     {
+        $this->assign('subcompanyno', '');
         $this->display();
     }
 
@@ -29,26 +30,31 @@ class AccessController extends CommonController
     {
         $departmentno = $this->_getDepartmentno();
         if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
-        $cabinetno = $this->_getCabinetno();
-        if (!$cabinetno) $this->ajaxReturn(1, '请选择钥匙柜！');
+
+        $cabinetnos = mRequest('cabinetnos', false);
+        if (!is_array($cabinetnos) || empty($cabinetnos)) {
+            $cabinetno = mRequest('cabinetno');
+            if (!$cabinetno) $this->ajaxReturn(1, '请选择钥匙柜！');
+
+            $cabinetnos = array($cabinetno);
+        }
 
         $usernos = mRequest('usernos', false);
         if (!is_array($usernos) || empty($usernos)) $this->ajaxReturn(1, '请选择警员！');
 
-        $data = array();
-        foreach ($usernos as $userno) {
-            $data[] = array(
-                'departmentno' => $departmentno,
-                'cabinetno'    => $cabinetno,
-                'userno'       => $userno,
-            );
+        foreach ($cabinetnos as $cabinetno) {
+            $data = array();
+            foreach ($usernos as $userno) {
+                $data[] = array(
+                    'departmentno' => $departmentno,
+                    'cabinetno'    => $cabinetno,
+                    'userno'       => $userno,
+                );
+            }
+            $result = D('Access')->savecabinetuser($departmentno, $cabinetno, $data);
+            if (!$result) $this->ajaxReturn(1, '保存失败！');
         }
-        $result = D('Access')->savecabinetuser($departmentno, $cabinetno, $data);
-        if ($result) {
-            $this->ajaxReturn(0, '保存成功！');
-        } else {
-            $this->ajaxReturn(1, '保存失败！');
-        }
+        $this->ajaxReturn(0, '保存成功！');
     }
 
     //警员钥匙配置
@@ -202,6 +208,113 @@ class AccessController extends CommonController
             $this->ajaxReturn(0, '下发警员钥匙权限成功！');
         } else {
             $this->ajaxReturn(1, '下发警员钥匙权限失败！');
+        }
+    }
+
+    //钥匙柜有哪些人员权限
+    public function cabinetuser()
+    {
+        $departmentno = $this->_getDepartmentno();
+        if (!$departmentno) $this->ajaxReturn(1, '未知派出所！');
+
+        $cabinetno = $this->_getCabinetno();
+        if (!$cabinetno) $this->ajaxReturn(1, '未知钥匙柜！');
+
+        $departmentinfo = $this->_getDepartmentinfo($departmentno);
+
+        $cabinetlist = D('Cabinet')->getCabinet(null, null, $departmentno, 0, 9999);
+        $cabinetlist = $cabinetlist['data'];
+        $this->assign('cabinetlist', $cabinetlist);
+
+        $userlist = D('User')->getUser(null, null, $departmentno);
+        $userlist = $userlist['data'];
+        $this->assign('userlist', $userlist);
+
+        $cabinetinfo = D('Cabinet')->getCabinetByDepartmentnoCabinetno($departmentno, $cabinetno);
+        $this->assign('cabinetinfo', $cabinetinfo);
+
+        //钥匙柜警员权限列表
+        $cabinetuser = D('Access')->getCabinetUser($departmentno, $cabinetno);
+        $this->assign('cabinetuser', $cabinetuser);
+
+        $this->display('Access/cabinetaccess');
+    }
+
+    //人员有哪些钥匙权限
+    public function userkey()
+    {
+        $userid = mRequest('userid');
+        $this->assign('userid', $userid);
+        if (!$userid) exit;
+
+        $userinfo = D('User')->getUserByID($userid);
+        if (!is_array($userinfo) || empty($userinfo)) exit;
+
+        //subcompanyno
+        foreach ($this->company['subcompany'] as $subcompany) {
+            if (isset($subcompany['department'])) {
+                foreach ($subcompany['department'] as $department) {
+                    if ($department['departmentno'] == $userinfo['departmentno']) {
+                        $userinfo['subcompanyno'] = $subcompany['subcompanyno'];
+                        $userinfo['subcompanyname'] = $subcompany['subcompanyname'];
+                        break(2);
+                    }
+                }
+            }
+        }
+
+        $this->assign('subcompanyno', $userinfo['subcompanyno']);
+        $this->assign('departmentno', $userinfo['departmentno']);
+
+        $this->assign('userinfo', $userinfo);
+
+        //获取钥匙柜的钥匙信息
+        $cabinetlist = D('Cabinet')->getCabinet(null, null, $userinfo['departmentno'], 0, 9999);
+        $cabinetlist = $cabinetlist['data'];
+        foreach ($cabinetlist as $key=>$cabinet) {
+            $data = D('Key')->getKey(null, null, null, $departmentno, $cabinet['cabinetno']);
+            $cabinetlist[$key]['keylist'] = $data['data'];
+        }
+        $this->assign('cabinetlist', $cabinetlist);
+
+        //获取钥匙权限信息
+        $userkeynos = D('Access')->getUserkeyByUserno($userinfo['departmentno'], $userinfo['userno']);
+        $this->assign('userkeynos', $userkeynos);
+
+        $this->display();
+    }
+
+    //人员有哪些钥匙权限 - 保存
+    public function userkeysave()
+    {
+        $departmentno = $this->_getDepartmentno();
+        if (!$departmentno) $this->ajaxReturn(1, '未知派出所！');
+        
+        $userno = mRequest('userno', false);
+        if (!$userno) $this->ajaxReturn(1, '未知警员！');
+
+        $keynos = mRequest('keynos', false);
+        if (!is_array($keynos) || empty($keynos)) $this->ajaxReturn(1, '请选择钥匙！');
+
+        $cabinetnos = array();
+        $data = array();
+        foreach ($keynos as $cabinetno=>$keynod) {
+            $cabinetnos[] = $cabinetno;
+
+            foreach ($keynod as $keyno) {
+                $data[] = array(
+                    'departmentno' => $departmentno,
+                    'userno'       => $userno,
+                    'cabinetno'    => $cabinetno,
+                    'keyno'        => $keyno,
+                );
+            }
+        }
+        $result = D('Access')->saveUserkeyaccess($departmentno, $userno, $cabinetnos, $data);
+        if ($result) {
+            $this->ajaxReturn(0, '保存成功！');
+        } else {
+            $this->ajaxReturn(1, '保存失败！');
         }
     }
 }

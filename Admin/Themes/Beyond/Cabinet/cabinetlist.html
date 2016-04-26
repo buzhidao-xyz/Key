@@ -86,7 +86,7 @@
                                         <td>{$company['subcompany'][$data.subcompanyno]['subcompanyname']}</td>
                                         <td>{$company['subcompany'][$data.subcompanyno]['department'][$data.departmentno]['departmentname']}</td>
                                         <td>{$data.cabinetno}</td>
-                                        <td>{$data.cabinetname}</td>
+                                        <td><a href="{$ANY.__APP__}?s=Access/cabinetuser&departmentno={$data.departmentno}&cabinetno={$data.cabinetno}">{$data.cabinetname}</a></td>
                                         <td>{$data.createtime|substr:0:19}</td>
                                         <td>
                                             <a href="{$ANY.__APP__}?s=Cabinet/ajaxGetCabinetHtml&cabinetid={$data.cabinetid}" class="btn btn-sky btn-edit-modal">编辑</a>

@@ -1,0 +1,12 @@
+{include file="Common/head.html"}
+
+    <!-- Page Body -->
+    <div class="page-body">
+        {if $pagereturn.error}
+        <h1 class="danger">{$pagereturn.msg}</h1>
+        {else}
+        <h1 class="success">{$pagereturn.msg}</h1>
+        {/if}
+    </div>
+
+{include file="Common/foot.html"}

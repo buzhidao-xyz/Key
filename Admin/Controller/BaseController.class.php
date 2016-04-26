@@ -92,7 +92,7 @@ class BaseController extends Controller
             'systemtitle' => array(
                 'name'  => '系统名称',
                 'key'   => 'systemtitle',
-                'value' => '钥匙柜管理系统',
+                'value' => '智能钥匙柜管理系统',
             ),
         );
         $this->assign('SYSTEM', $SYSTEM);
@@ -301,5 +301,29 @@ class BaseController extends Controller
         socket_close($socket);
 
         return (int)$result;
+    }
+
+    //根据departmentno获取departmentinfo
+    protected function _getDepartmentinfo($departmentno=null)
+    {
+        if (!$departmentno) return false;
+
+        //获取部门信息
+        $departmentinfo = array();
+        foreach ($this->company['subcompany'] as $subcompany) {
+            if (isset($subcompany['department'])) {
+                foreach ($subcompany['department'] as $department) {
+                    if ($department['departmentno'] == $departmentno) {
+                        $departmentinfo = array_merge($department, $subcompany);
+                        break(2);
+                    }
+                }
+            }
+        }
+        $this->assign('subcompanyno', $departmentinfo['subcompanyno']);
+        $this->assign('departmentno', $departmentinfo['departmentno']);
+
+        $this->assign('departmentinfo', $departmentinfo);
+        return $departmentinfo;
     }
 }

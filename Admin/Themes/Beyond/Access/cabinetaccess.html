@@ -34,12 +34,24 @@
                     <div class="widget-body">
                         <div id="horizontal-form">
                             <form name="cabinetuserform" method="post" action="{$ANY.__APP__}?s=Access/cabinetaccesssave" class="form-horizontal" role="form">
+                                {if $cabinetinfo.cabinetno}
                                 {include file="Public/scpdpm_cabinet.html"}
+                                {else}
+                                {include file="Public/scpdpm_cabinets.html"}
+                                {/if}
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">警员信息</label>
                                     <div class="col-sm-10">
                                         <div id="userbox">
                                             <p class="m-t-5" style="color: #747474;">--请选择警员--</p>
+                                            {foreach $userlist as $user}
+                                            <div class="checkbox" style="padding-bottom: 10px;">
+                                                <label>
+                                                    <input type="checkbox" name="usernos[]" value="{$user.userno}" class="useritem" {if in_array($user.userno, $cabinetuser)}checked="checked"{/if}>
+                                                    <span class="text">{$user.username}[{$user.userno}]</span>
+                                                </label>
+                                            </div>
+                                            {/foreach}
                                         </div>
                                     </div>
                                 </div>

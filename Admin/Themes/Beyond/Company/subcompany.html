@@ -28,6 +28,10 @@
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
                 <h5 class="row-title before-warning"><i class="glyphicon glyphicon-plane warning"></i>管理区分局</h5>
+                <div class="oplinks">
+                    <a href="{$ANY.__APP__}?s=Company/subcompany" class="btn btn-sky">管理区分局</a>
+                    <a href="{$ANY.__APP__}?s=Company/newsubcompany" class="btn btn-darkorange">新增区分局</a>
+                </div>
                 <div class="widget">
                     <div class="widget-header bordered-bottom bordered-warning">
                         <span class="widget-caption">查询区分局信息表单</span>
@@ -85,7 +89,7 @@
                                         <td>{$data.subcompanyno}</td>
                                         <td>{$company.companyname}</td>
                                         <td>
-                                            <a href="javascript:;" class="btn btn-sky">编辑</a>
+                                            <a href="{$ANY.__APP__}?s=Company/ajaxGetSubcompanyHtml&subcompanyno={$data.subcompanyno}" class="btn btn-sky btn-edit-modal">编辑</a>
                                         </td>
                                     </tr>
                                     {/foreach}

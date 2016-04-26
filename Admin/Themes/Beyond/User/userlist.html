@@ -28,6 +28,9 @@
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
                 <h5 class="row-title before-warning"><i class="glyphicon glyphicon-plane warning"></i>警员信息管理</h5>
+                <div class="oplinks">
+                    <a href="{$ANY.__APP__}?s=User/export&exportaction=user" class="btn btn-darkorange">导出警员信息</a>
+                </div>
                 <div class="widget">
                     <div class="widget-header bordered-bottom bordered-warning">
                         <span class="widget-caption">查询警员信息表单</span>
@@ -84,7 +87,7 @@
                                     {foreach $datalist as $data}
                                     <tr role="row" class="even">
                                         <td>{$data.ROW_NUMBER}</td>
-                                        <td>{$data.username}</td>
+                                        <td><a href="{$ANY.__APP__}?s=Access/userkey&userid={$data.userid}">{$data.username}</a></td>
                                         <td>{$data.codeno}</td>
                                         <td>{$data.cardno}</td>
                                         <td>{$data.phone}</td>

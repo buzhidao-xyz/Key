@@ -22,16 +22,27 @@ class CompanyModel extends CommonModel
     }
 
     //获取子公司信息
-    public function getSubCompany($companyid=null, $subcompanyid=null)
+    public function getSubCompany($companyid=null, $subcompanyid=null, $subcompanyname=null)
     {
         $where = array();
         if ($companyid) $where['companyid'] = $companyid;
         if ($subcompanyid) $where['subcompanyid'] = is_array($subcompanyid) ? array('in', $subcompanyid) : $subcompanyid;
+        if ($subcompanyname) $where['subcompanyname'] = array('like', '%'.$subcompanyname.'%');
 
         $total = M('subcompany')->where($where)->count();
         $data = M('subcompany')->where($where)->order('convert(int,subcompanyno) asc')->select();
 
         return array('total'=>$total, 'data'=>is_array($data)?$data:array());
+    }
+
+    //获取子公司信息 通过no
+    public function getSubCompanyByNo($subcompanyno=null)
+    {
+        if (!$subcompanyno) return false;
+
+        $subcompany = M('subcompany')->where(array('subcompanyno'=>$subcompanyno))->find();
+
+        return is_array($subcompany) ? $subcompany : array();
     }
 
     //获取子公司信息 通过ID
@@ -42,6 +53,28 @@ class CompanyModel extends CommonModel
         $subcompany = $this->getSubCompany(null, $subcompanyid);
 
         return $subcompany['total'] ? array_shift($subcompany) : array();
+    }
+
+    //获取最大的subcompanyno
+    public function getMaxSubcompanyno()
+    {
+        $subcompany = M('subcompany')->order('convert(int,subcompanyno) desc')->find();
+
+        return is_array($subcompany)&&!empty($subcompany) ? $subcompany['subcompanyno'] : 0;
+    }
+
+    //保存子公司信息
+    public function savesubcompany($subcompanyid=null, $data=array())
+    {
+        if (!is_array($data) || empty($data)) return false;
+
+        if ($subcompanyid) {
+            $return = M("subcompany")->where(array('subcompanyid'=>$subcompanyid))->save($data);
+        } else {
+            $return = M("subcompany")->add($data);
+        }
+
+        return $return;
     }
 
     //获取部门信息

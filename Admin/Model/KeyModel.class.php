@@ -113,7 +113,7 @@ class KeyModel extends CommonModel
             'a.isdelete' => 0
         );
         if ($keyid) $where['keyid'] = is_array($keyid) ? array('in', $keyid) : $keyid;
-        if ($keytypeid) $where['keytypeid'] = $keytypeid;
+        if ($keytypeid) $where['a.keytypeid'] = $keytypeid;
         if ($keyname) $where['_complex'] = array('_logic'=>'or', 'keyname'=>array('like', '%'.$keyname.'%'), 'keyshowname'=>array('like', '%'.$keyname.'%'));
         if ($departmentno) $where['a.departmentno'] = is_array($departmentno) ? array('in', $departmentno) : $departmentno;
         if ($cabinetno) $where['a.cabinetno'] = is_array($cabinetno) ? array('in', $cabinetno) : $cabinetno;

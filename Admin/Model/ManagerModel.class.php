@@ -233,4 +233,16 @@ class ManagerModel extends CommonModel
 
         return $data;
     }
+
+    //保存管理的部门
+    public function saveManagerDepartment($managerid=null, $data=array())
+    {
+        if (!$managerid || !is_array($data) || empty($data)) return false;
+
+        M('manager_department')->where(array('managerid'=>$managerid))->delete();
+
+        $result = M('manager_department')->addAll($data);
+
+        return $result ? true : false;
+    }
 }

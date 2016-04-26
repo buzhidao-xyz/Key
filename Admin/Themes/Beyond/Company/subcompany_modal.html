@@ -1,0 +1,20 @@
+<div id="modalhtml" title="区分局-编辑" class="modal-darkorange" style="display: none;">
+    <form role="form" name="modalform" method="post" action="javascript:;" doaction="{$ANY.__APP__}?s=Company/upsubcompanysave">
+        <input type="hidden" name="subcompanyid" value="{$subcompanyinfo.subcompanyid}">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-title"><b>区分局名称：</b></div>
+                <div class="form-group">
+                    <input type="text" name="subcompanyname" value="{$subcompanyinfo.subcompanyname}" class="form-control" placeholder="派出所名称">
+                </div>
+            </div>
+        </div>
+    </form>
+    <script>
+    $(function (){
+        setTimeout(function (){
+            $(".select2el").select2();
+        }, 100);
+    });
+    </script>
+</div>

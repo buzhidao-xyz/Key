@@ -28,6 +28,9 @@
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
                 <h5 class="row-title before-warning"><i class="glyphicon glyphicon-plane warning"></i>管理钥匙</h5>
+                <div class="oplinks">
+                    <a href="{$ANY.__APP__}?s=Key/export&exportaction=key" class="btn btn-darkorange">导出钥匙信息</a>
+                </div>
                 <div class="widget">
                     <div class="widget-header bordered-bottom bordered-warning">
                         <span class="widget-caption">查询钥匙信息表单</span>
@@ -42,7 +45,7 @@
                                         <select name="keytypeid" class="select2el" style="width:100%;">
                                             <option value="">--请选择钥匙类型--</option>
                                             {foreach $keytypelist as $keytype}
-                                            <option value="{$keytype.keytypeid}">{$keytype.keytypename}</option>
+                                            <option value="{$keytype.keytypeid}" {if $keytypeid==$keytype.keytypeid}selected{/if}>{$keytype.keytypename}</option>
                                             {/foreach}
                                         </select>
                                     </div>

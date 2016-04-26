@@ -14,19 +14,25 @@ class CompanyController extends CommonController
     }
 
     //获取subcompanyid
-    private function _getSubcompanyid()
+    private function _getSubcompanyid($ck=false, $ajax=true)
     {
         $subcompanyid = mRequest('subcompanyid');
         $this->assign('subcompanyid', $subcompanyid);
+
+        $ck&&!$subcompanyid&&$ajax ? $this->ajaxReturn(1, '未知区分局ID！') : null;
+        $ck&&!$subcompanyid&&!$ajax ? $this->pageReturn(1, '未知区分局ID！') : null;
 
         return $subcompanyid;
     }
 
     //获取subcompanyname
-    private function _getSubcompanyname()
+    private function _getSubcompanyname($ck=false, $ajax=true)
     {
         $subcompanyname = mRequest('subcompanyname');
         $this->assign('subcompanyname', $subcompanyname);
+
+        $ck&&!$subcompanyname&&$ajax ? $this->ajaxReturn(1, '请填写区分局名称！') : null;
+        $ck&&!$subcompanyname&&!$ajax ? $this->pageReturn(1, '请填写区分局名称！') : null;
 
         return $subcompanyname;
     }
@@ -79,17 +85,72 @@ class CompanyController extends CommonController
     {
         $subcompanyname = $this->_getSubcompanyname();
 
-        $datalist = array();
-        if ($subcompanyname) {
-            foreach ($this->company['subcompany'] as $subcompany) {
-                if (strpos($subcompany['subcompanyname'], $subcompanyname)!==false) $datalist[] = $subcompany;
-            }
-        } else {
-            $datalist = $this->company['subcompany'];
-        }
-        $this->assign('datalist', $datalist);
+        $datalist = D('Company')->getSubCompany(null, null, $subcompanyname);
+        $this->assign('datalist', $datalist['data']);
 
         $this->display();
+    }
+
+    //新增部门
+    public function newsubcompany()
+    {
+        $this->display();
+    }
+
+    //新增部门-保存
+    public function newsubcompanysave()
+    {
+        $subcompanyname = $this->_getSubcompanyname(true);
+
+        $maxsubcompanyno = D('Company')->getMaxSubcompanyno();
+
+        $subcompanyno = $maxsubcompanyno+1;
+        $data = array(
+            'subcompanyname' => $subcompanyname,
+            'subcompanyno'   => $subcompanyno,
+            'companyid'      => $this->company['companyid'],
+            'createtime'     => mkDateTime(),
+            'updatetime'     => mkDateTime(),
+        );
+        $result = D('Company')->savesubcompany(null, $data);
+        if ($result) {
+            $this->ajaxReturn(0, '保存成功！');
+        } else {
+            $this->ajaxReturn(1, '保存失败！');
+        }
+    }
+
+    //AJAX获取编辑html
+    public function ajaxGetSubcompanyHtml()
+    {
+        $subcompanyno = $this->_getSubcompanyno(true);
+
+        $subcompanyinfo = D('Company')->getSubCompanyByNo($subcompanyno);
+        $this->assign('subcompanyinfo', $subcompanyinfo);
+
+        $html = $this->fetch('Company/subcompany_modal');
+
+        $this->ajaxReturn(0, '', array(
+            'html' => $html
+        ));
+    }
+
+    //编辑子公司-保存
+    public function upsubcompanysave()
+    {
+        $subcompanyid = $this->_getSubcompanyid(true);
+        $subcompanyname = $this->_getSubcompanyname(true);
+
+        $data = array(
+            'subcompanyname' => $subcompanyname,
+            'updatetime'     => mkDateTime(),
+        );
+        $result = D('Company')->savesubcompany($subcompanyid, $data);
+        if ($result) {
+            $this->ajaxReturn(0, '保存成功！');
+        } else {
+            $this->ajaxReturn(1, '保存失败！');
+        }
     }
 
     //管理部门

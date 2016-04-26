@@ -327,4 +327,95 @@ class UserController extends CommonController
             'userlist' => $userlist
         ));
     }
+
+    //导出员工信息
+    public function export()
+    {
+        $exportaction = $this->_getExportaction();
+
+        require VENDOR_PATH.'PHPExcel/PHPExcel.php';
+
+        // 创建一个处理对象实例
+        $objPHPExcel = new \PHPExcel();
+
+        //设置当前的sheet索引，用于后续的内容操作。
+        $objPHPExcel->setActiveSheetIndex(0);       
+        $objActSheet = $objPHPExcel->getActiveSheet();
+
+        if ($exportaction == 'user') {
+            $title = '智能钥匙柜_警员信息';
+
+            $subcompanyno = $this->_getSubcompanyno();
+            $departmentno = $this->_getDepartmentno();
+
+            $username = $this->_getUsername();
+
+            $data = D('User')->getUser(null, $username, $departmentno);
+            $datalist = $data['data'];
+
+            //设置当前活动sheet的名称       
+            $objActSheet->setTitle($title);
+
+            //设置宽度，这个值和EXCEL里的不同，不知道是什么单位，略小于EXCEL中的宽度
+            $objActSheet->getColumnDimension('A')->setWidth(5);
+            $objActSheet->getColumnDimension('B')->setWidth(15);
+            $objActSheet->getColumnDimension('C')->setWidth(20);
+            $objActSheet->getColumnDimension('D')->setWidth(30);
+            $objActSheet->getColumnDimension('E')->setWidth(17);
+            $objActSheet->getColumnDimension('F')->setWidth(30);
+            $objActSheet->getColumnDimension('G')->setWidth(20);
+            $objActSheet->getColumnDimension('H')->setWidth(15);
+
+            //设置单元格的值
+            // $objActSheet->setCellValue('A1', '总标题显示');
+            
+            //设置表格标题栏内容
+            $objActSheet->setCellValue('A1', '序号');
+            $objActSheet->setCellValue('B1', '警员名称');
+            $objActSheet->setCellValue('C1', '警员编号');
+            $objActSheet->setCellValue('D1', 'RFID卡号');
+            $objActSheet->setCellValue('E1', '手机号');
+            $objActSheet->setCellValue('F1', '派出所');
+            $objActSheet->setCellValue('G1', '职务');
+            $objActSheet->setCellValue('H1', '状态');
+            
+            //遍历数据
+            $n = 2;
+            foreach ($datalist as $d) {
+                $status = $d['status'] ? '正常' : '已删除';
+
+                $objActSheet->setCellValue('A'.$n, $d["userno"]);
+                $objActSheet->setCellValue('B'.$n, $d["username"]);
+                $objActSheet->setCellValue('C'.$n, $d['codeno']);
+                $objActSheet->setCellValue('D'.$n, $d["cardno"]);
+                $objActSheet->setCellValue('E'.$n, $d["phone"]);
+                $objActSheet->setCellValue('F'.$n, $d["departmentname"]);
+                $objActSheet->setCellValue('G'.$n, $d["position"]);
+                $objActSheet->setCellValue('H'.$n, $status);
+
+                $n++;
+            }
+        }
+
+        //输出内容
+        $outputFileName = $title.'_'.date('Ymd_His', TIMESTAMP).".xlsx";
+
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+        //到文件
+        // $objWriter->save($outputFileName);
+        
+        //到浏览器
+        header("Content-Type: application/force-download");
+        header("Content-Type: application/octet-stream");
+        header("Content-Type: application/download");
+        header('Content-Disposition:inline;filename="'.iconv('UTF-8', 'GB2312', $outputFileName).'"');
+        header("Content-Transfer-Encoding: binary");
+        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Pragma: no-cache");
+        $objWriter->save("php://output");
+        exit;
+    }
 }

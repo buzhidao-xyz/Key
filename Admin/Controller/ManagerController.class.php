@@ -13,6 +13,9 @@ class ManagerController extends CommonController
     public function __construct()
     {
         parent::__construct();
+
+        $this->_rolelist = C('ROLE');
+        $this->assign('rolelist', $this->_rolelist);
     }
 
     public function index(){}
@@ -103,9 +106,11 @@ class ManagerController extends CommonController
     {
         //账户
         $account = $this->_getAccount();
+        //员工
+        $username = $this->_getUsername();
 
         //获取管理员列表
-        $result = D('Manager')->getManager(null, $account, $start, $length);
+        $result = D('Manager')->getManager(null, $account, $username, $start, $length);
         $datatotal = $result['total'];
         $this->assign('datatotal', $datatotal);
 
@@ -123,7 +128,8 @@ class ManagerController extends CommonController
         $this->assign('datalist', $datalist);
 
         $params = array(
-            'account'   => $account,
+            'account'  => $account,
+            'username' => $username,
         );
         $this->assign('params', $params);
         //解析分页数据
@@ -135,8 +141,6 @@ class ManagerController extends CommonController
     //管理员
     public function managerlist()
     {
-        
-        
         list($start, $length) = $this->_mkPage();
         $this->_getManager($start, $length);
 
@@ -168,10 +172,57 @@ class ManagerController extends CommonController
     //新增管理员
     public function newmanager()
     {
-        $rolelist = D('Role')->getRole();
-        $this->assign('rolelist', $rolelist['data']);
+        $this->display();
+    }
 
-        $this->display('Manager/managerform');
+    //新增管理员 - 保存
+    public function newmanagersave()
+    {
+        $account = $this->_getAccount();
+        if (!$account) $this->ajaxReturn(1, '请填写账号！');
+        $password = $this->_getPassword();
+        if (!Filter::F_Password($password)) $this->ajaxReturn(1, '密码不正确！');
+        $passwordc = $this->_getPasswordc();
+        if ($password != $passwordc) $this->ajaxReturn(1, '两次输入的密码不一致！');
+
+        $roleid = $this->_getRoleid();
+        if (!$roleid) $this->ajaxReturn(1, '请选择管理员角色！');
+
+        $departmentnos = $this->_getDepartmentnos();
+        if (!is_array($departmentnos)||empty($departmentnos)) $this->ajaxReturn(1, '请选择管理的派出所！');
+
+        $managerid = guid();
+        $mkey = \Org\Util\String::randString(6,3);
+        $password = D('Manager')->passwordEncrypt($password, $mkey);
+        $data = array(
+            'managerid'  => $managerid,
+            'account'    => $account,
+            'password'   => $password,
+            'mkey'       => $mkey,
+            'status'     => 1,
+            'super'      => 0,
+            'roleid'     => $roleid,
+            'userid'     => 0,
+            'createtime' => mkDateTime(),
+            'updatetime' => mkDateTime(),
+            'lastlogintime' => mkDateTime(),
+        );
+        $result = D('Manager')->saveManager(null, $data);
+        if ($result) {
+            //保存管理的派出所信息
+            $mddata = array();
+            foreach ($departmentnos as $departmentno) {
+                $mddata[] = array(
+                    'managerid' => $managerid,
+                    'departmentno' => $departmentno,
+                );
+            }
+            D('Manager')->saveManagerDepartment($managerid, $mddata);
+
+            $this->ajaxReturn(0, '保存成功！');
+        } else {
+            $this->ajaxReturn(1, '保存失败！');
+        }
     }
 
     //编辑管理员
@@ -184,14 +235,16 @@ class ManagerController extends CommonController
         $managerinfo = D('Manager')->getManagerByID($managerid);
         if (empty($managerinfo) || $managerinfo['super']) exit;
 
-        $rolelist = D('Role')->getRole();
-        $this->assign('rolelist', $rolelist['data']);
+        $this->assign('managerinfo', $managerinfo);
 
-        $this->display('Manager/managerform');
+        $departmentnos = D('Manager')->getManagerDepartment($managerid);
+        $this->assign('departmentnos', $departmentnos);
+
+        $this->display();
     }
 
-    //保存新增、编辑管理员信息
-    public function managersave()
+    //保存编辑管理员信息
+    public function upmanagersave()
     {
         $managerid = $this->_getManagerid();
         $this->assign('managerid', $managerid);
@@ -201,26 +254,38 @@ class ManagerController extends CommonController
         if (empty($managerinfo)) $this->ajaxReturn(1, '未知管理员！');
         if ($managerinfo['super']) $this->ajaxReturn(1, '非法操作！超级管理员！');
 
-        $account = $this->_getAccount();
-        if (!Filter::F_Account($account)) {
-            $this->ajaxReturn(1, "账号规则错误！");
-        }
         $password = $this->_getPassword();
-        if (!Filter::F_Password($password)) {
-            $this->ajaxReturn(1, "密码规则错误！");
-        }
-        $password1 = $this->_getPassword1();
-        if ($password1 !== $password) $this->ajaxReturn(1, '确认密码不一致！');
+        if ($password && !Filter::F_Password($password)) $this->ajaxReturn(1, '密码不正确！');
 
-        //是否超级管理员
-        $super = $this->_getSuper();
-        //角色信息 数组
-        $roleID = $this->_getRoleid();
-        if (!$roleID) $this->ajaxReturn(1, '请选择角色信息！');
+        $roleid = $this->_getRoleid();
+        if (!$roleid) $this->ajaxReturn(1, '请选择管理员角色！');
+
+        $departmentnos = $this->_getDepartmentnos();
+        if (!is_array($departmentnos)||empty($departmentnos)) $this->ajaxReturn(1, '请选择管理的派出所！');
 
         $data = array(
-            'account' => $account,
+            'roleid'     => $roleid,
         );
+        if ($password) {
+            $password = D('Manager')->passwordEncrypt($password, $managerinfo['mkey']);
+            $data['password'] = $password;
+        }
+        $result = D('Manager')->saveManager($managerid, $data);
+        if ($result) {
+            //保存管理的派出所信息
+            $mddata = array();
+            foreach ($departmentnos as $departmentno) {
+                $mddata[] = array(
+                    'managerid' => $managerid,
+                    'departmentno' => $departmentno,
+                );
+            }
+            D('Manager')->saveManagerDepartment($managerid, $mddata);
+
+            $this->ajaxReturn(0, '保存成功！');
+        } else {
+            $this->ajaxReturn(1, '保存失败！');
+        }
     }
 
     //管理员登录日志
