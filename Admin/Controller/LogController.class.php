@@ -197,7 +197,7 @@ class LogController extends CommonController
             $begintime = $this->_getBegintime();
             $endtime = $this->_getEndtime();
 
-            $data = D('Log')->getKeyuseLog(null, $departmentno, $cabinetno, null, null, $username, null, null, $begintime, $endtime, $keyname);
+            $data = D('Log')->getKeyuseLog(null, $departmentno, $cabinetno, null, null, $username, null, null, $begintime, $endtime, 0, 9999, $keyname);
             $datalist = $data['data'];
 
             //设置当前活动sheet的名称       
