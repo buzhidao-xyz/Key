@@ -97,6 +97,7 @@ class AccessController extends CommonController
                 'username'   => $d['username'],
                 'usercodeno' => $d['codeno'],
                 'usercardno' => $d['cardno'],
+                'access'     => (int)$d['access'],
                 'status'     => (int)$d['status'],
                 'finger'     => $finger,
                 'keylocknos' => $keylocknos,

@@ -26,7 +26,7 @@ class LogModel extends CommonModel
         if ($departmentno) $where['a.departmentno'] = is_array($departmentno) ? array('in', $departmentno) : $departmentno;
         if ($cabinetno) $where['a.cabinetno'] = is_array($cabinetno) ? array('in', $cabinetno) : $cabinetno;
         if ($userno) $where['userno'] = $userno;
-        if ($username) $where['username'] = array('like', '%'.$username.'%');
+        if ($username) $where['_complex'] = array('_logic'=>'or', 'username'=>array('like', '%'.$username.'%'), 'codeno'=>array('like', '%'.$username.'%'));
         if ($action!==null) $where['action'] = $action;
         if ($alarm!==null) $where['alarm'] = $alarm;
         if ($begintime!==null) $where['logtime'] = array('egt', $begintime);
@@ -83,13 +83,13 @@ class LogModel extends CommonModel
         if ($cabinetno) $where['a.cabinetno'] = is_array($cabinetno) ? array('in', $cabinetno) : $cabinetno;
         if ($keyno) $where['a.keyno'] = is_array($keyno) ? array('in', $keyno) : $keyno;
         if ($userno) $where['userno'] = $userno;
-        if ($username) $where['username'] = array('like', '%'.$username.'%');
+        if ($username) $where['_complex'] = array('_logic'=>'or', 'username'=>array('like', '%'.$username.'%'), 'codeno'=>array('like', '%'.$username.'%'));
         if ($action!==null) $where['action'] = $action;
         if ($actionflag!==null) $where['actionflag'] = $actionflag;
         if ($begintime!==null) $where['logtime'] = array('egt', $begintime);
         if ($endtime!==null) $where['logtime'] = array('elt', $endtime);
         if ($begintime!==null && $endtime!==null) $where['logtime'] = array('between', array($begintime, $endtime));
-        if ($keyname) $where['b.keyname'] = array('like', '%'.$keyname.'%');
+        if ($keyname) $where['_complex'] = array('_logic'=>'or', 'b.keyname'=>array('like', '%'.$keyname.'%'), 'b.keyshowname'=>array('like', '%'.$keyname.'%'));
 
         $total = M('keyuseLog')->alias('a')
                               ->field('a.*, b.keyname, c.cabinetname, d.departmentname, v.videofile, v.videosize, v.videolength')
