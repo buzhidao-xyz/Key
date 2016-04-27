@@ -523,6 +523,12 @@ class KeyController extends CommonController
         $jumpurl = urlencode(str_replace('&', '|||||', $this->pagination['url'].$this->pagination['curtpage']));
         $this->assign('jumpurl', $jumpurl);
 
+        $paramstr = null;
+        foreach ($params as $key=>$value) {
+            $paramstr .= '&'.$key.'='.$value;
+        }
+        $this->assign('paramstr', $paramstr);
+
         $this->display();
     }
 

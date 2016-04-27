@@ -223,6 +223,12 @@ class UserController extends CommonController
         //解析分页数据
         $this->_mkPagination($total, $params);
 
+        $paramstr = null;
+        foreach ($params as $key=>$value) {
+            $paramstr .= '&'.$key.'='.$value;
+        }
+        $this->assign('paramstr', $paramstr);
+
         $this->display();
     }
 

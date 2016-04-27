@@ -75,21 +75,13 @@ class LogController extends CommonController
         $cabinetno = $this->_getCabinetno();
         //钥匙名称、显示名称
         $keyname = $this->_getKeyname();
-        $keynos = null;
-        if ($keyname) {
-            $keylist = D('Key')->getKey(null, null, $keyname, $departmentno, $cabinetno);
-            $keylist = $keylist['data'];
-            foreach ($keylist as $key) {
-                $keynos[] = $key['keyno'];
-            }
-        }
         $username = $this->_getUsername();
 
         $begintime = $this->_getBegintime();
         $endtime = $this->_getEndtime();
 
         list($start, $length) = $this->_mkPage();
-        $data = D('Log')->getKeyuseLog(null, $departmentno, $cabinetno, $keynos, null, $username, null, null, $begintime, $endtime, $start, $length);
+        $data = D('Log')->getKeyuseLog(null, $departmentno, $cabinetno, null, null, $username, null, null, $begintime, $endtime, $start, $length, $keyname);
         $total = $data['total'];
         $datalist = $data['data'];
 
@@ -108,6 +100,12 @@ class LogController extends CommonController
         $this->assign('params', $params);
         //解析分页数据
         $this->_mkPagination($total, $params);
+
+        $paramstr = null;
+        foreach ($params as $key=>$value) {
+            $paramstr .= '&'.$key.'='.$value;
+        }
+        $this->assign('paramstr', $paramstr);
 
         $this->display();
     }
@@ -153,6 +151,12 @@ class LogController extends CommonController
         //解析分页数据
         $this->_mkPagination($total, $params);
 
+        $paramstr = null;
+        foreach ($params as $key=>$value) {
+            $paramstr .= '&'.$key.'='.$value;
+        }
+        $this->assign('paramstr', $paramstr);
+
         $this->display();
     }
 
@@ -188,20 +192,12 @@ class LogController extends CommonController
             $cabinetno = $this->_getCabinetno();
             //钥匙名称、显示名称
             $keyname = $this->_getKeyname();
-            $keynos = null;
-            if ($keyname) {
-                $keylist = D('Key')->getKey(null, null, $keyname, $departmentno, $cabinetno);
-                $keylist = $keylist['data'];
-                foreach ($keylist as $key) {
-                    $keynos[] = $key['keyno'];
-                }
-            }
             $username = $this->_getUsername();
 
             $begintime = $this->_getBegintime();
             $endtime = $this->_getEndtime();
 
-            $data = D('Log')->getKeyuseLog(null, $departmentno, $cabinetno, $keynos, null, $username, null, null, $begintime, $endtime);
+            $data = D('Log')->getKeyuseLog(null, $departmentno, $cabinetno, null, null, $username, null, null, $begintime, $endtime);
             $datalist = $data['data'];
 
             //设置当前活动sheet的名称       
