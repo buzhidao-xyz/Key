@@ -38,7 +38,15 @@ class AccessModel extends CommonModel
         );
         M('userkey')->where($where)->delete();
 
-        $result = M('userkey')->addAll($data);
+        $datai = array();
+        foreach ($data as $d) {
+            $datai[] = $d;
+            if (count($datai) >= 100) {
+                $result = M('userkey')->addAll($datai);
+                $datai = array();
+            }
+        }
+        if (!empty($datai)) $result = M('userkey')->addAll($datai);
 
         return $result;
     }
