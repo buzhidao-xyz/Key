@@ -34,7 +34,11 @@ class RoleModel extends CommonModel
     //获取角色信息 通过roleid
     public function getRoleByID($roleid=null)
     {
+        if (!$roleid) return false;
 
+        $roleinfo = $this->getRole($roleid);
+
+        return is_array($roleinfo) ? current($roleinfo['data']) : array();
     }
 
     //获取角色关联的菜单信息

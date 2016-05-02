@@ -76,3 +76,36 @@
     float: right;
     margin-top: 15px;
 }
+
+.checkbox-box {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #E1E1E1;
+    padding-left: 25px;
+}
+.checkbox-box .checkbox:before {
+    position: absolute;
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    top: 18px;
+    left: -25px;
+    border-top: 1px solid #E1E1E1;
+    z-index: 10000;
+}
+.checkbox-box .checkbase {
+}
+.checkbox-box .checkbase span.text {
+    color: #777;
+}
+.checkbox-box .checkbox-list {
+    width: 100%;
+    padding-left: 25px;
+    margin-left: 9px;
+    border-left: 1px solid #E1E1E1;
+    overflow: hidden;
+}
+.checkbox-box .checkbox-list .checkparent {
+    width: 100%;
+}

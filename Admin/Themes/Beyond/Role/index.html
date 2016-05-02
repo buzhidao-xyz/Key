@@ -1,0 +1,108 @@
+{include file="Common/head.html"}
+<link href="{$SERVER.HOST.CSS_SERVER}Themes/Beyond/Assets/css/dataTables.bootstrap.css" rel="stylesheet">
+    <!-- Page Header -->
+    <div class="page-header position-relative page-header-fixed">
+        <div class="header-title">
+            <h1>
+                角色管理 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+            </h1>
+        </div>
+        <!--Header Buttons-->
+        <div class="header-buttons">
+            <a class="sidebar-toggler" href="#">
+                <i class="fa fa-arrows-h"></i>
+            </a>
+            <a class="refresh" id="refresh-toggler" href="#">
+                <i class="glyphicon glyphicon-refresh"></i>
+            </a>
+            <a class="fullscreen" id="fullscreen-toggler" href="#">
+                <i class="glyphicon glyphicon-fullscreen"></i>
+            </a>
+        </div>
+        <!--Header Buttons End-->
+    </div>
+    <!-- /Page Header -->
+
+    <!-- Page Body -->
+    <div class="page-body">
+        <div class="row">
+            <div class="col-lg-12 col-sm-12 col-xs-12">
+                <h5 class="row-title before-warning"><i class="glyphicon glyphicon-plane warning"></i>查询角色</h5>
+                <!-- <div class="oplinks">
+                    <a href="{$ANY.__APP__}?s=Role/index" class="btn btn-sky">管理角色</a>
+                    <a href="{$ANY.__APP__}?s=Role/newrole" class="btn btn-success">新增角色</a>
+                </div> -->
+                <div class="widget">
+                    <div class="widget-header bordered-bottom bordered-warning">
+                        <span class="widget-caption">查询角色信息表单</span>
+                    </div>
+                    <div class="widget-body">
+                        <div id="horizontal-form">
+                            <form name="managerform" method="post" action="{$ANY.__APP__}?s=Role/index" class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">角色名称</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="rolename" value="{$rolename}" placeholder="角色名称 关键字">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-warning">查询</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="widget">
+                    <div class="widget-header bg-sky">
+                        <span class="widget-caption">角色信息列表</span>
+                        <div class="widget-buttons">
+                            <a href="#" data-toggle="collapse">
+                                <i class="fa fa-minus"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="widget-body no-padding">
+                        <div id="searchable_wrapper" class="dataTables_wrapper form-inline">
+                            <table class="table table-bordered table-hover table-striped dataTable" id="searchable" role="grid" aria-describedby="searchable_info">
+                                <thead class="bordered-darkorange">
+                                    <tr role="row">
+                                        <th></th>
+                                        <th>名称</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {if isset($datalist)&&is_array($datalist)&&!empty($datalist)}
+                                    {foreach $datalist as $data}
+                                    <tr role="row" class="even">
+                                        <td>{$data.roleid}</td>
+                                        <td>{$data.rolename}</td>
+                                        <td>
+                                            <a href="{$ANY.__APP__}?s=Role/uprole&roleid={$data.roleid}" class="btn btn-sky">编辑</a>
+                                            <!-- <a href="{$ANY.__APP__}?s=Role/delrole&roleid={$data.roleid}" class="btn btn-danger btn-ajax-delete">删除</a> -->
+                                        </td>
+                                    </tr>
+                                    {/foreach}
+                                    {/if}
+                                </tbody>
+                            </table>
+                            <div class="row DTTTFooter">
+                                <div class="col-xs-4"></div>
+                                <div class="col-xs-8">
+                                    {include file="Public/pagination.html"}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{include file="Common/foot.html"}
