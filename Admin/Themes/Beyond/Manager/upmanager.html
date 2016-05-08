@@ -45,7 +45,7 @@
                                     <label class="col-sm-2 control-label no-padding-right">密码</label>
                                     <div class="col-sm-10">
                                         <input type="password" class="form-control" name="password" placeholder="登录密码">
-                                        <p class="help-block danger m-b-5">*不修改请留空</p>
+                                        <p class="help-block danger m-b-5">*不修改请留空 *字母数字开始 字母数字下划线!@#$% 长度5-20</p>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -54,13 +54,13 @@
                                         <select name="roleid" class="select2el" style="width:100%;">
                                             <option value="">--请选择管理员角色--</option>
                                             {foreach $rolelist as $role}
-                                            <option value="{$role.id}" {if $managerinfo.roleid==$role.id}selected{/if}>{$role.rolename}</option>
+                                            <option value="{$role.roleid}" {if $managerinfo.roleid==$role.roleid}selected{/if}>{$role.rolename}</option>
                                             {/foreach}
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">管理的派出所</label>
+                                    <label class="col-sm-2 control-label no-padding-right">管理的{L('WordLang.DepartmentLang')}</label>
                                     <div class="col-sm-10">
                                         {foreach $company['subcompany'] as $subcompany}
                                         <div class="col-xs-12 m-b-10 checkbox-box" style="border-bottom: 1px solid #ccc;">

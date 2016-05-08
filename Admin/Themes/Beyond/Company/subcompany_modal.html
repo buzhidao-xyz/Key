@@ -1,11 +1,11 @@
-<div id="modalhtml" title="区分局-编辑" class="modal-darkorange" style="display: none;">
+<div id="modalhtml" title="{L('WordLang.SubCompanyLang')}-编辑" class="modal-darkorange" style="display: none;">
     <form role="form" name="modalform" method="post" action="javascript:;" doaction="{$ANY.__APP__}?s=Company/upsubcompanysave">
         <input type="hidden" name="subcompanyid" value="{$subcompanyinfo.subcompanyid}">
         <div class="row">
             <div class="col-md-12">
-                <div class="form-title"><b>区分局名称：</b></div>
+                <div class="form-title"><b>{L('WordLang.SubCompanyLang')}名称：</b></div>
                 <div class="form-group">
-                    <input type="text" name="subcompanyname" value="{$subcompanyinfo.subcompanyname}" class="form-control" placeholder="派出所名称">
+                    <input type="text" name="subcompanyname" value="{$subcompanyinfo.subcompanyname}" class="form-control" placeholder="{L('WordLang.DepartmentLang')}名称">
                 </div>
             </div>
         </div>

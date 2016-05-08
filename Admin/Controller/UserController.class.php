@@ -142,12 +142,12 @@ class UserController extends CommonController
     public function newusersave()
     {
         $username = $this->_getUsername();
-        if (!$username) $this->ajaxReturn(1, '请填写警员名称！');
+        if (!$username) $this->ajaxReturn(1, '请填写'.L('WordLang.UserLang').'名称！');
 
         $codeno = $this->_getCodeno();
-        if (!$codeno) $this->ajaxReturn(1, '请填写警员编号！');
-        //查询警员编号是否已存在
-        if (D("User")->ckUserCodenoExists(null, $codeno)) $this->ajaxReturn(1, '该警员编号已存在！');
+        if (!$codeno) $this->ajaxReturn(1, '请填写'.L('WordLang.UserLang').'编号！');
+        //查询'.L('WordLang.UserLang').'编号是否已存在
+        if (D("User")->ckUserCodenoExists(null, $codeno)) $this->ajaxReturn(1, '该'.L('WordLang.UserLang').'编号已存在！');
 
         $cardno = $this->_getCardno();
         $phone = $this->_getPhone();
@@ -158,7 +158,7 @@ class UserController extends CommonController
 
         $subcompanyno = $this->_getSubcompanyno();
         $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
+        if (!$departmentno) $this->ajaxReturn(1, '请选择'.L('WordLang.DepartmentLang').'！');
 
         //获取部门信息
         $departmentinfo = D('Company')->getDepartmentByNO($departmentno);
@@ -264,15 +264,15 @@ class UserController extends CommonController
     public function upusersave()
     {
         $userid = $this->_getUserid();
-        if (!$userid) $this->ajaxReturn(1, '未知警员信息！');
+        if (!$userid) $this->ajaxReturn(1, '未知'.L('WordLang.UserLang').'信息！');
 
         $username = $this->_getUsername();
-        if (!$username) $this->ajaxReturn(1, '请填写警员名称！');
+        if (!$username) $this->ajaxReturn(1, '请填写'.L('WordLang.UserLang').'名称！');
 
         $codeno = $this->_getCodeno();
-        if (!$codeno) $this->ajaxReturn(1, '请填写警员编号！');
-        //查询警员编号是否已存在
-        if (D("User")->ckUserCodenoExists($userid, $codeno)) $this->ajaxReturn(1, '该警员编号已存在！');
+        if (!$codeno) $this->ajaxReturn(1, '请填写'.L('WordLang.UserLang').'编号！');
+        //查询'.L('WordLang.UserLang').'编号是否已存在
+        if (D("User")->ckUserCodenoExists($userid, $codeno)) $this->ajaxReturn(1, '该'.L('WordLang.UserLang').'编号已存在！');
 
         $cardno = $this->_getCardno();
         $phone = $this->_getPhone();
@@ -282,7 +282,7 @@ class UserController extends CommonController
 
         $subcompanyno = $this->_getSubcompanyno();
         $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
+        if (!$departmentno) $this->ajaxReturn(1, '请选择'.L('WordLang.DepartmentLang').'！');
 
         //获取部门信息
         $departmentinfo = D('Company')->getDepartmentByNO($departmentno);
@@ -310,7 +310,7 @@ class UserController extends CommonController
     public function deleteuser()
     {
         $userid = $this->_getUserid();
-        if (!$userid) $this->ajaxReturn(1, '未知警员信息！');
+        if (!$userid) $this->ajaxReturn(1, '未知'.L('WordLang.UserLang').'信息！');
 
         $result = M('user')->where(array('userid'=>$userid))->save(array('status'=>0));
         if ($result) {
@@ -320,7 +320,7 @@ class UserController extends CommonController
         }
     }
 
-    //AJAX获取警员信息
+    //AJAX获取'.L('WordLang.UserLang').'信息
     public function ajaxGetUser()
     {
         $departmentno = $this->_getDepartmentno();
@@ -349,7 +349,7 @@ class UserController extends CommonController
         $objActSheet = $objPHPExcel->getActiveSheet();
 
         if ($exportaction == 'user') {
-            $title = '智能钥匙柜_警员信息';
+            $title = '智能钥匙柜_'.L('WordLang.UserLang').'信息';
 
             $subcompanyno = $this->_getSubcompanyno();
             $departmentno = $this->_getDepartmentno();
@@ -377,11 +377,11 @@ class UserController extends CommonController
             
             //设置表格标题栏内容
             $objActSheet->setCellValue('A1', '序号');
-            $objActSheet->setCellValue('B1', '警员名称');
-            $objActSheet->setCellValue('C1', '警员编号');
+            $objActSheet->setCellValue('B1', ''.L('WordLang.UserLang').'名称');
+            $objActSheet->setCellValue('C1', ''.L('WordLang.UserLang').'编号');
             $objActSheet->setCellValue('D1', 'RFID卡号');
             $objActSheet->setCellValue('E1', '手机号');
-            $objActSheet->setCellValue('F1', '派出所');
+            $objActSheet->setCellValue('F1', ''.L('WordLang.DepartmentLang').'');
             $objActSheet->setCellValue('G1', '职务');
             $objActSheet->setCellValue('H1', '状态');
             

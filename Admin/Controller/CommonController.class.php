@@ -253,8 +253,8 @@ class CommonController extends BaseController
         $subcompanyno = mRequest('subcompanyno');
         $this->assign('subcompanyno', $subcompanyno);
 
-        $ck&&!$subcompanyno&&$ajax ? $this->ajaxReturn(1, '未知区分局编号！') : null;
-        $ck&&!$subcompanyno&&!$ajax ? $this->pageReturn(1, '未知区分局编号！') : null;
+        $ck&&!$subcompanyno&&$ajax ? $this->ajaxReturn(1, '未知'.L('WordLang.SubCompanyLang').'编号！') : null;
+        $ck&&!$subcompanyno&&!$ajax ? $this->pageReturn(1, '未知'.L('WordLang.SubCompanyLang').'编号！') : null;
 
         return $subcompanyno;
     }
@@ -265,8 +265,8 @@ class CommonController extends BaseController
         $departmentno = mRequest('departmentno');
         $this->assign('departmentno', $departmentno);
 
-        $ck&&!$departmentno&&$ajax ? $this->ajaxReturn(1, '未知派出所编号！') : null;
-        $ck&&!$departmentno&&!$ajax ? $this->pageReturn(1, '未知派出所编号！') : null;
+        $ck&&!$departmentno&&$ajax ? $this->ajaxReturn(1, '未知'.L('WordLang.DepartmentLang').'编号！') : null;
+        $ck&&!$departmentno&&!$ajax ? $this->pageReturn(1, '未知'.L('WordLang.DepartmentLang').'编号！') : null;
 
         return $departmentno;
     }

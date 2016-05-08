@@ -19,8 +19,8 @@ class CompanyController extends CommonController
         $subcompanyid = mRequest('subcompanyid');
         $this->assign('subcompanyid', $subcompanyid);
 
-        $ck&&!$subcompanyid&&$ajax ? $this->ajaxReturn(1, '未知区分局ID！') : null;
-        $ck&&!$subcompanyid&&!$ajax ? $this->pageReturn(1, '未知区分局ID！') : null;
+        $ck&&!$subcompanyid&&$ajax ? $this->ajaxReturn(1, '未知'.L('WordLang.SubCompanyLang').'ID！') : null;
+        $ck&&!$subcompanyid&&!$ajax ? $this->pageReturn(1, '未知'.L('WordLang.SubCompanyLang').'ID！') : null;
 
         return $subcompanyid;
     }
@@ -31,8 +31,8 @@ class CompanyController extends CommonController
         $subcompanyname = mRequest('subcompanyname');
         $this->assign('subcompanyname', $subcompanyname);
 
-        $ck&&!$subcompanyname&&$ajax ? $this->ajaxReturn(1, '请填写区分局名称！') : null;
-        $ck&&!$subcompanyname&&!$ajax ? $this->pageReturn(1, '请填写区分局名称！') : null;
+        $ck&&!$subcompanyname&&$ajax ? $this->ajaxReturn(1, '请填写'.L('WordLang.SubCompanyLang').'名称！') : null;
+        $ck&&!$subcompanyname&&!$ajax ? $this->pageReturn(1, '请填写'.L('WordLang.SubCompanyLang').'名称！') : null;
 
         return $subcompanyname;
     }
@@ -67,10 +67,10 @@ class CompanyController extends CommonController
     public function companymsave()
     {
         $companyno = mRequest('companyno');
-        if (!$companyno) $this->ajaxReturn(1, '未知市局信息！');
+        if (!$companyno) $this->ajaxReturn(1, '未知'.L('WordLang.CompanyLang').'信息！');
 
         $companyname = mRequest('companyname');
-        if (!$companyname) $this->ajaxReturn(1, '未知市局名称！');
+        if (!$companyname) $this->ajaxReturn(1, '未知'.L('WordLang.CompanyLang').'名称！');
 
         $result = M('company')->where(array('companyno'=>$companyno))->save(array('companyname'=>$companyname));
         if ($result) {
@@ -188,10 +188,10 @@ class CompanyController extends CommonController
     public function newdepartmentsave()
     {
         $subcompanyid = $this->_getSubcompanyid();
-        if (!$subcompanyid) $this->ajaxReturn(1, '请选择区分局！');
+        if (!$subcompanyid) $this->ajaxReturn(1, '请选择'.L('WordLang.SubCompanyLang').'！');
 
         $departmentname = $this->_getDepartmentname();
-        if (!$departmentname) $this->ajaxReturn(1, '请填写派出所名称！');
+        if (!$departmentname) $this->ajaxReturn(1, '请填写'.L('WordLang.DepartmentLang').'名称！');
 
         $mtserverid = mRequest('mtserverid');
         if (!$mtserverid) $this->ajaxReturn(1, '请选择监控软件！');
@@ -220,7 +220,7 @@ class CompanyController extends CommonController
     public function ajaxGetDepartmentHtml()
     {
         $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '未知派出所！');
+        if (!$departmentno) $this->ajaxReturn(1, '未知'.L('WordLang.DepartmentLang').'！');
 
         $departmentinfo = array();
         foreach ($this->company['subcompany'] as $subcompany) {
@@ -251,10 +251,10 @@ class CompanyController extends CommonController
     public function updepartmentsave()
     {
         $departmentid = $this->_getDepartmentid();
-        if (!$departmentid) $this->ajaxReturn(1, '未知派出所！');
+        if (!$departmentid) $this->ajaxReturn(1, '未知'.L('WordLang.DepartmentLang').'！');
 
         $departmentname = $this->_getDepartmentname();
-        if (!$departmentname) $this->ajaxReturn(1, '请填写派出所名称！');
+        if (!$departmentname) $this->ajaxReturn(1, '请填写'.L('WordLang.DepartmentLang').'名称！');
 
         $mtserverid = mRequest('mtserverid');
         if (!$mtserverid) $this->ajaxReturn(1, '请选择监控软件！');

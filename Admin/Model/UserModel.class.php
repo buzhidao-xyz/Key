@@ -36,7 +36,7 @@ class UserModel extends CommonModel
                          ->field('a.*, b.departmentname')
                          ->join(' __DEPARTMENT__ b on a.departmentno=b.departmentno ')
                          ->where($where)
-                         ->order('convert(int, anyphp.departmentno) asc, convert(int, userno) asc')
+                         ->order('convert(int, anyphp.departmentno) asc, username asc, convert(int, userno) asc')
                          ->limit($start, $length)
                          ->select();
 

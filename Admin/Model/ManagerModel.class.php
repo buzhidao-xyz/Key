@@ -103,7 +103,7 @@ class ManagerModel extends CommonModel
         if ($managerid) $where['a.managerid'] = $managerid;
         if ($account) $where['a.account'] = array('like', '%'.$account.'%');
 
-        //如果有警员信息关键字
+        //如果有'.L('WordLang.UserLang').'信息关键字
         if ($username) {
             $userlist = D('User')->getUser(null, $username);
         }

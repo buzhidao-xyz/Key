@@ -160,12 +160,6 @@ class LogController extends CommonController
         $this->display();
     }
 
-    //播放视频
-    public function videoplay()
-    {
-        
-    }
-
     //导出Excel
     public function export()
     {
@@ -221,11 +215,11 @@ class LogController extends CommonController
             $objActSheet->setCellValue('A1', '钥匙名称');
             $objActSheet->setCellValue('B1', '钥匙柜');
             $objActSheet->setCellValue('C1', '锁位置');
-            $objActSheet->setCellValue('D1', '派出所');
+            $objActSheet->setCellValue('D1', ''.L('WordLang.DepartmentLang').'');
             $objActSheet->setCellValue('E1', '标签号');
             $objActSheet->setCellValue('F1', '动作');
-            $objActSheet->setCellValue('G1', '警员名称');
-            $objActSheet->setCellValue('H1', '警员编号');
+            $objActSheet->setCellValue('G1', ''.L('WordLang.UserLang').'名称');
+            $objActSheet->setCellValue('H1', ''.L('WordLang.UserLang').'编号');
             $objActSheet->setCellValue('I1', '记录时间');
             
             //遍历数据
@@ -289,11 +283,11 @@ class LogController extends CommonController
             //设置表格标题栏内容
             $objActSheet->setCellValue('A1', '钥匙柜名称');
             $objActSheet->setCellValue('B1', '编号');
-            $objActSheet->setCellValue('C1', '派出所');
+            $objActSheet->setCellValue('C1', ''.L('WordLang.DepartmentLang').'');
             $objActSheet->setCellValue('D1', '动作');
             $objActSheet->setCellValue('E1', '报警');
-            $objActSheet->setCellValue('F1', '警员名称');
-            $objActSheet->setCellValue('G1', '警员编号');
+            $objActSheet->setCellValue('F1', ''.L('WordLang.UserLang').'名称');
+            $objActSheet->setCellValue('G1', ''.L('WordLang.UserLang').'编号');
             $objActSheet->setCellValue('H1', '记录时间');
             
             //遍历数据

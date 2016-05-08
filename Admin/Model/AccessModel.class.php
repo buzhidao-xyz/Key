@@ -26,7 +26,7 @@ class AccessModel extends CommonModel
         return $result;
     }
 
-    //保存警员钥匙配置
+    //保存'.L('WordLang.UserLang').'钥匙配置
     public function saveUserkeyaccess($departmentno=null, $userno=null, $cabinetno=null, $data=array())
     {
         if (!$departmentno || !$userno || !$cabinetno || !is_array($data) || empty($data)) return false;

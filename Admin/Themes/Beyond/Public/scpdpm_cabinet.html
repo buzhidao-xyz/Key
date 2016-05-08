@@ -1,8 +1,8 @@
 <div class="form-group">
-    <label class="col-sm-2 control-label no-padding-right">区分局</label>
+    <label class="col-sm-2 control-label no-padding-right">{L('WordLang.SubCompanyLang')}</label>
     <div class="col-sm-10">
         <select name="subcompanyno" class="select2el" style="width:100%;">
-            <option value="">--请选择区分局--</option>
+            <option value="">--请选择{L('WordLang.SubCompanyLang')}--</option>
             {foreach $company.subcompany as $subcompany}
             <option value="{$subcompany.subcompanyno}" {if isset($subcompanyno)&&$subcompanyno==$subcompany.subcompanyno}selected="selected"{/if}>{$subcompany.subcompanyname}</option>
             {/foreach}
@@ -10,10 +10,10 @@
     </div>
 </div>
 <div class="form-group">
-    <label class="col-sm-2 control-label no-padding-right">派出所</label>
+    <label class="col-sm-2 control-label no-padding-right">{L('WordLang.DepartmentLang')}</label>
     <div class="col-sm-10">
         <select name="departmentno" class="select2el" style="width:100%;">
-            <option value="">--请选择派出所--</option>
+            <option value="">--请选择{L('WordLang.DepartmentLang')}--</option>
             {if isset($subcompanyno)&&$subcompanyno}
             {foreach $company.subcompany[$subcompanyno].department as $department}
             <option value="{$department.departmentno}" {if isset($departmentno)&&$departmentno==$department.departmentno}selected="selected"{/if}>{$department.departmentname}</option>
@@ -39,9 +39,9 @@
 $(function (){
     //获取子公司列表
     $("select[name=subcompanyno]").change(function (){
-        $("select[name=departmentno]").html('<option value="">--请选择派出所--</option>').select2();
+        $("select[name=departmentno]").html('<option value="">--请选择{L("WordLang.DepartmentLang")}--</option>').select2();
         $("select[name=cabinetno]").html('<option value="">--请选择钥匙柜--</option>').select2();
-        $("#userbox").html('<p class="m-t-5" style="color: #747474;">--请选择警员--</p>');
+        $("#userbox").html('<p class="m-t-5" style="color: #747474;">--请选择{L("WordLang.UserLang")}--</p>');
 
         var url = JS_APP + '?s=Company/ajaxGetDepartment';
         var params = {

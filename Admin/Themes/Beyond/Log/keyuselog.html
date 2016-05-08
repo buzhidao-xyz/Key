@@ -46,9 +46,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">警员信息</label>
+                                    <label class="col-sm-2 control-label no-padding-right">{L('WordLang.UserLang')}信息</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="username" value="{$username}" placeholder="警员名称、警号 关键字">
+                                        <input type="text" class="form-control" name="username" value="{$username}" placeholder="{L('WordLang.UserLang')}名称、警号 关键字">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -105,10 +105,10 @@
                                         <th></th>
                                         <th>钥匙名称</th>
                                         <th>显示名称</th>
-                                        <th>派出所</th>
+                                        <th>{L('WordLang.DepartmentLang')}</th>
                                         <th>钥匙柜</th>
                                         <th>位置</th>
-                                        <th>警员</th>
+                                        <th>{L('WordLang.UserLang')}</th>
                                         <th>警号</th>
                                         <th>动作</th>
                                         <th>视频</th>
@@ -135,7 +135,7 @@
                                             <span class="sky">归还</span>
                                             {/if}
                                         </td>
-                                        <td>{if $data.videologid}<a href="{$ANY.__APP__}?s=Log/videoplay&videologid={$data.videologid}">播放</a>{else}无{/if}</td>
+                                        <td>{if $data.videologid}<a href="{$ANY.__APP__}?s=Public/videoplay&videologid={$data.videologid}" class="btn-edit-modal">播放</a>{else}无{/if}</td>
                                         <td>{$data.logtime|substr:0:19}</td>
                                         <td>
                                             <a href="{$ANY.__APP__}?s=Log/keyuselogdetail&logid={$data.logid}" class="btn btn-sky">详情</a>

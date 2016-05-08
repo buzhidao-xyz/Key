@@ -146,9 +146,16 @@ function L($name=null, $value=null) {
     // 判断语言获取(或设置)
     // 若不存在,直接返回全大写$name
     if (is_string($name)) {
+        $namec  =   $name;
         $name   =   strtoupper($name);
         if (is_null($value)){
-            return isset($_lang[$name]) ? $_lang[$name] : $name;
+            $namec = explode('.', $namec);
+            $namec[0] = strtoupper($namec[0]);
+            if (isset($namec[1])) {
+                return isset($_lang[$namec[0]][$namec[1]]) ? $_lang[$namec[0]][$namec[1]] : $name;
+            } else {
+                return isset($_lang[$namec[0]]) ? $_lang[$namec[0]] : $name;
+            }
         }elseif(is_array($value)){
             // 支持变量
             $replace = array_keys($value);

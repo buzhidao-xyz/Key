@@ -14,7 +14,7 @@ class ManagerController extends CommonController
     {
         parent::__construct();
 
-        $this->_rolelist = C('ROLE');
+        $this->_rolelist = M('role')->select();
         $this->assign('rolelist', $this->_rolelist);
     }
 
@@ -189,7 +189,7 @@ class ManagerController extends CommonController
         if (!$roleid) $this->ajaxReturn(1, '请选择管理员角色！');
 
         $departmentnos = $this->_getDepartmentnos();
-        if (!is_array($departmentnos)||empty($departmentnos)) $this->ajaxReturn(1, '请选择管理的派出所！');
+        if (!is_array($departmentnos)||empty($departmentnos)) $this->ajaxReturn(1, '请选择管理的'.L('WordLang.DepartmentLang').'！');
 
         $managerid = guid();
         $mkey = \Org\Util\String::randString(6,3);
@@ -209,7 +209,7 @@ class ManagerController extends CommonController
         );
         $result = D('Manager')->saveManager(null, $data);
         if ($result) {
-            //保存管理的派出所信息
+            //保存管理的'.L('WordLang.DepartmentLang').'信息
             $mddata = array();
             foreach ($departmentnos as $departmentno) {
                 $mddata[] = array(
@@ -261,7 +261,7 @@ class ManagerController extends CommonController
         if (!$roleid) $this->ajaxReturn(1, '请选择管理员角色！');
 
         $departmentnos = $this->_getDepartmentnos();
-        if (!is_array($departmentnos)||empty($departmentnos)) $this->ajaxReturn(1, '请选择管理的派出所！');
+        if (!is_array($departmentnos)||empty($departmentnos)) $this->ajaxReturn(1, '请选择管理的'.L('WordLang.DepartmentLang').'！');
 
         $data = array(
             'roleid'     => $roleid,
@@ -272,7 +272,7 @@ class ManagerController extends CommonController
         }
         $result = D('Manager')->saveManager($managerid, $data);
         if ($result) {
-            //保存管理的派出所信息
+            //保存管理的'.L('WordLang.DepartmentLang').'信息
             $mddata = array();
             foreach ($departmentnos as $departmentno) {
                 $mddata[] = array(

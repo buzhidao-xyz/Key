@@ -138,7 +138,7 @@ class DeviceController extends CommonController
         if (!$deviceport) $this->ajaxReturn(1, '请填写设备端口！');
 
         $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
+        if (!$departmentno) $this->ajaxReturn(1, '请选择'.L('WordLang.DepartmentLang').'！');
 
         $online = $this->_getOnline();
 

@@ -26,7 +26,7 @@
     <div class="page-body">
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
-                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>警员钥匙权限配置</h5>
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>{L('WordLang.UserLang')}钥匙权限配置</h5>
                 <div class="widget">
                     <div class="widget-header bordered-bottom bordered-sky">
                         <span class="widget-caption">钥匙柜门禁配置信息表单</span>
@@ -38,7 +38,7 @@
                             <input type="hidden" name="departmentno" value="{$departmentno}">
                             <input type="hidden" name="userno" value="{$userinfo.userno}">
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">区分局</label>
+                                    <label class="col-sm-2 control-label no-padding-right">{L('WordLang.SubCompanyLang')}</label>
                                     <div class="col-sm-10">
                                         <div id="userbox">
                                             <p class="m-t-5 m-b-5">{$userinfo.subcompanyname}</p>
@@ -46,7 +46,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">派出所</label>
+                                    <label class="col-sm-2 control-label no-padding-right">{L('WordLang.DepartmentLang')}</label>
                                     <div class="col-sm-10">
                                         <div id="userbox">
                                             <p class="m-t-5 m-b-5">{$userinfo.departmentname}</p>
@@ -54,7 +54,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">警员信息</label>
+                                    <label class="col-sm-2 control-label no-padding-right">{L('WordLang.UserLang')}</label>
                                     <div class="col-sm-10">
                                         <div id="userbox">
                                             <p class="m-t-5 m-b-5">{$userinfo.username}</p>

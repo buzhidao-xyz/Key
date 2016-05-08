@@ -41,12 +41,12 @@
                                         <input type="text" class="form-control" name="account" value="{$account}" placeholder="管理员账号 关键字">
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">警员信息</label>
+                                <!-- <div class="form-group">
+                                    <label class="col-sm-2 control-label no-padding-right">{L('WordLang.UserLang')}信息</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="username" value="{$username}" placeholder="警员名称、警号 关键字">
+                                        <input type="text" class="form-control" name="username" value="{$username}" placeholder="{L('WordLang.UserLang')}名称、警号 关键字">
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
                                         <button type="submit" class="btn btn-warning">查询</button>
@@ -77,8 +77,8 @@
                                         <th></th>
                                         <th>账号</th>
                                         <th>角色</th>
-                                        <!-- <th>关联警员</th> -->
-                                        <th>派出所</th>
+                                        <!-- <th>关联{L('WordLang.UserLang')}</th> -->
+                                        <!-- <th>{L('WordLang.DepartmentLang')}</th> -->
                                         <th>状态</th>
                                         <th></th>
                                     </tr>
@@ -91,7 +91,7 @@
                                         <td>{$data.account}</td>
                                         <td>{if $data.super}超级管理员{else}{$data.rolename}{/if}</td>
                                         <!-- <td>{$data.username}</td> -->
-                                        <td>{$data.departmentno}</td>
+                                        <!-- <td>{$data.departmentno}</td> -->
                                         <td>{if $data.status}<span class="success">已启用</span>{else}<span class="danger">已禁用</span>{/if}</td>
                                         <td>
                                             {if !$data.super}

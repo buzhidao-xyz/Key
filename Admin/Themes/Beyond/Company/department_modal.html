@@ -1,15 +1,15 @@
-<div id="modalhtml" title="派出所-编辑" class="modal-darkorange" style="display: none;">
+<div id="modalhtml" title="{L('WordLang.DepartmentLang')}-编辑" class="modal-darkorange" style="display: none;">
     <form role="form" name="modalform" method="post" action="javascript:;" doaction="{$ANY.__APP__}?s=Company/updepartmentsave">
         <input type="hidden" name="departmentid" value="{$departmentinfo.departmentid}">
         <div class="row">
             <div class="col-md-12">
-                <div class="form-title"><b>所属区分局：</b></div>
+                <div class="form-title"><b>所属{L('WordLang.SubCompanyLang')}：</b></div>
                 <div class="form-group">
                     {$departmentinfo.subcompanyname}
                 </div>
-                <div class="form-title"><b>派出所名称：</b></div>
+                <div class="form-title"><b>{L('WordLang.DepartmentLang')}名称：</b></div>
                 <div class="form-group">
-                    <input type="text" name="departmentname" value="{$departmentinfo.departmentname}" class="form-control" placeholder="派出所名称">
+                    <input type="text" name="departmentname" value="{$departmentinfo.departmentname}" class="form-control" placeholder="{L('WordLang.DepartmentLang')}名称">
                 </div>
                 <div class="form-title"><b>监控软件服务器：</b></div>
                 <div class="form-group">

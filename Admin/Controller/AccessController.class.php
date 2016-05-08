@@ -29,7 +29,7 @@ class AccessController extends CommonController
     public function cabinetaccesssave()
     {
         $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
+        if (!$departmentno) $this->ajaxReturn(1, '请选择'.L('WordLang.DepartmentLang').'！');
 
         $cabinetnos = mRequest('cabinetnos', false);
         if (!is_array($cabinetnos) || empty($cabinetnos)) {
@@ -40,7 +40,7 @@ class AccessController extends CommonController
         }
 
         $usernos = mRequest('usernos', false);
-        if (!is_array($usernos) || empty($usernos)) $this->ajaxReturn(1, '请选择警员！');
+        if (!is_array($usernos) || empty($usernos)) $this->ajaxReturn(1, '请选择'.L('WordLang.UserLang').'！');
 
         foreach ($cabinetnos as $cabinetno) {
             $data = array();
@@ -57,20 +57,20 @@ class AccessController extends CommonController
         $this->ajaxReturn(0, '保存成功！');
     }
 
-    //警员钥匙配置
+    //'.L('WordLang.UserLang').'钥匙配置
     public function userkeyaccess()
     {
         $this->display();
     }
 
-    //警员钥匙配置-保存
+    //'.L('WordLang.UserLang').'钥匙配置-保存
     public function userkeyaccesssave()
     {
         $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
+        if (!$departmentno) $this->ajaxReturn(1, '请选择'.L('WordLang.DepartmentLang').'！');
         
         $usernos = mRequest('usernos', false);
-        if (!is_array($usernos) || empty($usernos)) $this->ajaxReturn(1, '请选择警员！');
+        if (!is_array($usernos) || empty($usernos)) $this->ajaxReturn(1, '请选择'.L('WordLang.UserLang').'！');
 
         $cabinetno = $this->_getCabinetno();
         if (!$cabinetno) $this->ajaxReturn(1, '请选择钥匙柜！');
@@ -101,7 +101,7 @@ class AccessController extends CommonController
     public function sendCabinetKeys()
     {
         $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '未知派出所！');
+        if (!$departmentno) $this->ajaxReturn(1, '未知'.L('WordLang.DepartmentLang').'！');
 
         $cabinetno = $this->_getCabinetno();
         if (!$cabinetno) $this->ajaxReturn(1, '未知钥匙柜！');
@@ -139,7 +139,7 @@ class AccessController extends CommonController
     public function sendCabinetAccess()
     {
         $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '未知派出所！');
+        if (!$departmentno) $this->ajaxReturn(1, '未知'.L('WordLang.DepartmentLang').'！');
 
         $cabinetno = $this->_getCabinetno();
         if (!$cabinetno) $this->ajaxReturn(1, '未知钥匙柜！');
@@ -177,7 +177,7 @@ class AccessController extends CommonController
     public function sendUserKeyAccess()
     {
         $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '未知派出所！');
+        if (!$departmentno) $this->ajaxReturn(1, '未知'.L('WordLang.DepartmentLang').'！');
 
         $cabinetno = $this->_getCabinetno();
         if (!$cabinetno) $this->ajaxReturn(1, '未知钥匙柜！');
@@ -205,9 +205,9 @@ class AccessController extends CommonController
         $data = 'AA BB 00 05 57 '.$departmentno.' '.$cabinetno.' 00 00 00 EE FF';
         $result = $this->_socketTcpSend($departmentinfo['mtserverip'], $departmentinfo['mtserverport'], $data);
         if ($result) {
-            $this->ajaxReturn(0, '下发警员钥匙权限成功！');
+            $this->ajaxReturn(0, '下发'.L('WordLang.UserLang').'钥匙权限成功！');
         } else {
-            $this->ajaxReturn(1, '下发警员钥匙权限失败！');
+            $this->ajaxReturn(1, '下发'.L('WordLang.UserLang').'钥匙权限失败！');
         }
     }
 
@@ -215,7 +215,7 @@ class AccessController extends CommonController
     public function cabinetuser()
     {
         $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '未知派出所！');
+        if (!$departmentno) $this->ajaxReturn(1, '未知'.L('WordLang.DepartmentLang').'！');
 
         $cabinetno = $this->_getCabinetno();
         if (!$cabinetno) $this->ajaxReturn(1, '未知钥匙柜！');
@@ -233,7 +233,7 @@ class AccessController extends CommonController
         $cabinetinfo = D('Cabinet')->getCabinetByDepartmentnoCabinetno($departmentno, $cabinetno);
         $this->assign('cabinetinfo', $cabinetinfo);
 
-        //钥匙柜警员权限列表
+        //钥匙柜'.L('WordLang.UserLang').'权限列表
         $cabinetuser = D('Access')->getCabinetUser($departmentno, $cabinetno);
         $this->assign('cabinetuser', $cabinetuser);
 
@@ -288,10 +288,10 @@ class AccessController extends CommonController
     public function userkeysave()
     {
         $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '未知派出所！');
+        if (!$departmentno) $this->ajaxReturn(1, '未知'.L('WordLang.DepartmentLang').'！');
         
         $userno = mRequest('userno', false);
-        if (!$userno) $this->ajaxReturn(1, '未知警员！');
+        if (!$userno) $this->ajaxReturn(1, '未知'.L('WordLang.UserLang').'！');
 
         $keynos = mRequest('keynos', false);
         if (!is_array($keynos) || empty($keynos)) $this->ajaxReturn(1, '请选择钥匙！');
@@ -315,6 +315,33 @@ class AccessController extends CommonController
             $this->ajaxReturn(0, '保存成功！');
         } else {
             $this->ajaxReturn(1, '保存失败！');
+        }
+    }
+
+    //清除'.L('WordLang.UserLang').'钥匙权限
+    public function cleanuserkeyaccess()
+    {
+        $this->display();
+    }
+
+    //清除'.L('WordLang.UserLang').'钥匙权限 - 保存
+    public function cleanuserkeyaccesssave()
+    {
+        $departmentno = $this->_getDepartmentno();
+        if (!$departmentno) $this->ajaxReturn(1, '请选择'.L('WordLang.DepartmentLang').'！');
+        
+        $usernos = mRequest('usernos', false);
+        if (!is_array($usernos) || empty($usernos)) $this->ajaxReturn(1, '请选择'.L('WordLang.UserLang').'！');
+
+        $where = array(
+            'departmentno' => $departmentno,
+            'userno' => array('in', $usernos)
+        );
+        $result = M('userkey')->where($where)->delete();
+        if ($result) {
+            $this->ajaxReturn(0, '清除成功！');
+        } else {
+            $this->ajaxReturn(1, '清除失败！');
         }
     }
 }

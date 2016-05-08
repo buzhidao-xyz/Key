@@ -416,7 +416,7 @@ class KeyController extends CommonController
         if (!$keyshowname) $this->ajaxReturn(1, '请填写车牌号码！');
 
         $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
+        if (!$departmentno) $this->ajaxReturn(1, '请选择'.L('WordLang.DepartmentLang').'！');
 
         $cabinetno = $this->_getCabinetno();
         if (!$cabinetno) $this->ajaxReturn(1, '请选择所在钥匙柜！');
@@ -701,7 +701,7 @@ class KeyController extends CommonController
     public function ajaxGetKey()
     {
         $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
+        if (!$departmentno) $this->ajaxReturn(1, '请选择'.L('WordLang.DepartmentLang').'！');
 
         $cabinetno = $this->_getCabinetno();
 
@@ -765,7 +765,7 @@ class KeyController extends CommonController
             $objActSheet->setCellValue('D1', '显示名称');
             $objActSheet->setCellValue('E1', '类型');
             $objActSheet->setCellValue('F1', '标签号');
-            $objActSheet->setCellValue('G1', '派出所');
+            $objActSheet->setCellValue('G1', ''.L('WordLang.DepartmentLang').'');
             
             //遍历数据
             $n = 2;

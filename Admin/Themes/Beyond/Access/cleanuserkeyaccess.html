@@ -26,32 +26,20 @@
     <div class="page-body">
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
-                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>钥匙柜门禁配置</h5>
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>清除{L('WordLang.UserLang')}钥匙权限</h5>
                 <div class="widget">
                     <div class="widget-header bordered-bottom bordered-sky">
                         <span class="widget-caption">钥匙柜门禁配置信息表单</span>
                     </div>
                     <div class="widget-body">
                         <div id="horizontal-form">
-                            <form name="cabinetuserform" method="post" action="{$ANY.__APP__}?s=Access/cabinetaccesssave" class="form-horizontal" role="form">
-                                {if $cabinetinfo.cabinetno}
-                                {include file="Public/scpdpm_cabinet.html"}
-                                {else}
-                                {include file="Public/scpdpm_cabinets.html"}
-                                {/if}
+                            <form name="userkeyform" method="post" action="{$ANY.__APP__}?s=Access/cleanuserkeyaccesssave" class="form-horizontal" role="form">
+                                {include file="Public/scpdpm_select.html"}
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">{L('WordLang.UserLang')}信息</label>
                                     <div class="col-sm-10">
                                         <div id="userbox">
                                             <p class="m-t-5" style="color: #747474;">--请选择{L('WordLang.UserLang')}--</p>
-                                            {foreach $userlist as $user}
-                                            <div class="checkbox" style="padding-bottom: 10px;">
-                                                <label>
-                                                    <input type="checkbox" name="usernos[]" value="{$user.userno}" class="useritem" {if in_array($user.userno, $cabinetuser)}checked="checked"{/if}>
-                                                    <span class="text">{$user.username}[{$user.userno}]</span>
-                                                </label>
-                                            </div>
-                                            {/foreach}
                                         </div>
                                     </div>
                                 </div>
@@ -59,7 +47,7 @@
                                     <div class="col-sm-offset-2 col-sm-10" style="border-top: 1px solid #ed4e2a;">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" name="checkall" value="1" class="colored-success">
+                                                <input type="checkbox" name="checkall-userbox" value="1" class="colored-success">
                                                 <span class="text">全选</span>
                                             </label>
                                         </div>
@@ -67,7 +55,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
-                                        <button type="submit" class="btn btn-sky submit">保存</button>
+                                        <button type="submit" class="btn btn-sky submit">确定清除</button>
                                     </div>
                                 </div>
                             </form>
@@ -79,8 +67,8 @@
     </div>
 <script type="text/javascript">
 $(function (){
-    //全选
-    $("input[name=checkall]").click(function (){
+    //userbox全选
+    $("input[name=checkall-userbox]").click(function (){
         if ($(this).attr('checked')) {
             $("#userbox").find("input.useritem").attr('checked', 'checked');
         } else {
@@ -88,10 +76,9 @@ $(function (){
         }
     });
 
-    //获取{L('WordLang.UserLang')}列表
     $("select[name=departmentno]").change(function (){
+        //获取{L('WordLang.UserLang')}列表
         $("#userbox").html('<p class="m-t-5" style="color: #747474;">--请选择{L("WordLang.UserLang")}--</p>');
-
         var url = JS_APP + '?s=User/ajaxGetUser';
         var params = {
             departmentno: $(this).val()
@@ -114,7 +101,7 @@ $(function (){
     });
 
     //form提交
-    $("form[name=cabinetuserform]").submit(function (){
+    $("form[name=userkeyform]").submit(function (){
         var url = $(this).attr('action');
         var postdata = $(this).serialize();
         $.post(url, postdata, function (data){

@@ -38,7 +38,7 @@ class CabinetController extends CommonController
         $cabinetname = $this->_getCabinetname();
         if (!$cabinetname) $this->ajaxReturn(1, '请填写钥匙柜名称！');
         $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
+        if (!$departmentno) $this->ajaxReturn(1, '请选择'.L('WordLang.DepartmentLang').'！');
         $keylocknonum = mRequest('keylocknonum');
         if (!$keylocknonum) $this->ajaxReturn(1, '请填写钥匙锁孔数量！');
 
@@ -151,7 +151,7 @@ class CabinetController extends CommonController
         $cabinetname = $this->_getCabinetname();
         if (!$cabinetname) $this->ajaxReturn(1, '请填写钥匙柜名称！');
         $departmentno = $this->_getDepartmentno();
-        if (!$departmentno) $this->ajaxReturn(1, '请选择派出所！');
+        if (!$departmentno) $this->ajaxReturn(1, '请选择'.L('WordLang.DepartmentLang').'！');
         $keylocknonum = mRequest('keylocknonum');
         if (!$keylocknonum) $this->ajaxReturn(1, '请填写钥匙锁孔数量！');
 

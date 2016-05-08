@@ -26,19 +26,19 @@
     <div class="page-body">
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
-                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>市局管理</h5>
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>{L('WordLang.CompanyLang')}管理</h5>
                 <div class="widget">
                     <div class="widget-header bordered-bottom bordered-sky">
-                        <span class="widget-caption">市局信息</span>
+                        <span class="widget-caption">{L('WordLang.CompanyLang')}信息</span>
                     </div>
                     <div class="widget-body">
                         <div id="horizontal-form">
                             <form name="companymform" method="post" action="{$ANY.__APP__}?s=Company/companymsave" class="form-horizontal" role="form">
                                 <input type="hidden" name="companyno" value="{$company.companyno}">
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">市局名称</label>
+                                    <label class="col-sm-2 control-label no-padding-right">{L('WordLang.CompanyLang')}名称</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="companyname" value="{$company.companyname}" placeholder="市局名称 例：常州市公安局">
+                                        <input type="text" class="form-control" name="companyname" value="{$company.companyname}" placeholder="{L('WordLang.CompanyLang')}名称 例：常州{L('WordLang.CompanyLang')}">
                                     </div>
                                 </div>
                                 <div class="form-group">

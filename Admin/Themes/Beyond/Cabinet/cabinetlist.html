@@ -70,8 +70,8 @@
                                 <thead class="bordered-darkorange">
                                     <tr role="row">
                                         <th></th>
-                                        <th>区分局</th>
-                                        <th>派出所</th>
+                                        <th>{L('WordLang.SubCompanyLang')}</th>
+                                        <th>{L('WordLang.DepartmentLang')}</th>
                                         <th>编号</th>
                                         <th>钥匙柜</th>
                                         <th>创建时间</th>
@@ -92,7 +92,7 @@
                                             <a href="{$ANY.__APP__}?s=Cabinet/ajaxGetCabinetHtml&cabinetid={$data.cabinetid}" class="btn btn-sky btn-edit-modal">编辑</a>
                                             <a href="{$ANY.__APP__}?s=Access/sendCabinetKeys&departmentno={$data.departmentno}&cabinetno={$data.cabinetno}" id="sendCabinetKeys" class="btn btn-warning">下发钥匙信息</a>
                                             <a href="{$ANY.__APP__}?s=Access/sendCabinetAccess&departmentno={$data.departmentno}&cabinetno={$data.cabinetno}" id="sendCabinetAccess" class="btn btn-darkorange">下发门禁权限</a>
-                                            <a href="{$ANY.__APP__}?s=Access/sendUserKeyAccess&departmentno={$data.departmentno}&cabinetno={$data.cabinetno}" id="sendUserKeyAccess" class="btn btn-success">下发警员钥匙权限</a>
+                                            <a href="{$ANY.__APP__}?s=Access/sendUserKeyAccess&departmentno={$data.departmentno}&cabinetno={$data.cabinetno}" id="sendUserKeyAccess" class="btn btn-success">下发{L('WordLang.UserLang')}钥匙权限</a>
                                         </td>
                                     </tr>
                                     {/foreach}

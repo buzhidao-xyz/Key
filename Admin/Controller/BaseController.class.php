@@ -62,14 +62,23 @@ class BaseController extends Controller
      */
     private function _loadLang()
     {
-        $lang = C('DEFAULT_LANG');
+        $defaultlang = C('DEFAULT_LANG');
 
-        //加载公共语言包
-        include(LANG_PATH.$lang.'.php');
-        L($lang);
-        //加载控制器语言包
-        include(LANG_PATH.$lang.'/'.CONTROLLER_NAME.'.php');
-        L($lang);
+        //语言包文件
+        $langfiles = array(
+            //系统公共语言包
+            LANG_PATH.$defaultlang.'.php',
+            //系统控制器语言包
+            LANG_PATH.$defaultlang.'/'.CONTROLLER_NAME.'.php',
+            //应用公共语言包
+            MODULE_PATH.'Common/Lang/'.$defaultlang.'.php',
+            //应用控制器语言包
+            MODULE_PATH.'Common/Lang/'.$defaultlang.'/'.CONTROLLER_NAME.'.php',
+        );
+        //遍历加载语言包
+        foreach ($langfiles as $langfile) {
+            if (file_exists($langfile)) L(require($langfile));
+        }
     }
 
     /**

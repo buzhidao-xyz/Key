@@ -3,7 +3,7 @@
     <div class="page-header position-relative page-header-fixed">
         <div class="header-title">
             <h1>
-                警员管理 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
+                {L('WordLang.UserLang')}管理 <!-- <small><i class="fa fa-angle-right"></i> 管理 </small> -->
             </h1>
         </div>
         <!--Header Buttons-->
@@ -26,23 +26,23 @@
     <div class="page-body">
         <div class="row">
             <div class="col-lg-12 col-sm-12 col-xs-12">
-                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>录入警员信息</h5>
+                <h5 class="row-title before-sky"><i class="glyphicon glyphicon-plane sky"></i>录入{L('WordLang.UserLang')}信息</h5>
                 <div class="widget">
                     <div class="widget-header bordered-bottom bordered-sky">
-                        <span class="widget-caption">警员信息表单</span>
+                        <span class="widget-caption">{L('WordLang.UserLang')}信息表单</span>
                     </div>
                     <div class="widget-body">
                         <div id="horizontal-form">
                             <form name="userform" method="post" action="{$ANY.__APP__}?s=User/newusersave" class="form-horizontal" role="form">
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">警员名称</label>
+                                    <label class="col-sm-2 control-label no-padding-right">{L('WordLang.UserLang')}名称</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="username" placeholder="警员名称 例：一二三">
+                                        <input type="text" class="form-control" name="username" placeholder="{L('WordLang.UserLang')}名称 例：一二三">
                                         <!-- <p class="help-block"></p> -->
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label no-padding-right">警员编号</label>
+                                    <label class="col-sm-2 control-label no-padding-right">{L('WordLang.UserLang')}编号</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="codeno" placeholder="警号 例：05371234">
                                     </div>
@@ -63,14 +63,14 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">职务</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="position" placeholder="警员职务 例：队长">
+                                        <input type="text" class="form-control" name="position" placeholder="{L('WordLang.UserLang')}职务 例：队长">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label no-padding-right">头像</label>
                                     <div class="col-sm-10">
                                         <input type="hidden" name="photo" value="">
-                                        <input id="photofile" type="file" name="photofile" placeholder="警员照片、头像" class="file-loading">
+                                        <input id="photofile" type="file" name="photofile" placeholder="{L('WordLang.UserLang')}照片、头像" class="file-loading">
                                         <p class="help-block darkorange m-b-5">*尺寸:1寸(71*99) 大小:50K以下</p>
                                     </div>
                                 </div>
