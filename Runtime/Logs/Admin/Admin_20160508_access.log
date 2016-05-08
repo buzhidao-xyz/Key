@@ -1,4 +1,0 @@
-[Admin::8585] 0.0.0.0 - - [2016-05-08 18:04:38 UTC+0800] GET - - "/Keycabinet/index.php?s=Monitor/rtmonitorRun&departmentno=1&cabinetno=1" HTTP/1.1
-{"departmentno":"1","cabinetno":"1","refersh_time":"0","admin_username":"admin","PHPSESSID":"q6qidrpguntdsmf04f49q2i5c5","KeyCabinet":"0ohvjsve13e8m1el5e33umpid7","phpinput":""}
-[Admin::8585] 0.0.0.0 - - [2016-05-08 18:04:54 UTC+0800] GET - - "/Keycabinet/index.php?s=Monitor/rtmonitorRun&departmentno=1&cabinetno=1" HTTP/1.1
-{"departmentno":"1","cabinetno":"1","refersh_time":"0","admin_username":"admin","PHPSESSID":"q6qidrpguntdsmf04f49q2i5c5","KeyCabinet":"0ohvjsve13e8m1el5e33umpid7","phpinput":""}
