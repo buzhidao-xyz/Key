@@ -179,7 +179,7 @@ class ManagerController extends CommonController
     public function newmanagersave()
     {
         $account = $this->_getAccount();
-        if (!$account) $this->ajaxReturn(1, '请填写账号！');
+        if (!Filter::F_Account($account)) $this->ajaxReturn(1, '请填写账号！');
         $password = $this->_getPassword();
         if (!Filter::F_Password($password)) $this->ajaxReturn(1, '密码不正确！');
         $passwordc = $this->_getPasswordc();
