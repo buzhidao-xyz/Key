@@ -169,6 +169,25 @@ class ManagerController extends CommonController
         }
     }
 
+    //删除管理员
+    public function delmanager()
+    {
+        $managerid = $this->_getManagerid();
+        if (!$managerid) $this->ajaxReturn(1, '未知管理员！');
+
+        //获取管理员信息
+        $managerinfo = D('Manager')->getManagerByID($managerid);
+        if (empty($managerinfo)) $this->ajaxReturn(1, '未知管理员！');
+        if ($managerinfo['super']) $this->ajaxReturn(1, '非法操作！超级管理员！');
+
+        $result = M('manager')->where(array('managerid'=>$managerid))->delete();
+        if ($result) {
+            $this->ajaxReturn(0, '删除成功！');
+        } else {
+            $this->ajaxReturn(1, '删除失败！');
+        }
+    }
+
     //新增管理员
     public function newmanager()
     {
@@ -180,6 +199,9 @@ class ManagerController extends CommonController
     {
         $account = $this->_getAccount();
         if (!Filter::F_Account($account)) $this->ajaxReturn(1, '请填写账号！');
+        //检查账号是否已存在
+        if (M('manager')->where(array('account'=>$account))->count()) $this->ajaxReturn(1, '该账号已存在！');
+
         $password = $this->_getPassword();
         if (!Filter::F_Password($password)) $this->ajaxReturn(1, '密码不正确！');
         $passwordc = $this->_getPasswordc();
@@ -254,6 +276,11 @@ class ManagerController extends CommonController
         if (empty($managerinfo)) $this->ajaxReturn(1, '未知管理员！');
         if ($managerinfo['super']) $this->ajaxReturn(1, '非法操作！超级管理员！');
 
+        $account = $this->_getAccount();
+        if (!Filter::F_Account($account)) $this->ajaxReturn(1, '请填写账号！');
+        //检查账号是否已存在
+        if (M('manager')->where(array('managerid'=>array('neq', $managerid),'account'=>$account))->count()) $this->ajaxReturn(1, '该账号已存在！');
+
         $password = $this->_getPassword();
         if ($password && !Filter::F_Password($password)) $this->ajaxReturn(1, '密码不正确！');
 
@@ -264,7 +291,8 @@ class ManagerController extends CommonController
         if (!is_array($departmentnos)||empty($departmentnos)) $this->ajaxReturn(1, '请选择管理的'.L('WordLang.DepartmentLang').'！');
 
         $data = array(
-            'roleid'     => $roleid,
+            'account' => $account,
+            'roleid'  => $roleid,
         );
         if ($password) {
             $password = D('Manager')->passwordEncrypt($password, $managerinfo['mkey']);

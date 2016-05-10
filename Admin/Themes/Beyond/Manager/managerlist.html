@@ -96,8 +96,9 @@
                                         <td>
                                             {if !$data.super}
                                             <a href="{$ANY.__APP__}?s=Manager/upmanager&managerid={$data.managerid}" class="btn btn-sky">编辑</a>
+                                            <a href="{$ANY.__APP__}?s=Manager/delmanager&managerid={$data.managerid}" class="btn btn-danger btn-ajax">删除</a>
                                             {if $data.status}
-                                            <a href="{$ANY.__APP__}?s=Manager/enablemanager&managerid={$data.managerid}&status=0" class="btn btn-danger btn-ajax-delete">禁用</a>
+                                            <a href="{$ANY.__APP__}?s=Manager/enablemanager&managerid={$data.managerid}&status=0" class="btn btn-darkorange btn-ajax-delete">禁用</a>
                                             {else}
                                             <a href="{$ANY.__APP__}?s=Manager/enablemanager&managerid={$data.managerid}&status=1" class="btn btn-success btn-ajax-delete">启用</a>
                                             {/if}
